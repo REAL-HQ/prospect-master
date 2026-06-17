@@ -23,20 +23,20 @@ function StepCard({ num, eyebrow, title, desc, items, visual, imageLeft }: StepP
   const [openIdx, setOpenIdx] = useState<number | null>(0);
 
   const textSide = (
-    <div className="p-6 md:p-8" style={{ minWidth: 0 }}>
+    <div className="p-5 md:p-6" style={{ minWidth: 0 }}>
       <div
         className="inline-block uppercase tracking-wide"
         style={{ fontSize: 10, color: "#CC0000", fontWeight: 500, letterSpacing: "0.08em" }}
       >
         Step {num} · {eyebrow}
       </div>
-      <h3 className="mt-3" style={{ fontSize: 22, fontWeight: 600, color: "#0E1116", lineHeight: 1.25 }}>
+      <h3 className="mt-2" style={{ fontSize: 22, fontWeight: 600, color: "#0E1116", lineHeight: 1.25 }}>
         {title}
       </h3>
-      <p className="mt-3" style={{ fontSize: 15, color: "#555", lineHeight: 1.6 }}>
+      <p className="mt-2" style={{ fontSize: 15, color: "#555", lineHeight: 1.6 }}>
         {desc}
       </p>
-      <div className="mt-4">
+      <div className="mt-3">
         {items.map((it, i) => (
           <AccordionItem
             key={it.label}
@@ -51,7 +51,7 @@ function StepCard({ num, eyebrow, title, desc, items, visual, imageLeft }: StepP
   );
 
   const imageSide = (
-    <div className="p-4 md:p-5" style={{ minHeight: 420 }}>
+    <div className="p-3 md:p-4" style={{ minHeight: 300 }}>
       <div
         className="h-full w-full"
         style={{
