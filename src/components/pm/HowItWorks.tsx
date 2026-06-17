@@ -179,7 +179,8 @@ function Visual2() {
 
 function Visual3() {
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-full" style={{ background: "white" }}>
+      {/* Browser chrome */}
       <div
         className="flex items-center gap-2 px-3 py-2.5"
         style={{ background: "#f8f8f8", borderBottom: "0.5px solid #E8E8E8" }}
@@ -191,29 +192,183 @@ function Visual3() {
           preview.prospectmaster.com/lakeside-dental
         </span>
       </div>
-      <motion.div {...fadeRow(0.3)} className="p-4" style={{ background: "#CC0000" }}>
-        <div style={{ fontSize: 15, fontWeight: 500, color: "white" }}>Lakeside Dental</div>
-        <motion.div {...fadeRow(0.5)} style={{ fontSize: 11, color: "rgba(255,255,255,0.9)", marginTop: 4 }}>
-          Your smile is our priority. Book today.
-        </motion.div>
-        <motion.button
-          {...fadeRow(0.7)}
-          style={{
-            marginTop: 12,
-            background: "white",
-            color: "#CC0000",
-            fontSize: 11,
-            fontWeight: 500,
-            padding: "7px 14px",
-            borderRadius: 5,
-          }}
-        >
-          Book A Consultation
-        </motion.button>
+
+      {/* Site nav */}
+      <motion.div
+        {...fadeRow(0.2)}
+        className="flex items-center justify-between px-4 py-2.5"
+        style={{ borderBottom: "0.5px solid #EEE", background: "white" }}
+      >
+        <div className="flex items-center gap-1.5">
+          <div
+            style={{
+              width: 16,
+              height: 16,
+              borderRadius: 4,
+              background: "linear-gradient(135deg,#0E6BA8,#3FA7D6)",
+            }}
+          />
+          <span style={{ fontSize: 10, fontWeight: 700, color: "#0E1116", letterSpacing: "0.02em" }}>
+            LAKESIDE<span style={{ color: "#3FA7D6" }}>DENTAL</span>
+          </span>
+        </div>
+        <div className="flex items-center gap-3">
+          {["Services", "About", "Reviews"].map((l) => (
+            <span key={l} style={{ fontSize: 9, color: "#555" }}>
+              {l}
+            </span>
+          ))}
+          <span
+            style={{
+              fontSize: 9,
+              fontWeight: 600,
+              color: "white",
+              background: "#0E6BA8",
+              padding: "3px 7px",
+              borderRadius: 4,
+            }}
+          >
+            Book
+          </span>
+        </div>
       </motion.div>
-      <motion.div {...fadeRow(0.9)} className="p-4 flex flex-col gap-2.5">
-        {[90, 75, 60, 85, 70, 55].map((w, i) => (
-          <div key={i} style={{ height: 8, width: `${w}%`, background: "#E8E8E8", borderRadius: 4 }} />
+
+      {/* Hero */}
+      <motion.div
+        {...fadeRow(0.35)}
+        className="relative px-4 py-4"
+        style={{
+          background:
+            "linear-gradient(135deg,#EAF4FB 0%,#F7FBFD 60%,#FFFFFF 100%)",
+          overflow: "hidden",
+        }}
+      >
+        <div
+          aria-hidden
+          style={{
+            position: "absolute",
+            top: -30,
+            right: -30,
+            width: 90,
+            height: 90,
+            borderRadius: "50%",
+            background: "radial-gradient(circle,#3FA7D6 0%,transparent 70%)",
+            opacity: 0.35,
+          }}
+        />
+        <div className="grid grid-cols-[1fr_auto] gap-3 items-center relative">
+          <div className="min-w-0">
+            <motion.div
+              {...fadeRow(0.45)}
+              className="inline-block mb-1.5"
+              style={{
+                fontSize: 8,
+                fontWeight: 600,
+                letterSpacing: "0.1em",
+                color: "#0E6BA8",
+                background: "rgba(14,107,168,0.1)",
+                padding: "2px 6px",
+                borderRadius: 999,
+              }}
+            >
+              ✦ NEW PATIENTS WELCOME
+            </motion.div>
+            <motion.div
+              {...fadeRow(0.5)}
+              style={{
+                fontSize: 16,
+                fontWeight: 700,
+                color: "#0A2540",
+                lineHeight: 1.1,
+                letterSpacing: "-0.02em",
+              }}
+            >
+              Healthy smiles,<br />crafted on the lake.
+            </motion.div>
+            <motion.div
+              {...fadeRow(0.6)}
+              style={{ fontSize: 9, color: "#5A6B7A", marginTop: 5, lineHeight: 1.4 }}
+            >
+              Modern, gentle dentistry in the heart of Tampa.
+            </motion.div>
+            <motion.button
+              {...fadeRow(0.7)}
+              style={{
+                marginTop: 9,
+                background: "#0E6BA8",
+                color: "white",
+                fontSize: 9,
+                fontWeight: 600,
+                padding: "6px 11px",
+                borderRadius: 5,
+                boxShadow: "0 4px 12px -4px rgba(14,107,168,0.5)",
+              }}
+            >
+              Book A Consultation →
+            </motion.button>
+          </div>
+          <motion.div
+            {...fadeRow(0.55)}
+            style={{
+              width: 70,
+              height: 80,
+              borderRadius: 10,
+              background:
+                "linear-gradient(160deg,#3FA7D6 0%,#0E6BA8 100%)",
+              boxShadow: "0 8px 20px -6px rgba(14,107,168,0.4)",
+              position: "relative",
+              overflow: "hidden",
+            }}
+          >
+            <div
+              style={{
+                position: "absolute",
+                inset: 0,
+                background:
+                  "radial-gradient(circle at 30% 30%,rgba(255,255,255,0.4),transparent 60%)",
+              }}
+            />
+            <div
+              style={{
+                position: "absolute",
+                bottom: 6,
+                left: 6,
+                right: 6,
+                fontSize: 7,
+                color: "white",
+                opacity: 0.9,
+                fontWeight: 500,
+              }}
+            >
+              Dr. Chen, DDS
+            </div>
+          </motion.div>
+        </div>
+      </motion.div>
+
+      {/* Feature row */}
+      <motion.div
+        {...fadeRow(0.85)}
+        className="grid grid-cols-3 gap-1.5 px-4 py-3"
+      >
+        {[
+          { n: "20+", l: "Years" },
+          { n: "4.9★", l: "Rating" },
+          { n: "12k", l: "Smiles" },
+        ].map((s) => (
+          <div
+            key={s.l}
+            style={{
+              border: "0.5px solid #E8EEF3",
+              borderRadius: 6,
+              padding: "5px 6px",
+              textAlign: "center",
+              background: "#FBFDFE",
+            }}
+          >
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#0E6BA8" }}>{s.n}</div>
+            <div style={{ fontSize: 7, color: "#8896A4", letterSpacing: "0.05em" }}>{s.l}</div>
+          </div>
         ))}
       </motion.div>
     </div>
