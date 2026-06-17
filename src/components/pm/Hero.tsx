@@ -135,7 +135,7 @@ export function Hero() {
           </div>
         </div>
 
-        <div className="relative hidden lg:block" style={{ minHeight: 520 }}>
+        <div className="relative hidden lg:block" style={{ minHeight: 760 }}>
           {pins.map((p) => (
             <PinCard key={p.name} pin={p} />
           ))}
