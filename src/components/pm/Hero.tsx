@@ -1,4 +1,4 @@
-import { Search, Play, MapPin } from "lucide-react";
+import { Search, Play, MapPin, Sparkles } from "lucide-react";
 import { MapBackground } from "./MapBackground";
 
 type Pin = {
@@ -77,7 +77,12 @@ export function Hero() {
       <MapBackground />
       <div className="relative z-[2] mx-auto max-w-[1280px] grid lg:grid-cols-[1fr_460px] gap-6">
         <div className="px-6 md:px-10 lg:px-12 pt-8 pb-6 max-w-[640px]">
-          <div className="pm-eyebrow mb-3">AI-Powered · Fully Automated</div>
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-xl mb-3" style={{ background: "#FFF0F0" }}>
+            <Sparkles size={14} style={{ color: "#CC0000" }} />
+            <span className="text-[13px] font-medium" style={{ color: "#CC0000" }}>
+              AI-Powered · Fully Automated
+            </span>
+          </div>
           <h1
             className="mb-3 font-extrabold tracking-tight"
             style={{
