@@ -301,35 +301,35 @@ function Visual4() {
 
 function Visual5() {
   return (
-    <div className="p-3 flex flex-col gap-2 h-full">
+    <div className="p-4 flex flex-col gap-3 h-full">
       <motion.div
         {...fadeRow(0.2)}
-        style={{ background: "white", border: "0.5px solid #E0E0E0", borderRadius: 10, padding: "10px 12px" }}
+        style={{ background: "white", border: "0.5px solid #E0E0E0", borderRadius: 12, padding: "12px 14px" }}
       >
-        <div style={{ fontSize: 9, color: "#999" }}>Lakeside Dental — Website Purchase</div>
+        <div style={{ fontSize: 10, color: "#999" }}>Lakeside Dental — Website Purchase</div>
         <div
-          className="mt-1.5 px-2 py-1.5"
-          style={{ background: "#f5f5f5", borderRadius: 4, fontSize: 10, color: "#888" }}
+          className="mt-2 px-3 py-2"
+          style={{ background: "#f5f5f5", borderRadius: 5, fontSize: 11, color: "#888" }}
         >
           4242 4242 4242 4242
         </div>
-        <div className="grid grid-cols-2 gap-1.5 mt-1.5">
-          <div className="px-2 py-1.5" style={{ background: "#f5f5f5", borderRadius: 4, fontSize: 10, color: "#888" }}>
+        <div className="grid grid-cols-2 gap-2 mt-2">
+          <div className="px-3 py-2" style={{ background: "#f5f5f5", borderRadius: 5, fontSize: 11, color: "#888" }}>
             MM / YY
           </div>
-          <div className="px-2 py-1.5" style={{ background: "#f5f5f5", borderRadius: 4, fontSize: 10, color: "#888" }}>
+          <div className="px-3 py-2" style={{ background: "#f5f5f5", borderRadius: 5, fontSize: 11, color: "#888" }}>
             CVC
           </div>
         </div>
         <button
-          className="mt-2 w-full"
+          className="mt-3 w-full"
           style={{
             background: "#CC0000",
             color: "white",
-            fontSize: 11,
+            fontSize: 12,
             fontWeight: 500,
-            padding: "7px",
-            borderRadius: 5,
+            padding: "9px",
+            borderRadius: 6,
           }}
         >
           Pay $1,000 — Claim Your Website
@@ -337,38 +337,54 @@ function Visual5() {
       </motion.div>
       <motion.div
         {...fadeRow(0.8)}
-        className="flex items-center gap-2 px-3 py-2"
+        className="flex items-center gap-3 px-4 py-3"
         style={{
           background: "#f0fff4",
           border: "0.5px solid rgba(42,122,79,0.3)",
-          borderRadius: 10,
+          borderRadius: 12,
         }}
       >
         <div
           className="flex items-center justify-center"
-          style={{ width: 22, height: 22, background: "#2A7A4F", borderRadius: "50%" }}
+          style={{ width: 26, height: 26, background: "#2A7A4F", borderRadius: "50%" }}
         >
-          <Check size={12} color="white" strokeWidth={3} />
+          <Check size={14} color="white" strokeWidth={3} />
         </div>
         <div>
-          <div style={{ fontSize: 11, fontWeight: 500, color: "#2A7A4F" }}>Payment received — $1,000</div>
-          <div style={{ fontSize: 9.5, color: "#2A7A4F", opacity: 0.85 }}>Site live at lakesidedental.com</div>
+          <div style={{ fontSize: 13, fontWeight: 500, color: "#2A7A4F" }}>Payment received — $1,000</div>
+          <div style={{ fontSize: 10, color: "#2A7A4F", opacity: 0.85 }}>Site live at lakesidedental.com</div>
         </div>
       </motion.div>
-      <div className="grid grid-cols-2 gap-1.5">
+      <div className="grid grid-cols-2 gap-2">
         <motion.div
           {...fadeRow(1.0)}
-          style={{ background: "#F5F5F5", borderRadius: 8, padding: "8px 10px" }}
+          style={{ background: "#F5F5F5", borderRadius: 10, padding: "10px 12px" }}
         >
-          <div style={{ fontSize: 9, color: "#999" }}>This Month</div>
-          <div style={{ fontSize: 16, fontWeight: 500, color: "#111" }}>$8,500</div>
+          <div style={{ fontSize: 10, color: "#999" }}>This Month</div>
+          <div style={{ fontSize: 18, fontWeight: 500, color: "#111" }}>$8,500</div>
         </motion.div>
         <motion.div
           {...fadeRow(1.1)}
-          style={{ background: "#F5F5F5", borderRadius: 8, padding: "8px 10px" }}
+          style={{ background: "#F5F5F5", borderRadius: 10, padding: "10px 12px" }}
         >
-          <div style={{ fontSize: 9, color: "#999" }}>Active MRR</div>
-          <div style={{ fontSize: 16, fontWeight: 500, color: "#CC0000" }}>$3,450</div>
+          <div style={{ fontSize: 10, color: "#999" }}>Active MRR</div>
+          <div style={{ fontSize: 18, fontWeight: 500, color: "#CC0000" }}>$3,450</div>
+        </motion.div>
+      </div>
+      <div className="grid grid-cols-2 gap-2">
+        <motion.div
+          {...fadeRow(1.2)}
+          style={{ background: "#F5F5F5", borderRadius: 10, padding: "10px 12px" }}
+        >
+          <div style={{ fontSize: 10, color: "#999" }}>Clients</div>
+          <div style={{ fontSize: 18, fontWeight: 500, color: "#111" }}>12</div>
+        </motion.div>
+        <motion.div
+          {...fadeRow(1.3)}
+          style={{ background: "#F5F5F5", borderRadius: 10, padding: "10px 12px" }}
+        >
+          <div style={{ fontSize: 10, color: "#999" }}>Sites Built</div>
+          <div style={{ fontSize: 18, fontWeight: 500, color: "#CC0000" }}>47</div>
         </motion.div>
       </div>
     </div>
