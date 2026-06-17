@@ -1,99 +1,178 @@
-import type { ReactNode } from "react";
-import { Search, BarChart3, Layout, Mail, DollarSign, Check, ListChecks } from "lucide-react";
+import { useState, type ReactNode } from "react";
+import { motion } from "framer-motion";
+import { Search, ListChecks, Check } from "lucide-react";
 import { SectionHeader } from "./SectionHeader";
+import { AccordionItem } from "./AccordionItem";
 
-type Step = {
+type AccItem = { label: string; detail: string };
+
+type StepProps = {
   num: number;
   eyebrow: string;
   title: string;
-  body: string;
-  tags: string[];
+  desc: string;
+  items: AccItem[];
   visual: ReactNode;
+  wide?: boolean;
 };
 
-function Visual1() {
+function StepCard({ num, eyebrow, title, desc, items, visual, wide }: StepProps) {
+  const [openIdx, setOpenIdx] = useState<number | null>(0);
+
+  const textSide = (
+    <div className="p-6 md:p-7" style={{ minWidth: 0 }}>
+      <div
+        className="inline-block uppercase tracking-wide"
+        style={{ fontSize: 10, color: "#CC0000", fontWeight: 500, letterSpacing: "0.08em" }}
+      >
+        Step {num} · {eyebrow}
+      </div>
+      <h3 className="mt-3" style={{ fontSize: 16, fontWeight: 500, color: "#0E1116" }}>
+        {title}
+      </h3>
+      <p className="mt-2" style={{ fontSize: 12.5, color: "#666", lineHeight: 1.6 }}>
+        {desc}
+      </p>
+      <div className="mt-4">
+        {items.map((it, i) => (
+          <AccordionItem
+            key={it.label}
+            label={it.label}
+            detail={it.detail}
+            isOpen={openIdx === i}
+            onToggle={() => setOpenIdx(openIdx === i ? null : i)}
+          />
+        ))}
+      </div>
+    </div>
+  );
+
   return (
     <div
-      className="w-full h-full p-4 flex flex-col gap-1.5 text-[10px]"
-      style={{ color: "#444" }}
+      className={wide ? "md:col-span-2" : ""}
+      style={{
+        background: "#F5F5F5",
+        borderRadius: 14,
+        overflow: "hidden",
+        display: "grid",
+        gridTemplateColumns: wide ? undefined : "1fr",
+      }}
     >
-      <div className="flex items-center gap-1.5 mb-1">
-        <Search size={12} style={{ color: "#CC0000" }} />
-        <span className="font-medium">Search · Tampa, FL · Dentists</span>
-      </div>
       <div
-        className="grid grid-cols-[1fr_auto] gap-2 px-2 py-1.5 font-medium"
-        style={{ background: "white", border: "0.5px solid #E0E0E0", borderRadius: 6 }}
+        className={wide ? "grid md:grid-cols-[1fr_340px]" : "flex flex-col"}
       >
-        <span>Business</span>
-        <span style={{ color: "#CC0000" }}>No Website</span>
-      </div>
-      {["Lakeside Dental", "Smile Bay Co.", "Bright Family Dental", "Coastal Orthodontics"].map(
-        (n) => (
+        {textSide}
+        <div
+          className={wide ? "pt-4 pr-4 md:pt-4 md:pr-4" : "px-3.5 pb-3.5"}
+          style={{ minHeight: wide ? 240 : 200 }}
+        >
           <div
-            key={n}
-            className="grid grid-cols-[1fr_auto] items-center gap-2 px-2 py-1.5"
-            style={{ background: "white", border: "0.5px solid #E0E0E0", borderRadius: 6 }}
+            className="h-full w-full"
+            style={{
+              background: "white",
+              border: "0.5px solid #E0E0E0",
+              borderRadius: wide ? "10px 10px 0 0" : 10,
+              overflow: "hidden",
+            }}
           >
-            <span>{n}</span>
-            <span
-              className="text-[9px] font-medium px-1.5 py-0.5"
-              style={{ background: "#FFF0F0", color: "#CC0000", borderRadius: 10 }}
-            >
-              YES
-            </span>
+            {visual}
           </div>
-        )
-      )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+const fadeRow = (delay: number) => ({
+  initial: { opacity: 0, y: 6 },
+  whileInView: { opacity: 1, y: 0 },
+  viewport: { once: true, amount: 0.2 },
+  transition: { delay, duration: 0.4 },
+});
+const slideIn = (delay: number) => ({
+  initial: { opacity: 0, x: 20 },
+  whileInView: { opacity: 1, x: 0 },
+  viewport: { once: true, amount: 0.2 },
+  transition: { delay, duration: 0.4 },
+});
+
+function Visual1() {
+  const rows = ["Lakeside Dental", "Smile Bay Co.", "Bright Family Dental", "Coastal Orthodontics"];
+  const delays = [0.2, 0.55, 0.85, 1.1];
+  return (
+    <div className="flex flex-col h-full">
+      <div
+        className="flex items-center justify-between px-3 py-2"
+        style={{ background: "#f8f8f8", borderBottom: "0.5px solid #E8E8E8" }}
+      >
+        <div className="flex items-center gap-1.5">
+          <Search size={11} style={{ color: "#CC0000" }} />
+          <span style={{ fontSize: 10, color: "#444" }}>Search · Tampa, FL · Dentists</span>
+        </div>
+        <span style={{ fontSize: 9, color: "#CC0000", fontWeight: 500, letterSpacing: "0.06em" }}>
+          SCANNING...
+        </span>
+      </div>
+      <div className="flex items-center justify-between px-3 py-2" style={{ borderBottom: "0.5px solid #E8E8E8" }}>
+        <span style={{ fontSize: 10, color: "#888", fontWeight: 500 }}>Business</span>
+        <span style={{ fontSize: 10, color: "#CC0000", fontWeight: 500 }}>No Website</span>
+      </div>
+      <div className="flex-1 flex flex-col">
+        {rows.map((r, i) => (
+          <motion.div
+            key={r}
+            {...fadeRow(delays[i])}
+            className="flex items-center justify-between px-3 py-2"
+            style={{ borderBottom: i < rows.length - 1 ? "0.5px solid #F0F0F0" : undefined }}
+          >
+            <span style={{ fontSize: 11, color: "#222" }}>{r}</span>
+            <span style={{ fontSize: 10, color: "#CC0000", fontWeight: 500 }}>YES</span>
+          </motion.div>
+        ))}
+      </div>
     </div>
   );
 }
 
 function Visual2() {
-  const items = [
-    { name: "Lakeside Dental", score: "9.4", tag: "HOT", hot: true },
-    { name: "Bella Vista Trattoria", score: "7.1", tag: "WARM", hot: false },
-    { name: "Lux Hair Lounge", score: "4.8", tag: "COLD", hot: false },
+  const cards = [
+    { name: "Lakeside Dental", score: "9.4", tag: "HOT", hot: true, scoreColor: "#CC0000" },
+    { name: "Bella Vista Trattoria", score: "7.1", tag: "WARM", hot: false, scoreColor: "#666", bg: "#f0f0f0", tc: "#888" },
+    { name: "Lux Hair Lounge", score: "4.8", tag: "COLD", hot: false, scoreColor: "#bbb", bg: "#f4f4f4", tc: "#aaa" },
   ];
+  const delays = [0.2, 0.45, 0.65];
   return (
-    <div className="w-full h-full p-4 flex flex-col gap-2 justify-center">
-      {items.map((it) => (
-        <div
-          key={it.name}
-          className="flex items-center justify-between px-3 py-2.5"
+    <div className="p-3 flex flex-col gap-1.5 h-full justify-center">
+      {cards.map((c, i) => (
+        <motion.div
+          key={c.name}
+          {...slideIn(delays[i])}
+          className="flex items-center justify-between px-3 py-2"
           style={{
-            background: "white",
-            border: it.hot ? "1px solid #CC0000" : "0.5px solid #E0E0E0",
+            border: c.hot ? "1.5px solid #CC0000" : "0.5px solid #E0E0E0",
             borderRadius: 8,
           }}
         >
           <div>
-            <div className="text-[11px] font-medium" style={{ color: "#111" }}>
-              {it.name}
-            </div>
-            <div className="text-[9px]" style={{ color: "#666" }}>
-              Signal score
-            </div>
+            <div style={{ fontSize: 11, color: "#111", fontWeight: 500 }}>{c.name}</div>
+            <div style={{ fontSize: 9, color: "#999" }}>Signal score</div>
           </div>
           <div className="flex items-center gap-2">
+            <span style={{ fontSize: 16, fontWeight: 500, color: c.scoreColor }}>{c.score}</span>
             <span
-              className="text-[16px] font-medium"
-              style={{ color: it.hot ? "#CC0000" : "#666" }}
-            >
-              {it.score}
-            </span>
-            <span
-              className="text-[9px] font-medium px-1.5 py-0.5"
               style={{
-                background: it.hot ? "#CC0000" : "#f0f0f0",
-                color: it.hot ? "white" : "#666",
+                fontSize: 9,
+                fontWeight: 500,
+                padding: "2px 6px",
                 borderRadius: 10,
+                background: c.hot ? "#CC0000" : c.bg,
+                color: c.hot ? "white" : c.tc,
               }}
             >
-              {it.tag}
+              {c.tag}
             </span>
           </div>
-        </div>
+        </motion.div>
       ))}
     </div>
   );
@@ -101,80 +180,109 @@ function Visual2() {
 
 function Visual3() {
   return (
-    <div className="w-full h-full p-4 flex items-center justify-center">
+    <div className="flex flex-col h-full">
       <div
-        className="w-full overflow-hidden"
-        style={{ background: "white", border: "0.5px solid #E0E0E0", borderRadius: 6 }}
+        className="flex items-center gap-1.5 px-2 py-1.5"
+        style={{ background: "#f8f8f8", borderBottom: "0.5px solid #E8E8E8" }}
       >
-        <div
-          className="flex items-center gap-1 px-2 py-1.5"
-          style={{ background: "#f5f5f5", borderBottom: "0.5px solid #E0E0E0" }}
-        >
-          <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#ff5f57" }} />
-          <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#febc2e" }} />
-          <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#28c840" }} />
-          <span className="text-[9px] ml-2" style={{ color: "#999" }}>
-            lakesidedental.pm.site
-          </span>
-        </div>
-        <div className="p-3" style={{ background: "#CC0000" }}>
-          <div className="text-[11px] text-white font-medium">Lakeside Dental</div>
-          <div className="text-[9px] text-white/85 mt-0.5">Trusted Tampa family dentistry</div>
-          <button
-            className="mt-2 text-[9px] px-2 py-1 font-medium"
-            style={{ background: "white", color: "#CC0000", borderRadius: 4 }}
-          >
-            Book An Appointment
-          </button>
-        </div>
-        <div className="p-2 grid grid-cols-3 gap-1">
-          {[1, 2, 3].map((i) => (
-            <div key={i} style={{ background: "#f5f5f5", height: 24, borderRadius: 3 }} />
-          ))}
-        </div>
+        <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#f09595" }} />
+        <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#EF9F27" }} />
+        <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#97C459" }} />
+        <span className="ml-2" style={{ fontSize: 9, color: "#bbb" }}>
+          preview.prospectmaster.com/lakeside-dental
+        </span>
       </div>
+      <motion.div {...fadeRow(0.3)} className="p-3" style={{ background: "#CC0000" }}>
+        <div style={{ fontSize: 13, fontWeight: 500, color: "white" }}>Lakeside Dental</div>
+        <motion.div {...fadeRow(0.5)} style={{ fontSize: 10, color: "rgba(255,255,255,0.9)", marginTop: 2 }}>
+          Your smile is our priority. Book today.
+        </motion.div>
+        <motion.button
+          {...fadeRow(0.7)}
+          style={{
+            marginTop: 8,
+            background: "white",
+            color: "#CC0000",
+            fontSize: 10,
+            fontWeight: 500,
+            padding: "5px 10px",
+            borderRadius: 4,
+          }}
+        >
+          Book A Consultation
+        </motion.button>
+      </motion.div>
+      <motion.div {...fadeRow(0.9)} className="p-3 flex flex-col gap-1.5">
+        {[90, 75, 60].map((w) => (
+          <div key={w} style={{ height: 6, width: `${w}%`, background: "#E8E8E8", borderRadius: 3 }} />
+        ))}
+      </motion.div>
     </div>
   );
 }
 
 function Visual4() {
-  const steps = [
-    { day: "Day 1", subj: "Built a free site for you", active: false },
-    { day: "Day 3", subj: "Did you see this?", active: true },
-    { day: "Day 7", subj: "Last chance — going to your competitor", active: false },
+  const cards = [
+    {
+      tag: "Day 1 — Initial Email",
+      status: "Sent",
+      subj: "I built a website for Lakeside Dental",
+      body: "Hi — I noticed Lakeside Dental isn't online yet, so I built you a free preview...",
+      delay: 0.2,
+      tagColor: "#CC0000",
+      statusColor: "#999",
+      bg: "white",
+      border: "0.5px solid #E0E0E0",
+      opacity: 1,
+    },
+    {
+      tag: "Day 3 — Follow-Up",
+      status: "Opened 2x",
+      subj: "86% of patients search before booking",
+      body: "Just wanted to check — most new patients find dentists on Google first...",
+      delay: 0.55,
+      tagColor: "#CC0000",
+      statusColor: "#CC0000",
+      bg: "#fff0f0",
+      border: "1px solid rgba(204,0,0,0.2)",
+      opacity: 1,
+    },
+    {
+      tag: "Day 7 — Final Notice",
+      status: "Scheduled",
+      subj: "Holding your site for 48 more hours",
+      body: "Last note before this preview goes to your competitor...",
+      delay: 0.85,
+      tagColor: "#999",
+      statusColor: "#999",
+      bg: "white",
+      border: "0.5px solid #E0E0E0",
+      opacity: 0.6,
+    },
   ];
   return (
-    <div className="w-full h-full p-4 flex flex-col justify-center gap-2 relative">
-      {steps.map((s, i) => (
-        <div key={s.day} className="relative">
-          <div
-            className="px-3 py-2"
-            style={{
-              background: "white",
-              border: s.active ? "1px solid #CC0000" : "0.5px solid #E0E0E0",
-              borderRadius: 6,
-            }}
-          >
-            <div
-              className="text-[9px] font-medium uppercase tracking-wide"
-              style={{ color: s.active ? "#CC0000" : "#999" }}
-            >
-              {s.day}
-            </div>
-            <div className="text-[11px] mt-0.5" style={{ color: "#111" }}>
-              {s.subj}
-            </div>
+    <div className="p-3 flex flex-col gap-2 h-full">
+      {cards.map((c) => (
+        <motion.div
+          key={c.tag}
+          {...fadeRow(c.delay)}
+          style={{
+            background: c.bg,
+            border: c.border,
+            borderRadius: 8,
+            padding: "8px 10px",
+            opacity: c.opacity,
+          }}
+        >
+          <div className="flex items-center justify-between">
+            <span style={{ fontSize: 9, fontWeight: 500, color: c.tagColor, letterSpacing: "0.05em" }}>
+              {c.tag.toUpperCase()}
+            </span>
+            <span style={{ fontSize: 9, color: c.statusColor }}>{c.status}</span>
           </div>
-          {i < steps.length - 1 && (
-            <div
-              className="ml-4 my-0.5"
-              style={{
-                height: 8,
-                borderLeft: "1px dashed #CC0000",
-              }}
-            />
-          )}
-        </div>
+          <div style={{ fontSize: 10.5, fontWeight: 500, color: "#111", marginTop: 3 }}>{c.subj}</div>
+          <div style={{ fontSize: 9.5, color: "#888", marginTop: 1, lineHeight: 1.4 }}>{c.body}</div>
+        </motion.div>
       ))}
     </div>
   );
@@ -182,109 +290,79 @@ function Visual4() {
 
 function Visual5() {
   return (
-    <div className="w-full h-full p-4 flex flex-col gap-2 justify-center">
-      <div
-        className="p-3"
-        style={{ background: "white", border: "0.5px solid #E0E0E0", borderRadius: 8 }}
+    <div className="p-3 flex flex-col gap-2 h-full">
+      <motion.div
+        {...fadeRow(0.2)}
+        style={{ background: "white", border: "0.5px solid #E0E0E0", borderRadius: 10, padding: "10px 12px" }}
       >
-        <div className="text-[9px] uppercase tracking-wide" style={{ color: "#999" }}>
-          Stripe Checkout
-        </div>
-        <div className="mt-1 text-[12px] font-medium" style={{ color: "#111" }}>
-          Lakeside Dental Site
-        </div>
-        <div className="text-[16px] font-medium mt-0.5" style={{ color: "#111" }}>
-          $1,200.00
-        </div>
+        <div style={{ fontSize: 9, color: "#999" }}>Lakeside Dental — Website Purchase</div>
         <div
-          className="mt-2 px-2 py-1.5 text-[10px]"
-          style={{ background: "#f5f5f5", borderRadius: 4, color: "#666" }}
+          className="mt-1.5 px-2 py-1.5"
+          style={{ background: "#f5f5f5", borderRadius: 4, fontSize: 10, color: "#888" }}
         >
-          •••• •••• •••• 4242
+          4242 4242 4242 4242
+        </div>
+        <div className="grid grid-cols-2 gap-1.5 mt-1.5">
+          <div className="px-2 py-1.5" style={{ background: "#f5f5f5", borderRadius: 4, fontSize: 10, color: "#888" }}>
+            MM / YY
+          </div>
+          <div className="px-2 py-1.5" style={{ background: "#f5f5f5", borderRadius: 4, fontSize: 10, color: "#888" }}>
+            CVC
+          </div>
         </div>
         <button
-          className="mt-2 w-full text-[11px] py-1.5 font-medium text-white"
-          style={{ background: "#CC0000", borderRadius: 4 }}
+          className="mt-2 w-full"
+          style={{
+            background: "#CC0000",
+            color: "white",
+            fontSize: 11,
+            fontWeight: 500,
+            padding: "7px",
+            borderRadius: 5,
+          }}
         >
-          Pay $1,200
+          Pay $1,000 — Claim Your Website
         </button>
-      </div>
-      <div
+      </motion.div>
+      <motion.div
+        {...fadeRow(0.8)}
         className="flex items-center gap-2 px-3 py-2"
         style={{
-          background: "#EAF7EF",
-          border: "0.5px solid #2A7A4F",
-          borderRadius: 8,
+          background: "#f0fff4",
+          border: "0.5px solid rgba(42,122,79,0.3)",
+          borderRadius: 10,
         }}
       >
         <div
           className="flex items-center justify-center"
-          style={{
-            width: 16,
-            height: 16,
-            background: "#2A7A4F",
-            borderRadius: "50%",
-          }}
+          style={{ width: 22, height: 22, background: "#2A7A4F", borderRadius: "50%" }}
         >
-          <Check size={10} color="white" strokeWidth={3} />
+          <Check size={12} color="white" strokeWidth={3} />
         </div>
         <div>
-          <div className="text-[10px] font-medium" style={{ color: "#2A7A4F" }}>
-            Deal closed
-          </div>
-          <div className="text-[9px]" style={{ color: "#2A7A4F" }}>
-            Site deploying to lakesidedental.com
-          </div>
+          <div style={{ fontSize: 11, fontWeight: 500, color: "#2A7A4F" }}>Payment received — $1,000</div>
+          <div style={{ fontSize: 9.5, color: "#2A7A4F", opacity: 0.85 }}>Site live at lakesidedental.com</div>
         </div>
+      </motion.div>
+      <div className="grid grid-cols-2 gap-1.5">
+        <motion.div
+          {...fadeRow(1.0)}
+          style={{ background: "#F5F5F5", borderRadius: 8, padding: "8px 10px" }}
+        >
+          <div style={{ fontSize: 9, color: "#999" }}>This Month</div>
+          <div style={{ fontSize: 16, fontWeight: 500, color: "#111" }}>$8,500</div>
+        </motion.div>
+        <motion.div
+          {...fadeRow(1.1)}
+          style={{ background: "#F5F5F5", borderRadius: 8, padding: "8px 10px" }}
+        >
+          <div style={{ fontSize: 9, color: "#999" }}>Active MRR</div>
+          <div style={{ fontSize: 16, fontWeight: 500, color: "#CC0000" }}>$3,450</div>
+        </motion.div>
       </div>
     </div>
   );
 }
-
-const steps: Step[] = [
-  {
-    num: 1,
-    eyebrow: "Discovery",
-    title: "AI Scans Google Maps + Local Directories",
-    body: "Enter a location and keyword. Our AI searches live data, not a stale database, and returns every business in that area with no website detected.",
-    tags: ["Live Web Search", "Not A Database"],
-    visual: <Visual1 />,
-  },
-  {
-    num: 2,
-    eyebrow: "Scoring",
-    title: "Leads Scored, Ranked, And Enriched",
-    body: "Every result gets a signal score 1 to 10. High ratings + no website = hot lead. Phone numbers, addresses, and owner names pulled automatically.",
-    tags: ["Signal Scoring", "Skip Trace Enrichment"],
-    visual: <Visual2 />,
-  },
-  {
-    num: 3,
-    eyebrow: "Build",
-    title: "AI Builds A Custom Demo Site In 60 Seconds",
-    body: "Full website generated with copy, images, layout, and SEO meta, tuned for that exact business category. Hosted instantly with a trackable preview link.",
-    tags: ["AI Site Builder", "Free Hosting", "SSL"],
-    visual: <Visual3 />,
-  },
-  {
-    num: 4,
-    eyebrow: "Outreach",
-    title: "AI Sends Personalized Outreach And Follows Up",
-    body: "Industry-specific cold email and SMS sent automatically. Multi-step follow-up sequences run on autopilot with built-in objection handling.",
-    tags: ["Email", "SMS", "Automated Follow-Up"],
-    visual: <Visual4 />,
-  },
-  {
-    num: 5,
-    eyebrow: "Close",
-    title: "AI Closes The Deal — You Collect The Payment",
-    body: "Stripe checkout link sent automatically. When they pay, the site goes live under their domain. You earn the upfront fee plus monthly hosting MRR.",
-    tags: ["Stripe", "Auto-Deploy", "MRR Dashboard"],
-    visual: <Visual5 />,
-  },
-];
-
-const stepIcons = [Search, BarChart3, Layout, Mail, DollarSign];
 
 export function HowItWorks() {
   return (
@@ -292,72 +370,79 @@ export function HowItWorks() {
       <div className="mx-auto max-w-[1100px]">
         <SectionHeader
           icon={ListChecks}
-          eyebrow="The System"
+          eyebrow="How It Works"
           headline={<>Five Steps. <span style={{ color: "#CC0000" }}>Zero Manual Work.</span></>}
           subtext="Other tools hand you leads and walk away. ProspectMaster runs the full pipeline."
           maxWidth={520}
         />
 
-        <div className="mt-10 flex flex-col gap-4">
-          {steps.map((s, i) => {
-            const Icon = stepIcons[i];
-            const isEven = i % 2 === 1;
-            return (
-              <div
-                key={s.num}
-                className="grid md:grid-cols-[1fr_300px] overflow-hidden"
-                style={{
-                  border: "0.5px solid #E0E0E0",
-                  borderRadius: 12,
-                  direction: isEven ? "rtl" : "ltr",
-                }}
-              >
-                <div className="p-7 md:p-8" style={{ direction: "ltr" }}>
-                  <div className="flex items-center gap-3">
-                    <div
-                      className="flex items-center justify-center text-white text-[12px] font-medium"
-                      style={{
-                        width: 26,
-                        height: 26,
-                        background: "#CC0000",
-                        borderRadius: "50%",
-                      }}
-                    >
-                      {s.num}
-                    </div>
-                    <div className="pm-eyebrow">{s.eyebrow}</div>
-                  </div>
-                  <h3 className="mt-4 text-[18px] md:text-[20px]">
-                    <span className="inline-flex items-center gap-2">
-                      <Icon size={18} style={{ color: "#CC0000" }} />
-                      {s.title}
-                    </span>
-                  </h3>
-                  <p className="mt-2 text-[13px]" style={{ color: "#666", lineHeight: 1.6 }}>
-                    {s.body}
-                  </p>
-                  <div className="mt-4 flex flex-wrap gap-2">
-                    {s.tags.map((t) => (
-                      <span key={t} className="pm-pill-red">
-                        {t}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-                <div
-                  className="min-h-[200px]"
-                  style={{
-                    background: "#F5F5F5",
-                    borderLeft: isEven ? undefined : "0.5px solid #E0E0E0",
-                    borderRight: isEven ? "0.5px solid #E0E0E0" : undefined,
-                    direction: "ltr",
-                  }}
-                >
-                  {s.visual}
-                </div>
-              </div>
-            );
-          })}
+        <div className="mt-10 grid md:grid-cols-2 gap-2.5">
+          <StepCard
+            num={1}
+            eyebrow="Discovery"
+            title="AI Scans Google Maps + Local Directories"
+            desc="Enter a location and keyword. Our AI searches live data, not a stale database, and returns every business with no website detected."
+            items={[
+              { label: "Live Web Search, Not A Database", detail: "Pulls directly from Google Maps in real time. Every result is fresh, not cached from weeks ago." },
+              { label: "Filter By Category And Rating", detail: "Search restaurants, dentists, salons, plumbers, gyms, or any custom keyword in any city, state, or ZIP." },
+              { label: "Verified Contact On Every Result", detail: "Phone number, address, hours, rating, and review count pulled automatically. Ready to call or email instantly." },
+              { label: "Global Coverage — 200+ Countries", detail: "Anywhere Google Maps reaches, ProspectMaster can scan. No geographic limits." },
+            ]}
+            visual={<Visual1 />}
+            wide
+          />
+          <StepCard
+            num={2}
+            eyebrow="Scoring"
+            title="Leads Scored, Ranked, And Enriched"
+            desc="Every result gets a signal score 1 to 10. High ratings plus no website equals hot lead."
+            items={[
+              { label: "HOT / WARM / COLD Tiers", detail: "Color-coded at a glance. 8+ red HOT, 6-7 amber WARM, below 6 gray COLD." },
+              { label: "Skip Trace Enrichment", detail: "Owner names and emails pulled automatically where available. Go deeper on your best leads." },
+              { label: "Score Breakdown Popover", detail: "See exactly why each lead scored as it did — rating weight, review count, no-website bonus." },
+            ]}
+            visual={<Visual2 />}
+          />
+          <StepCard
+            num={3}
+            eyebrow="Build"
+            title="AI Builds A Custom Demo Site In 60 Seconds"
+            desc="Full website generated. Copy, images, layout, SEO. Tuned for that exact business type."
+            items={[
+              { label: "Category Design Systems", detail: "Restaurants get editorial warmth. Dentists get clinical calm. Plumbers get industrial trade. 12 vertical systems built in." },
+              { label: "Free Hosting + SSL On Every Preview", detail: "Sites go live instantly at preview.prospectmaster.com/{slug}. No ZIP uploads, no extra steps." },
+              { label: "One-Click Deploy On Close", detail: "When they pay, the site automatically deploys to their custom domain. You just collect the notification." },
+            ]}
+            visual={<Visual3 />}
+          />
+          <StepCard
+            num={4}
+            eyebrow="Outreach"
+            title="AI Sends Personalized Outreach And Follows Up"
+            desc="Industry-specific cold email and SMS sent automatically. Multi-step follow-up sequences run on autopilot."
+            items={[
+              { label: "Day 1, Day 3, Day 7 Cadence", detail: "Three-step automated sequence. Each message escalates urgency. Zero manual sends required from you." },
+              { label: "Industry-Specific Objection Handling", detail: "Plumber scripts cite emergency search stats. Restaurant scripts cite diner discovery habits. Each pitch hits the right nerve." },
+              { label: "Email Via Resend + SMS Via Twilio", detail: "Both channels covered. Hit them in their inbox and their phone. Stripe link included in every message." },
+              { label: "Trackable Preview Link In Every Send", detail: "Real-time open tracking. Get notified the moment they view their site. Auto-trigger next follow-up on view." },
+            ]}
+            visual={<Visual4 />}
+            wide
+          />
+          <StepCard
+            num={5}
+            eyebrow="Close"
+            title="AI Closes The Deal. You Collect The Payment."
+            desc="Stripe checkout included in every outreach. They pay, the site deploys to their domain. You get notified. No sales call needed."
+            items={[
+              { label: "Stripe Payment Link Auto-Created", detail: "Generated automatically on site build. Embedded in every email and SMS. Set your own price — $500, $1,000, $2,500, any amount." },
+              { label: "Site Auto-Deploys On Payment", detail: "The moment Stripe confirms payment, the site goes live on their custom domain. Fully automatic." },
+              { label: "100% Of Revenue Goes To You", detail: "ProspectMaster takes zero cut of your sales. Every dollar from the upfront fee and monthly hosting is yours to keep." },
+              { label: "Monthly Hosting MRR From Day One", detail: "Auto-create a Stripe subscription for recurring hosting. Stack clients month over month. Watch your MRR compound." },
+            ]}
+            visual={<Visual5 />}
+            wide
+          />
         </div>
       </div>
     </section>
