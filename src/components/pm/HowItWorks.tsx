@@ -70,7 +70,7 @@ function StepCard({ num, eyebrow, title, desc, items, visual, wide }: StepProps)
           <div
             className="h-full w-full"
             style={{
-              background: "white",
+              background: "#F5F5F5",
               border: "0.5px solid #E0E0E0",
               borderRadius: wide ? "10px 10px 0 0" : 10,
               overflow: "hidden",
