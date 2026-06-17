@@ -1,3 +1,4 @@
+import { Link } from "@tanstack/react-router";
 import { Search, Play, MapPin, Sparkles, UtensilsCrossed, Smile, Scissors, Wrench, Dumbbell } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { MapBackground } from "./MapBackground";
@@ -153,7 +154,7 @@ export function Hero() {
           </div>
 
           <div className="mt-4 flex flex-wrap gap-2.5 items-center">
-            <button className="pm-btn-red">Start Free</button>
+            <Link to="/auth" className="pm-btn-red">Start Free</Link>
             <button className="pm-btn-ghost">
               <Play size={13} /> Watch Demo
             </button>

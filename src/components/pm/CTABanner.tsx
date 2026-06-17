@@ -1,3 +1,4 @@
+import { Link } from "@tanstack/react-router";
 import { Rocket } from "lucide-react";
 import { SectionHeader } from "./SectionHeader";
 
@@ -22,9 +23,9 @@ export function CTABanner() {
           maxWidth={760}
         />
         <div className="mt-6">
-          <button className="pm-btn-red" style={{ padding: "13px 28px", fontSize: 14 }}>
+          <Link to="/auth" className="pm-btn-red" style={{ padding: "13px 28px", fontSize: 14 }}>
             Start Free — It's Automatic
-          </button>
+          </Link>
         </div>
       </div>
     </section>
