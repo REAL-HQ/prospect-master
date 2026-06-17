@@ -50,20 +50,12 @@ export function Footer() {
         ))}
       </div>
       <div
-        className="mx-auto max-w-[1280px] px-6 md:px-10 py-6 flex flex-col md:flex-row items-center justify-between gap-3"
+        className="mx-auto max-w-[1280px] px-6 md:px-10 py-6 text-center"
         style={{ borderTop: "0.5px solid #E0E0E0" }}
       >
-        <Logo />
         <div className="text-[12px]" style={{ color: "#999" }}>
-          © {new Date().getFullYear()} ProspectMaster. All rights reserved.
+          © {new Date().getFullYear()} ProspectMaster. All Rights Reserved.
         </div>
-        <a
-          href="#"
-          className="text-[12px]"
-          style={{ color: "#666" }}
-        >
-          prospectmaster.com
-        </a>
       </div>
     </footer>
   );
