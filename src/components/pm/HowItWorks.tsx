@@ -48,7 +48,7 @@ function StepCard({ num, eyebrow, title, desc, items, visual, imageLeft }: StepP
   );
 
   const imageSide = (
-    <div className="p-4 md:p-5" style={{ minHeight: 260 }}>
+    <div className="p-4 md:p-5" style={{ minHeight: 420 }}>
       <div
         className="h-full w-full"
         style={{
@@ -94,36 +94,36 @@ const slideIn = (delay: number) => ({
 });
 
 function Visual1() {
-  const rows = ["Lakeside Dental", "Smile Bay Co.", "Bright Family Dental", "Coastal Orthodontics"];
-  const delays = [0.2, 0.55, 0.85, 1.1];
+  const rows = ["Lakeside Dental", "Smile Bay Co.", "Bright Family Dental", "Coastal Orthodontics", "Harbor View Dental", "Sunshine Smile Clinic", "Bay Bridge Dental"];
+  const delays = [0.2, 0.4, 0.6, 0.8, 1.0, 1.2, 1.4];
   return (
     <div className="flex flex-col h-full">
       <div
-        className="flex items-center justify-between px-3 py-2"
+        className="flex items-center justify-between px-4 py-3"
         style={{ background: "#f8f8f8", borderBottom: "0.5px solid #E8E8E8" }}
       >
-        <div className="flex items-center gap-1.5">
-          <Search size={11} style={{ color: "#CC0000" }} />
-          <span style={{ fontSize: 10, color: "#444" }}>Search · Tampa, FL · Dentists</span>
+        <div className="flex items-center gap-2">
+          <Search size={13} style={{ color: "#CC0000" }} />
+          <span style={{ fontSize: 11, color: "#444" }}>Search · Tampa, FL · Dentists</span>
         </div>
-        <span style={{ fontSize: 9, color: "#CC0000", fontWeight: 500, letterSpacing: "0.06em" }}>
+        <span style={{ fontSize: 10, color: "#CC0000", fontWeight: 500, letterSpacing: "0.06em" }}>
           SCANNING...
         </span>
       </div>
-      <div className="flex items-center justify-between px-3 py-2" style={{ borderBottom: "0.5px solid #E8E8E8" }}>
-        <span style={{ fontSize: 10, color: "#888", fontWeight: 500 }}>Business</span>
-        <span style={{ fontSize: 10, color: "#CC0000", fontWeight: 500 }}>No Website</span>
+      <div className="flex items-center justify-between px-4 py-3" style={{ borderBottom: "0.5px solid #E8E8E8" }}>
+        <span style={{ fontSize: 11, color: "#888", fontWeight: 500 }}>Business</span>
+        <span style={{ fontSize: 11, color: "#CC0000", fontWeight: 500 }}>No Website</span>
       </div>
       <div className="flex-1 flex flex-col">
         {rows.map((r, i) => (
           <motion.div
             key={r}
             {...fadeRow(delays[i])}
-            className="flex items-center justify-between px-3 py-2"
+            className="flex items-center justify-between px-4 py-3"
             style={{ borderBottom: i < rows.length - 1 ? "0.5px solid #F0F0F0" : undefined }}
           >
-            <span style={{ fontSize: 11, color: "#222" }}>{r}</span>
-            <span style={{ fontSize: 10, color: "#CC0000", fontWeight: 500 }}>YES</span>
+            <span style={{ fontSize: 13, color: "#222" }}>{r}</span>
+            <span style={{ fontSize: 11, color: "#CC0000", fontWeight: 500 }}>YES</span>
           </motion.div>
         ))}
       </div>
@@ -136,31 +136,33 @@ function Visual2() {
     { name: "Lakeside Dental", score: "9.4", tag: "HOT", hot: true, scoreColor: "#CC0000" },
     { name: "Bella Vista Trattoria", score: "7.1", tag: "WARM", hot: false, scoreColor: "#666", bg: "#f0f0f0", tc: "#888" },
     { name: "Lux Hair Lounge", score: "4.8", tag: "COLD", hot: false, scoreColor: "#bbb", bg: "#f4f4f4", tc: "#aaa" },
+    { name: "Coastal Orthodontics", score: "8.7", tag: "HOT", hot: true, scoreColor: "#CC0000" },
+    { name: "Harbor View Dental", score: "6.2", tag: "WARM", hot: false, scoreColor: "#666", bg: "#f0f0f0", tc: "#888" },
   ];
-  const delays = [0.2, 0.45, 0.65];
+  const delays = [0.2, 0.4, 0.6, 0.8, 1.0];
   return (
-    <div className="p-3 flex flex-col gap-1.5 h-full justify-center">
+    <div className="p-4 flex flex-col gap-2.5 h-full justify-center">
       {cards.map((c, i) => (
         <motion.div
           key={c.name}
           {...slideIn(delays[i])}
-          className="flex items-center justify-between px-3 py-2"
+          className="flex items-center justify-between px-4 py-3"
           style={{
             border: c.hot ? "1.5px solid #CC0000" : "0.5px solid #E0E0E0",
-            borderRadius: 8,
+            borderRadius: 10,
           }}
         >
           <div>
-            <div style={{ fontSize: 11, color: "#111", fontWeight: 500 }}>{c.name}</div>
-            <div style={{ fontSize: 9, color: "#999" }}>Signal score</div>
+            <div style={{ fontSize: 13, color: "#111", fontWeight: 500 }}>{c.name}</div>
+            <div style={{ fontSize: 10, color: "#999" }}>Signal score</div>
           </div>
-          <div className="flex items-center gap-2">
-            <span style={{ fontSize: 16, fontWeight: 500, color: c.scoreColor }}>{c.score}</span>
+          <div className="flex items-center gap-3">
+            <span style={{ fontSize: 18, fontWeight: 500, color: c.scoreColor }}>{c.score}</span>
             <span
               style={{
-                fontSize: 9,
+                fontSize: 10,
                 fontWeight: 500,
-                padding: "2px 6px",
+                padding: "3px 8px",
                 borderRadius: 10,
                 background: c.hot ? "#CC0000" : c.bg,
                 color: c.hot ? "white" : c.tc,
@@ -179,39 +181,39 @@ function Visual3() {
   return (
     <div className="flex flex-col h-full">
       <div
-        className="flex items-center gap-1.5 px-2 py-1.5"
+        className="flex items-center gap-2 px-3 py-2.5"
         style={{ background: "#f8f8f8", borderBottom: "0.5px solid #E8E8E8" }}
       >
-        <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#f09595" }} />
-        <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#EF9F27" }} />
-        <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#97C459" }} />
-        <span className="ml-2" style={{ fontSize: 9, color: "#bbb" }}>
+        <span style={{ width: 7, height: 7, borderRadius: "50%", background: "#f09595" }} />
+        <span style={{ width: 7, height: 7, borderRadius: "50%", background: "#EF9F27" }} />
+        <span style={{ width: 7, height: 7, borderRadius: "50%", background: "#97C459" }} />
+        <span className="ml-2" style={{ fontSize: 10, color: "#bbb" }}>
           preview.prospectmaster.com/lakeside-dental
         </span>
       </div>
-      <motion.div {...fadeRow(0.3)} className="p-3" style={{ background: "#CC0000" }}>
-        <div style={{ fontSize: 13, fontWeight: 500, color: "white" }}>Lakeside Dental</div>
-        <motion.div {...fadeRow(0.5)} style={{ fontSize: 10, color: "rgba(255,255,255,0.9)", marginTop: 2 }}>
+      <motion.div {...fadeRow(0.3)} className="p-4" style={{ background: "#CC0000" }}>
+        <div style={{ fontSize: 15, fontWeight: 500, color: "white" }}>Lakeside Dental</div>
+        <motion.div {...fadeRow(0.5)} style={{ fontSize: 11, color: "rgba(255,255,255,0.9)", marginTop: 4 }}>
           Your smile is our priority. Book today.
         </motion.div>
         <motion.button
           {...fadeRow(0.7)}
           style={{
-            marginTop: 8,
+            marginTop: 12,
             background: "white",
             color: "#CC0000",
-            fontSize: 10,
+            fontSize: 11,
             fontWeight: 500,
-            padding: "5px 10px",
-            borderRadius: 4,
+            padding: "7px 14px",
+            borderRadius: 5,
           }}
         >
           Book A Consultation
         </motion.button>
       </motion.div>
-      <motion.div {...fadeRow(0.9)} className="p-3 flex flex-col gap-1.5">
-        {[90, 75, 60].map((w) => (
-          <div key={w} style={{ height: 6, width: `${w}%`, background: "#E8E8E8", borderRadius: 3 }} />
+      <motion.div {...fadeRow(0.9)} className="p-4 flex flex-col gap-2.5">
+        {[90, 75, 60, 85, 70, 55].map((w, i) => (
+          <div key={i} style={{ height: 8, width: `${w}%`, background: "#E8E8E8", borderRadius: 4 }} />
         ))}
       </motion.div>
     </div>
@@ -224,7 +226,7 @@ function Visual4() {
       tag: "Day 1 — Initial Email",
       status: "Sent",
       subj: "I built a website for Lakeside Dental",
-      body: "Hi — I noticed Lakeside Dental isn't online yet, so I built you a free preview...",
+      body: "Hi — I noticed Lakeside Dental isn't online yet, so I built you a free preview site so you can see what you're missing...",
       delay: 0.2,
       tagColor: "#CC0000",
       statusColor: "#999",
@@ -236,8 +238,20 @@ function Visual4() {
       tag: "Day 3 — Follow-Up",
       status: "Opened 2x",
       subj: "86% of patients search before booking",
-      body: "Just wanted to check — most new patients find dentists on Google first...",
-      delay: 0.55,
+      body: "Just wanted to check — most new patients find dentists on Google first. Without a site, you're invisible to them...",
+      delay: 0.45,
+      tagColor: "#CC0000",
+      statusColor: "#CC0000",
+      bg: "#fff0f0",
+      border: "1px solid rgba(204,0,0,0.2)",
+      opacity: 1,
+    },
+    {
+      tag: "Day 5 — Second Follow-Up",
+      status: "Clicked link",
+      subj: "Your preview site got 12 views this week",
+      body: "People are already checking out the preview I built. Imagine what happens when it goes live with your branding...",
+      delay: 0.65,
       tagColor: "#CC0000",
       statusColor: "#CC0000",
       bg: "#fff0f0",
@@ -248,7 +262,7 @@ function Visual4() {
       tag: "Day 7 — Final Notice",
       status: "Scheduled",
       subj: "Holding your site for 48 more hours",
-      body: "Last note before this preview goes to your competitor...",
+      body: "Last note before this preview goes to your competitor down the street. Ready to claim it?",
       delay: 0.85,
       tagColor: "#999",
       statusColor: "#999",
@@ -258,7 +272,7 @@ function Visual4() {
     },
   ];
   return (
-    <div className="p-3 flex flex-col gap-2 h-full">
+    <div className="p-4 flex flex-col gap-2.5 h-full">
       {cards.map((c) => (
         <motion.div
           key={c.tag}
@@ -266,19 +280,19 @@ function Visual4() {
           style={{
             background: c.bg,
             border: c.border,
-            borderRadius: 8,
-            padding: "8px 10px",
+            borderRadius: 10,
+            padding: "10px 12px",
             opacity: c.opacity,
           }}
         >
           <div className="flex items-center justify-between">
-            <span style={{ fontSize: 9, fontWeight: 500, color: c.tagColor, letterSpacing: "0.05em" }}>
+            <span style={{ fontSize: 10, fontWeight: 500, color: c.tagColor, letterSpacing: "0.05em" }}>
               {c.tag.toUpperCase()}
             </span>
-            <span style={{ fontSize: 9, color: c.statusColor }}>{c.status}</span>
+            <span style={{ fontSize: 10, color: c.statusColor }}>{c.status}</span>
           </div>
-          <div style={{ fontSize: 10.5, fontWeight: 500, color: "#111", marginTop: 3 }}>{c.subj}</div>
-          <div style={{ fontSize: 9.5, color: "#888", marginTop: 1, lineHeight: 1.4 }}>{c.body}</div>
+          <div style={{ fontSize: 11, fontWeight: 500, color: "#111", marginTop: 4 }}>{c.subj}</div>
+          <div style={{ fontSize: 10, color: "#888", marginTop: 2, lineHeight: 1.4 }}>{c.body}</div>
         </motion.div>
       ))}
     </div>
@@ -287,35 +301,35 @@ function Visual4() {
 
 function Visual5() {
   return (
-    <div className="p-3 flex flex-col gap-2 h-full">
+    <div className="p-4 flex flex-col gap-3 h-full">
       <motion.div
         {...fadeRow(0.2)}
-        style={{ background: "white", border: "0.5px solid #E0E0E0", borderRadius: 10, padding: "10px 12px" }}
+        style={{ background: "white", border: "0.5px solid #E0E0E0", borderRadius: 12, padding: "12px 14px" }}
       >
-        <div style={{ fontSize: 9, color: "#999" }}>Lakeside Dental — Website Purchase</div>
+        <div style={{ fontSize: 10, color: "#999" }}>Lakeside Dental — Website Purchase</div>
         <div
-          className="mt-1.5 px-2 py-1.5"
-          style={{ background: "#f5f5f5", borderRadius: 4, fontSize: 10, color: "#888" }}
+          className="mt-2 px-3 py-2"
+          style={{ background: "#f5f5f5", borderRadius: 5, fontSize: 11, color: "#888" }}
         >
           4242 4242 4242 4242
         </div>
-        <div className="grid grid-cols-2 gap-1.5 mt-1.5">
-          <div className="px-2 py-1.5" style={{ background: "#f5f5f5", borderRadius: 4, fontSize: 10, color: "#888" }}>
+        <div className="grid grid-cols-2 gap-2 mt-2">
+          <div className="px-3 py-2" style={{ background: "#f5f5f5", borderRadius: 5, fontSize: 11, color: "#888" }}>
             MM / YY
           </div>
-          <div className="px-2 py-1.5" style={{ background: "#f5f5f5", borderRadius: 4, fontSize: 10, color: "#888" }}>
+          <div className="px-3 py-2" style={{ background: "#f5f5f5", borderRadius: 5, fontSize: 11, color: "#888" }}>
             CVC
           </div>
         </div>
         <button
-          className="mt-2 w-full"
+          className="mt-3 w-full"
           style={{
             background: "#CC0000",
             color: "white",
-            fontSize: 11,
+            fontSize: 12,
             fontWeight: 500,
-            padding: "7px",
-            borderRadius: 5,
+            padding: "9px",
+            borderRadius: 6,
           }}
         >
           Pay $1,000 — Claim Your Website
@@ -323,38 +337,54 @@ function Visual5() {
       </motion.div>
       <motion.div
         {...fadeRow(0.8)}
-        className="flex items-center gap-2 px-3 py-2"
+        className="flex items-center gap-3 px-4 py-3"
         style={{
           background: "#f0fff4",
           border: "0.5px solid rgba(42,122,79,0.3)",
-          borderRadius: 10,
+          borderRadius: 12,
         }}
       >
         <div
           className="flex items-center justify-center"
-          style={{ width: 22, height: 22, background: "#2A7A4F", borderRadius: "50%" }}
+          style={{ width: 26, height: 26, background: "#2A7A4F", borderRadius: "50%" }}
         >
-          <Check size={12} color="white" strokeWidth={3} />
+          <Check size={14} color="white" strokeWidth={3} />
         </div>
         <div>
-          <div style={{ fontSize: 11, fontWeight: 500, color: "#2A7A4F" }}>Payment received — $1,000</div>
-          <div style={{ fontSize: 9.5, color: "#2A7A4F", opacity: 0.85 }}>Site live at lakesidedental.com</div>
+          <div style={{ fontSize: 13, fontWeight: 500, color: "#2A7A4F" }}>Payment received — $1,000</div>
+          <div style={{ fontSize: 10, color: "#2A7A4F", opacity: 0.85 }}>Site live at lakesidedental.com</div>
         </div>
       </motion.div>
-      <div className="grid grid-cols-2 gap-1.5">
+      <div className="grid grid-cols-2 gap-2">
         <motion.div
           {...fadeRow(1.0)}
-          style={{ background: "#F5F5F5", borderRadius: 8, padding: "8px 10px" }}
+          style={{ background: "#F5F5F5", borderRadius: 10, padding: "10px 12px" }}
         >
-          <div style={{ fontSize: 9, color: "#999" }}>This Month</div>
-          <div style={{ fontSize: 16, fontWeight: 500, color: "#111" }}>$8,500</div>
+          <div style={{ fontSize: 10, color: "#999" }}>This Month</div>
+          <div style={{ fontSize: 18, fontWeight: 500, color: "#111" }}>$8,500</div>
         </motion.div>
         <motion.div
           {...fadeRow(1.1)}
-          style={{ background: "#F5F5F5", borderRadius: 8, padding: "8px 10px" }}
+          style={{ background: "#F5F5F5", borderRadius: 10, padding: "10px 12px" }}
         >
-          <div style={{ fontSize: 9, color: "#999" }}>Active MRR</div>
-          <div style={{ fontSize: 16, fontWeight: 500, color: "#CC0000" }}>$3,450</div>
+          <div style={{ fontSize: 10, color: "#999" }}>Active MRR</div>
+          <div style={{ fontSize: 18, fontWeight: 500, color: "#CC0000" }}>$3,450</div>
+        </motion.div>
+      </div>
+      <div className="grid grid-cols-2 gap-2">
+        <motion.div
+          {...fadeRow(1.2)}
+          style={{ background: "#F5F5F5", borderRadius: 10, padding: "10px 12px" }}
+        >
+          <div style={{ fontSize: 10, color: "#999" }}>Clients</div>
+          <div style={{ fontSize: 18, fontWeight: 500, color: "#111" }}>12</div>
+        </motion.div>
+        <motion.div
+          {...fadeRow(1.3)}
+          style={{ background: "#F5F5F5", borderRadius: 10, padding: "10px 12px" }}
+        >
+          <div style={{ fontSize: 10, color: "#999" }}>Sites Built</div>
+          <div style={{ fontSize: 18, fontWeight: 500, color: "#CC0000" }}>47</div>
         </motion.div>
       </div>
     </div>
