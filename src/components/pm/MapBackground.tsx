@@ -97,5 +97,11 @@ export function MapBackground() {
         ))}
       </g>
     </svg>
+    {/* White fade overlay to soften the map */}
+    <div
+      className="absolute inset-0 pointer-events-none"
+      style={{ background: "linear-gradient(to right, rgba(255,255,255,0.75) 0%, rgba(255,255,255,0.55) 45%, rgba(255,255,255,0.35) 100%)" }}
+    />
+    </>
   );
 }
