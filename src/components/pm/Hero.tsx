@@ -58,41 +58,14 @@ function PinCard({ pin }: { pin: Pin }) {
       <div
         className="absolute"
         style={{
-          bottom: -14,
+          bottom: -18,
           left: "50%",
           transform: "translateX(-50%)",
-          width: 0,
-          height: 0,
           zIndex: 10,
+          filter: "drop-shadow(0 2px 4px rgba(0,0,0,0.3))",
         }}
       >
-        {/* Pin needle line */}
-        <div
-          style={{
-            position: "absolute",
-            left: "50%",
-            top: -6,
-            transform: "translateX(-50%)",
-            width: 2,
-            height: 14,
-            background: "#CC0000",
-          }}
-        />
-        {/* Pin head - half on card, half on map */}
-        <div
-          style={{
-            position: "absolute",
-            left: "50%",
-            top: -6,
-            transform: "translate(-50%, -50%)",
-            width: 18,
-            height: 18,
-            borderRadius: "50%",
-            background: "#CC0000",
-            border: "3px solid white",
-            boxShadow: "0 2px 6px rgba(0,0,0,0.3)",
-          }}
-        />
+        <MapPin size={26} strokeWidth={2} fill="#CC0000" color="#ffffff" />
       </div>
     </div>
   );
