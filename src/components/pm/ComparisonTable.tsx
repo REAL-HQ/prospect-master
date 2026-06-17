@@ -1,4 +1,4 @@
-import { Check, Minus } from "lucide-react";
+import { Check, Minus, Scale } from "lucide-react";
 import { SectionHeader } from "./SectionHeader";
 
 const competitors = ["ProspectMaster", "SiteSeeker", "NoSiteSearch", "Origami", "Durable"];
@@ -34,9 +34,10 @@ export function ComparisonTable() {
     <section className="px-6 md:px-10 py-16 md:py-20">
       <div className="mx-auto max-w-[1100px]">
         <SectionHeader
+          icon={Scale}
           eyebrow="vs. The Competition"
           headline={<>Nobody Else Does All Of <span style={{ color: "#CC0000" }}>This.</span></>}
-          subtext="Every other tool does one or two pieces. ProspectMaster is the only fully automated end-to-end system."
+          subtext="Other tools do one or two things. ProspectMaster is the only fully automated system."
           maxWidth={520}
         />
 

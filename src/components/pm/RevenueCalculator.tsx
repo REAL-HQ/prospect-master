@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { TrendingUp } from "lucide-react";
 import { SectionHeader } from "./SectionHeader";
 
 type SliderProps = {
@@ -64,9 +65,10 @@ export function RevenueCalculator() {
     <section id="calculator" className="px-6 md:px-10 py-16 md:py-20" style={{ background: "#F5F5F5" }}>
       <div className="mx-auto max-w-[1100px]">
         <SectionHeader
+          icon={TrendingUp}
           eyebrow="Revenue Calculator"
           headline={<>See Exactly What You'll <span style={{ color: "#CC0000" }}>Make.</span></>}
-          subtext="Drag the sliders. Watch your income update in real time, broken down by upfront sales, recurring hosting, and annual total."
+          subtext="Drag the sliders and watch your income update in real time."
           maxWidth={560}
         />
 

@@ -1,3 +1,4 @@
+import { Rocket } from "lucide-react";
 import { SectionHeader } from "./SectionHeader";
 
 export function CTABanner() {
@@ -8,6 +9,7 @@ export function CTABanner() {
     >
       <div className="mx-auto max-w-[760px]">
         <SectionHeader
+          icon={Rocket}
           eyebrow="Ready To Start"
           headline={<>37% Of Local Businesses Need A Website. <span style={{ color: "#CC0000" }}>Your AI Is About To Call All Of Them.</span></>}
           subtext="Start free. No credit card. First 10 prospects on us."

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Check } from "lucide-react";
+import { Check, Tag } from "lucide-react";
 import { SectionHeader } from "./SectionHeader";
 
 type Plan = {
@@ -65,6 +65,7 @@ export function Pricing() {
     <section id="pricing" className="px-6 md:px-10 py-16 md:py-20">
       <div className="mx-auto max-w-[1100px] text-center">
         <SectionHeader
+          icon={Tag}
           eyebrow="Pricing"
           headline={<>Start Free. <span style={{ color: "#CC0000" }}>Scale When You Close.</span></>}
           subtext="Every plan includes the full automation stack. Pay more only when you want more volume."

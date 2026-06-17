@@ -7,6 +7,7 @@ import {
   DollarSign,
   Users,
   RefreshCw,
+  Layers,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { SectionHeader } from "./SectionHeader";
@@ -61,6 +62,7 @@ export function FeaturesGrid() {
     <section id="features" className="px-6 md:px-10 py-16 md:py-20" style={{ background: "#F5F5F5" }}>
       <div className="mx-auto max-w-[1100px]">
         <SectionHeader
+          icon={Layers}
           eyebrow="Features"
           headline={<>Everything In One <span style={{ color: "#CC0000" }}>Platform.</span></>}
           subtext="No stitching tools together. No Zapier. No manual steps."
