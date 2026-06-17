@@ -37,7 +37,7 @@ const plans: Plan[] = [
       "Multi-Step Follow-Up Sequences",
       "AI Objection Handling",
       "Skip Trace Enrichment",
-      "MRR Dashboard",
+      "Revenue Dashboard",
     ],
     cta: "Get Started",
     featured: true,
