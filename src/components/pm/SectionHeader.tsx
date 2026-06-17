@@ -26,7 +26,7 @@ export function SectionHeader({
           className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-5"
           style={{ background: "#FFF0F0" }}
         >
-          {icon && <icon size={14} style={{ color: "#CC0000" }} />}
+          {Icon && <Icon size={14} style={{ color: "#CC0000" }} />}
           <span className="text-[13px] font-medium" style={{ color: "#CC0000" }}>
             {eyebrow}
           </span>
