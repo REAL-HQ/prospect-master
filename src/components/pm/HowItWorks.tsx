@@ -48,7 +48,7 @@ function StepCard({ num, eyebrow, title, desc, items, visual, imageLeft }: StepP
   );
 
   const imageSide = (
-    <div className="p-4 md:p-5" style={{ minHeight: 260 }}>
+    <div className="p-4 md:p-5" style={{ minHeight: 420 }}>
       <div
         className="h-full w-full"
         style={{
