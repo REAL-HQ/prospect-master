@@ -65,16 +65,17 @@ export function Hero() {
       <MapBackground />
       <div className="relative z-[2] mx-auto max-w-[1280px] grid lg:grid-cols-2">
         <div className="px-6 md:px-10 lg:px-12 py-14 lg:py-[60px] max-w-[560px]">
-          <div className="pm-eyebrow mb-4">Fully Automated · AI-Powered · End-To-End</div>
+          <div className="pm-eyebrow mb-4">AI-Powered · Fully Automated</div>
           <h1 className="mb-5" style={{ fontSize: "clamp(32px, 5vw, 44px)", lineHeight: 1.1 }}>
-            Your AI Closes Website Deals{" "}
+            Your AI Closes<br />
+            Website Deals<br />
             <span style={{ color: "#CC0000" }}>While You Sleep.</span>
           </h1>
           <p className="text-[15px]" style={{ color: "#666" }}>
-            ProspectMaster finds local businesses with no website, builds their site, pitches it, and closes the deal. Automatically.
+            ProspectMaster Finds Local Businesses With No Website, Builds Their Site, Pitches It, And Closes The Deal. Automatically.
           </p>
           <p className="text-[15px] font-medium mt-3" style={{ color: "#111" }}>
-            Zero human follow-up required.
+            Zero Human Follow-Up Required.
           </p>
 
           <div className="mt-7 max-w-[460px]">
@@ -103,7 +104,7 @@ export function Hero() {
               </button>
             </div>
             <div className="text-[12px] mt-2" style={{ color: "#999" }}>
-              Returns only businesses with no website · Scored · Contact-ready
+              Returns Only Businesses With No Website · Scored · Contact-Ready
             </div>
           </div>
 
@@ -115,7 +116,7 @@ export function Hero() {
           </div>
 
           <div className="mt-5 text-[12px]" style={{ color: "#999" }}>
-            No credit card required · First 10 prospects free
+            No Credit Card Required · First 10 Prospects Free
           </div>
         </div>
 
