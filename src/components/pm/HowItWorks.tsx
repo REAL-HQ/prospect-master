@@ -398,7 +398,7 @@ export function HowItWorks() {
         <SectionHeader
           icon={ListChecks}
           eyebrow="How It Works"
-          headline={<>Five Steps. <span style={{ color: "#CC0000" }}>Zero Manual Work.</span></>}
+          headline={<>Five Steps. <span style={{ color: "#CC0000" }}>Zero Manual Work.</span><br />Plus Everything They Don't.</>}
           subtext="Other tools hand you leads and walk away. ProspectMaster runs the full pipeline."
           maxWidth={520}
         />
