@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { Search, BarChart3, Layout, Mail, DollarSign, Check } from "lucide-react";
+import { SectionHeader } from "./SectionHeader";
 
 type Step = {
   num: number;

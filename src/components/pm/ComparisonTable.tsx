@@ -1,4 +1,5 @@
 import { Check, Minus } from "lucide-react";
+import { SectionHeader } from "./SectionHeader";
 
 const competitors = ["ProspectMaster", "SiteSeeker", "NoSiteSearch", "Origami", "Durable"];
 type Row = { label: string; values: (boolean | "only")[] };

@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { SectionHeader } from "./SectionHeader";
 
 type SliderProps = {
   label: string;

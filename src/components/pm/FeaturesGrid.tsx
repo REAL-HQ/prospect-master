@@ -9,6 +9,7 @@ import {
   RefreshCw,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
+import { SectionHeader } from "./SectionHeader";
 
 type Feature = { icon: LucideIcon; title: string; body: string };
 
