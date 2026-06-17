@@ -177,13 +177,13 @@ export function Hero() {
       >
         <div className="mx-auto max-w-[1280px] grid grid-cols-1 md:grid-cols-3">
           {[
-            { stat: "37%", label: "Of US small businesses have no website" },
-            { stat: "2.5M+", label: "Prospects ready today" },
-            { stat: "$0", label: "Human labor to close" },
+            { stat: "37%", label: "Of US Small Businesses Have No Website" },
+            { stat: "2.5M+", label: "Prospects Ready Today" },
+            { stat: "$0", label: "Human Labor To Close" },
           ].map((s, i) => (
             <div
               key={s.stat}
-              className="px-8 py-4 text-center md:text-left"
+              className="px-8 py-4 text-center"
               style={i < 2 ? { borderRight: "0.5px solid #E0E0E0" } : {}}
             >
               <div className="text-[24px] font-semibold" style={{ color: "#CC0000" }}>
