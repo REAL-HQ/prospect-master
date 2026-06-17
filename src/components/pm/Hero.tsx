@@ -87,7 +87,7 @@ export function Hero() {
   return (
     <section id="top" className="relative overflow-hidden">
       <MapBackground />
-      <div className="relative z-[2] mx-auto max-w-[1280px] grid lg:grid-cols-[1fr_460px] gap-6">
+      <div className="relative z-[2] mx-auto grid lg:grid-cols-[1fr_460px] gap-6">
         <div className="px-6 md:px-10 lg:px-12 pt-8 pb-6 max-w-[640px]">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-xl mb-3" style={{ background: "#FFF0F0" }}>
             <Sparkles size={14} style={{ color: "#CC0000" }} />
