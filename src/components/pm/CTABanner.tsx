@@ -7,15 +7,12 @@ export function CTABanner() {
       style={{ background: "#F5F5F5" }}
     >
       <div className="mx-auto max-w-[760px]">
-        <h2 style={{ fontSize: "clamp(24px, 4vw, 32px)" }}>
-          37% Of Local Businesses Need A Website.{" "}
-          <span style={{ color: "#CC0000" }}>
-            Your AI Is About To Call All Of Them.
-          </span>
-        </h2>
-        <p className="mt-4 text-[15px]" style={{ color: "#666" }}>
-          Start free. No credit card. First 10 prospects on us.
-        </p>
+        <SectionHeader
+          eyebrow="Ready To Start"
+          headline={<>37% Of Local Businesses Need A Website. <span style={{ color: "#CC0000" }}>Your AI Is About To Call All Of Them.</span></>}
+          subtext="Start free. No credit card. First 10 prospects on us."
+          maxWidth={760}
+        />
         <div className="mt-6">
           <button className="pm-btn-red" style={{ padding: "13px 28px", fontSize: 14 }}>
             Start Free — It's Automatic

@@ -33,13 +33,12 @@ export function ComparisonTable() {
   return (
     <section className="px-6 md:px-10 py-16 md:py-20">
       <div className="mx-auto max-w-[1100px]">
-        <div className="pm-eyebrow mb-3">vs. The Competition</div>
-        <h2 className="mb-3" style={{ fontSize: "clamp(24px, 4vw, 32px)" }}>
-          Nobody Else Does All Of This.
-        </h2>
-        <p className="max-w-[520px] text-[15px]" style={{ color: "#666" }}>
-          Every other tool does one or two pieces. ProspectMaster is the only fully automated end-to-end system.
-        </p>
+        <SectionHeader
+          eyebrow="vs. The Competition"
+          headline={<>Nobody Else Does All Of <span style={{ color: "#CC0000" }}>This.</span></>}
+          subtext="Every other tool does one or two pieces. ProspectMaster is the only fully automated end-to-end system."
+          maxWidth={520}
+        />
 
         <div
           className="mt-10 overflow-x-auto"
