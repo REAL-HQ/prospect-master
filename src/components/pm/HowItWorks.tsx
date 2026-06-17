@@ -373,7 +373,7 @@ export function HowItWorks() {
           maxWidth={520}
         />
 
-        <div className="mt-10 grid md:grid-cols-2 gap-2.5">
+        <div className="mt-10 flex flex-col gap-5">
           <StepCard
             num={1}
             eyebrow="Discovery"
@@ -386,7 +386,6 @@ export function HowItWorks() {
               { label: "Global Coverage — 200+ Countries", detail: "Anywhere Google Maps reaches, ProspectMaster can scan. No geographic limits." },
             ]}
             visual={<Visual1 />}
-            wide
           />
           <StepCard
             num={2}
@@ -399,6 +398,7 @@ export function HowItWorks() {
               { label: "Score Breakdown Popover", detail: "See exactly why each lead scored as it did — rating weight, review count, no-website bonus." },
             ]}
             visual={<Visual2 />}
+            imageLeft
           />
           <StepCard
             num={3}
@@ -424,7 +424,7 @@ export function HowItWorks() {
               { label: "Trackable Preview Link In Every Send", detail: "Real-time open tracking. Get notified the moment they view their site. Auto-trigger next follow-up on view." },
             ]}
             visual={<Visual4 />}
-            wide
+            imageLeft
           />
           <StepCard
             num={5}
@@ -438,7 +438,6 @@ export function HowItWorks() {
               { label: "Monthly Hosting MRR From Day One", detail: "Auto-create a Stripe subscription for recurring hosting. Stack clients month over month. Watch your MRR compound." },
             ]}
             visual={<Visual5 />}
-            wide
           />
         </div>
       </div>
