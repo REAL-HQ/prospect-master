@@ -18,6 +18,7 @@ export function SectionHeader({
   align = "center",
   maxWidth = 640,
 }: SectionHeaderProps) {
+  const Icon = icon;
   return (
     <div className={align === "center" ? "text-center" : ""}>
       {eyebrow && (
