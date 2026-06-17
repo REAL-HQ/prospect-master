@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { SectionHeader } from "./SectionHeader";
 
 type SliderProps = {
   label: string;
@@ -62,13 +63,12 @@ export function RevenueCalculator() {
   return (
     <section id="calculator" className="px-6 md:px-10 py-16 md:py-20" style={{ background: "#F5F5F5" }}>
       <div className="mx-auto max-w-[1100px]">
-        <div className="pm-eyebrow mb-3">Revenue Calculator</div>
-        <h2 className="mb-3" style={{ fontSize: "clamp(24px, 4vw, 32px)" }}>
-          See Exactly What You'll Make.
-        </h2>
-        <p className="max-w-[560px] text-[15px]" style={{ color: "#666" }}>
-          Drag the sliders. Watch your income update in real time, broken down by upfront sales, recurring hosting, and annual total.
-        </p>
+        <SectionHeader
+          eyebrow="Revenue Calculator"
+          headline={<>See Exactly What You'll <span style={{ color: "#CC0000" }}>Make.</span></>}
+          subtext="Drag the sliders. Watch your income update in real time, broken down by upfront sales, recurring hosting, and annual total."
+          maxWidth={560}
+        />
 
         <div
           className="mt-10 overflow-hidden bg-white"

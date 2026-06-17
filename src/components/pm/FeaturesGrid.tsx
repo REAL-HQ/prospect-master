@@ -9,6 +9,7 @@ import {
   RefreshCw,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
+import { SectionHeader } from "./SectionHeader";
 
 type Feature = { icon: LucideIcon; title: string; body: string };
 
@@ -59,13 +60,12 @@ export function FeaturesGrid() {
   return (
     <section id="features" className="px-6 md:px-10 py-16 md:py-20" style={{ background: "#F5F5F5" }}>
       <div className="mx-auto max-w-[1100px]">
-        <div className="pm-eyebrow mb-3">Features</div>
-        <h2 className="mb-3" style={{ fontSize: "clamp(24px, 4vw, 32px)" }}>
-          Everything In One Platform.
-        </h2>
-        <p className="max-w-[520px] text-[15px]" style={{ color: "#666" }}>
-          No stitching tools together. No Zapier. No manual steps.
-        </p>
+        <SectionHeader
+          eyebrow="Features"
+          headline={<>Everything In One <span style={{ color: "#CC0000" }}>Platform.</span></>}
+          subtext="No stitching tools together. No Zapier. No manual steps."
+          maxWidth={520}
+        />
 
         <div
           className="mt-10 overflow-hidden"

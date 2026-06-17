@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Check } from "lucide-react";
+import { SectionHeader } from "./SectionHeader";
 
 type Plan = {
   name: string;
@@ -63,13 +64,12 @@ export function Pricing() {
   return (
     <section id="pricing" className="px-6 md:px-10 py-16 md:py-20">
       <div className="mx-auto max-w-[1100px] text-center">
-        <div className="pm-eyebrow mb-3">Pricing</div>
-        <h2 className="mb-3" style={{ fontSize: "clamp(24px, 4vw, 32px)" }}>
-          Start Free. Scale When You Close.
-        </h2>
-        <p className="max-w-[560px] mx-auto text-[15px]" style={{ color: "#666" }}>
-          Every plan includes the full automation stack. Pay more only when you want more volume.
-        </p>
+        <SectionHeader
+          eyebrow="Pricing"
+          headline={<>Start Free. <span style={{ color: "#CC0000" }}>Scale When You Close.</span></>}
+          subtext="Every plan includes the full automation stack. Pay more only when you want more volume."
+          maxWidth={560}
+        />
 
         <div
           className="inline-flex mt-7 p-1"

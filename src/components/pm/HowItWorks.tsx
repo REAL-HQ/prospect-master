@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { Search, BarChart3, Layout, Mail, DollarSign, Check } from "lucide-react";
+import { SectionHeader } from "./SectionHeader";
 
 type Step = {
   num: number;
@@ -289,13 +290,12 @@ export function HowItWorks() {
   return (
     <section id="how-it-works" className="px-6 md:px-10 py-16 md:py-20">
       <div className="mx-auto max-w-[1100px]">
-        <div className="pm-eyebrow mb-3">The System</div>
-        <h2 className="mb-3" style={{ fontSize: "clamp(24px, 4vw, 32px)" }}>
-          Five Steps. Zero Manual Work.
-        </h2>
-        <p className="max-w-[520px] text-[15px]" style={{ color: "#666" }}>
-          Every other tool hands you leads and walks away. ProspectMaster runs the entire pipeline from the first scan to the signed deal.
-        </p>
+        <SectionHeader
+          eyebrow="The System"
+          headline={<>Five Steps. <span style={{ color: "#CC0000" }}>Zero Manual Work.</span></>}
+          subtext="Every other tool hands you leads and walks away. ProspectMaster runs the entire pipeline from the first scan to the signed deal."
+          maxWidth={520}
+        />
 
         <div className="mt-10 flex flex-col gap-4">
           {steps.map((s, i) => {
