@@ -36,7 +36,7 @@ export function ComparisonTable() {
         <SectionHeader
           icon={Scale}
           eyebrow="vs. The Competition"
-          headline={<>Nobody Else Does All Of <span style={{ color: "#CC0000" }}>This.</span></>}
+          headline="Nobody Else Does All Of This."
           subtext="Other tools do one or two things. ProspectMaster is the only fully automated system."
           maxWidth={520}
         />
