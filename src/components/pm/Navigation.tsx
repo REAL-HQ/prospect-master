@@ -1,5 +1,8 @@
 import { useState } from "react";
-import { Menu, X } from "lucide-react";
+import { Link, useNavigate } from "@tanstack/react-router";
+import { Menu, X, LogOut, LayoutDashboard } from "lucide-react";
+import { useAuth } from "@/hooks/use-auth";
+import { supabase } from "@/integrations/supabase/client";
 
 const links = [
   { href: "#how-it-works", label: "How It Works" },
@@ -22,6 +25,14 @@ export function Logo() {
 
 export function Navigation() {
   const [open, setOpen] = useState(false);
+  const { user, loading } = useAuth();
+  const navigate = useNavigate();
+
+  const handleSignOut = async () => {
+    await supabase.auth.signOut();
+    navigate({ to: "/" });
+  };
+
   return (
     <header
       className="sticky top-0 z-[100] bg-white"
@@ -41,8 +52,29 @@ export function Navigation() {
           ))}
         </div>
         <div className="hidden md:flex items-center gap-2">
-          <button className="pm-btn-ghost">Sign In</button>
-          <button className="pm-btn-red">Start Free</button>
+          {loading ? (
+            <div className="w-20 h-8 animate-pulse bg-muted rounded" />
+          ) : user ? (
+            <>
+              <Link to="/dashboard" className="pm-btn-ghost">
+                <LayoutDashboard size={14} />
+                Dashboard
+              </Link>
+              <button onClick={handleSignOut} className="pm-btn-ghost">
+                <LogOut size={14} />
+                Sign Out
+              </button>
+            </>
+          ) : (
+            <>
+              <Link to="/auth" className="pm-btn-ghost">
+                Sign In
+              </Link>
+              <Link to="/auth" className="pm-btn-red">
+                Start Free
+              </Link>
+            </>
+          )}
         </div>
         <button
           aria-label="Toggle menu"
@@ -68,8 +100,27 @@ export function Navigation() {
             </a>
           ))}
           <div className="flex gap-2 pt-2">
-            <button className="pm-btn-ghost flex-1">Sign In</button>
-            <button className="pm-btn-red flex-1 justify-center">Start Free</button>
+            {loading ? null : user ? (
+              <>
+                <Link to="/dashboard" className="pm-btn-ghost flex-1 justify-center" onClick={() => setOpen(false)}>
+                  <LayoutDashboard size={14} />
+                  Dashboard
+                </Link>
+                <button onClick={() => { handleSignOut(); setOpen(false); }} className="pm-btn-ghost flex-1 justify-center">
+                  <LogOut size={14} />
+                  Sign Out
+                </button>
+              </>
+            ) : (
+              <>
+                <Link to="/auth" className="pm-btn-ghost flex-1 justify-center" onClick={() => setOpen(false)}>
+                  Sign In
+                </Link>
+                <Link to="/auth" className="pm-btn-red flex-1 justify-center" onClick={() => setOpen(false)}>
+                  Start Free
+                </Link>
+              </>
+            )}
           </div>
         </div>
       )}
