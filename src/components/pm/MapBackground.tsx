@@ -14,11 +14,13 @@ export function MapBackground() {
   ];
 
   return (
+    <>
     <svg
       viewBox="0 0 900 520"
       preserveAspectRatio="xMidYMid slice"
       className="absolute inset-0 w-full h-full pointer-events-none"
       aria-hidden="true"
+      style={{ opacity: 0.35 }}
     >
       {/* Tan/beige map base */}
       <rect width="900" height="520" fill="#E8E2D5" />
