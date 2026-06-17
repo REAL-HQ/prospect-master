@@ -134,33 +134,40 @@ export function Hero() {
           </p>
 
           <div className="mt-5 max-w-[520px]">
-            <div
+            <form
+              onSubmit={onScan}
               className="flex items-stretch bg-white overflow-hidden"
               style={{ border: "1px solid #E0E0E0", borderRadius: 8, boxShadow: "0 4px 14px -8px rgba(0,0,0,0.1)" }}
             >
               <input
                 type="text"
+                value={location}
+                onChange={(e) => setLocation(e.target.value)}
                 placeholder="Tampa, FL or ZIP 33601"
                 className="flex-1 min-w-0 px-3 py-2.5 text-[13px] outline-none bg-transparent"
               />
               <div className="self-center" style={{ width: "1px", height: 22, background: "#E0E0E0" }} />
               <input
                 type="text"
+                value={niche}
+                onChange={(e) => setNiche(e.target.value)}
                 placeholder="Dentists, gyms, salons..."
                 className="flex-1 min-w-0 px-3 py-2.5 text-[13px] outline-none bg-transparent"
               />
               <button
+                type="submit"
                 className="text-white font-medium text-[13px] px-4 py-2.5 flex items-center gap-1.5"
                 style={{ background: "#CC0000" }}
               >
                 <Search size={14} strokeWidth={2.2} />
                 <span className="hidden sm:inline">Scan</span>
               </button>
-            </div>
+            </form>
             <div className="text-[11.5px] mt-1.5" style={{ color: "#999" }}>
               Returns Only Businesses With No Website · Scored · Contact-Ready
             </div>
           </div>
+
 
           <div className="mt-4 flex flex-wrap gap-2.5 items-center">
             <Link to="/auth" className="pm-btn-red">Start Free</Link>
