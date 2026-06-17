@@ -15,7 +15,7 @@ export function CTABanner() {
             <span style={{ fontSize: "clamp(24px, 3.5vw, 40px)" }}>
               <span className="whitespace-normal md:whitespace-nowrap">37% Of Local Businesses Need A Website.</span>
               <br />
-              <span className="whitespace-normal md:whitespace-nowrap" style={{ color: "#CC0000" }}>Your AI Is About To Call All Of Them.</span>
+              <span className="whitespace-normal md:whitespace-nowrap" style={{ color: "#CC0000" }}>Your AI Is About To Contact All Of Them.</span>
             </span>
           }
           subtext="Start free. No credit card. First 10 prospects on us."
