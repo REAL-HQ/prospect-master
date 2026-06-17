@@ -600,7 +600,7 @@ export function HowItWorks() {
           <StepCard
             num={4}
             eyebrow="Outreach"
-            title="AI Sends Personalized Outreach And Follows Up"
+            title="AI Sends Personalized Outreach & Follows Up"
             desc="Industry-specific cold email and SMS sent automatically. Multi-step follow-up sequences run on autopilot."
             items={[
               { label: "Day 1, Day 3, Day 7 Cadence", detail: "Three-step automated sequence. Each message escalates urgency. Zero manual sends required from you." },
