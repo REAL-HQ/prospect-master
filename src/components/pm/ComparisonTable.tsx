@@ -37,7 +37,7 @@ export function ComparisonTable() {
           icon={Scale}
           eyebrow="vs. The Competition"
           headline="Nobody Else Does All Of This."
-          subtext="Other tools do one or two things. ProspectMaster is the only fully automated system."
+          subtext="See how ProspectMaster stacks up against the most popular alternatives."
           maxWidth={520}
         />
 
