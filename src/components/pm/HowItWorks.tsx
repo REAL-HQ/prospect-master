@@ -457,93 +457,10 @@ function Visual3() {
         </div>
       </motion.div>
 
-      {/* Gallery */}
-      <motion.div {...fadeRow(1.05)} className="grid grid-cols-2 gap-1.5 px-4 py-2" style={{ background: "white" }}>
-        <div
-          style={{
-            borderRadius: 8,
-            overflow: "hidden",
-            height: 44,
-            position: "relative",
-          }}
-        >
-          <img
-            src={dentalClinic}
-            alt="Modern clinic"
-            loading="lazy"
-            style={{ width: "100%", height: "100%", objectFit: "cover" }}
-          />
-          <div
-            style={{
-              position: "absolute",
-              bottom: 3,
-              left: 4,
-              fontSize: 7,
-              color: "white",
-              fontWeight: 600,
-              textShadow: "0 1px 2px rgba(0,0,0,0.5)",
-            }}
-          >
-            Our Clinic
-          </div>
-        </div>
-        <div
-          style={{
-            borderRadius: 8,
-            overflow: "hidden",
-            height: 44,
-            position: "relative",
-          }}
-        >
-          <img
-            src={dentalSmile}
-            alt="Bright smile"
-            loading="lazy"
-            style={{ width: "100%", height: "100%", objectFit: "cover" }}
-          />
-          <div
-            style={{
-              position: "absolute",
-              bottom: 3,
-              left: 4,
-              fontSize: 7,
-              color: "white",
-              fontWeight: 600,
-              textShadow: "0 1px 2px rgba(0,0,0,0.5)",
-            }}
-          >
-            Real Results
-          </div>
-        </div>
-      </motion.div>
-
-      {/* Testimonial */}
-      <motion.div
-        {...fadeRow(1.15)}
-        className="mx-4 mb-2 p-2.5"
-        style={{
-          background: "linear-gradient(135deg,#0E6BA8,#3FA7D6)",
-          borderRadius: 10,
-          color: "white",
-        }}
-      >
-        <div className="flex items-center gap-0.5 mb-1">
-          {[0, 1, 2, 3, 4].map((i) => (
-            <Star key={i} size={8} fill="#FFD166" stroke="#FFD166" />
-          ))}
-        </div>
-        <div style={{ fontSize: 9, lineHeight: 1.4, fontWeight: 500 }}>
-          "Best Dental Experience I've Ever Had. The Team Made Me Feel Right At Home."
-        </div>
-        <div style={{ fontSize: 7, marginTop: 4, opacity: 0.85, fontWeight: 500 }}>
-          — Sarah M., Tampa
-        </div>
-      </motion.div>
-
       {/* Footer CTA */}
       <motion.div
-        {...fadeRow(1.25)}
-        className="px-4 py-2 flex items-center justify-between"
+        {...fadeRow(1.05)}
+        className="px-4 py-2 flex items-center justify-between mt-auto"
         style={{ background: "#0A2540", color: "white" }}
       >
         <div>
@@ -575,6 +492,7 @@ function Visual3() {
     </div>
   );
 }
+
 
 
 function Visual4() {
