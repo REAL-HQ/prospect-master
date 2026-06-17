@@ -10,11 +10,11 @@ type Pin = {
 };
 
 const pins: Pin[] = [
-  { type: "Restaurant", name: "Bella Vista Trattoria", value: "$1,200", top: 44, right: 214 },
-  { type: "Dentist", name: "Lakeside Dental", value: "$2,500", top: 128, right: 68 },
-  { type: "Hair Salon", name: "Lux Hair Lounge", value: "$900", top: 268, right: 154 },
-  { type: "Plumber", name: "Lone Star Plumbing", value: "$1,800", top: 362, right: 52 },
-  { type: "Gym", name: "Desert Iron Fitness", value: "$1,500", top: 424, right: 272 },
+  { type: "Restaurant", name: "Bella Vista Trattoria", value: "$1,200", top: 20, right: 260 },
+  { type: "Dentist", name: "Lakeside Dental", value: "$2,500", top: 150, right: 30 },
+  { type: "Hair Salon", name: "Lux Hair Lounge", value: "$900", top: 330, right: 210 },
+  { type: "Plumber", name: "Lone Star Plumbing", value: "$1,800", top: 470, right: 20 },
+  { type: "Gym", name: "Desert Iron Fitness", value: "$1,500", top: 600, right: 280 },
 ];
 
 function PinCard({ pin }: { pin: Pin }) {
