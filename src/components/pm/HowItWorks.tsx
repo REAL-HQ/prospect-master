@@ -13,14 +13,14 @@ type StepProps = {
   desc: string;
   items: AccItem[];
   visual: ReactNode;
-  wide?: boolean;
+  imageLeft?: boolean;
 };
 
-function StepCard({ num, eyebrow, title, desc, items, visual, wide }: StepProps) {
+function StepCard({ num, eyebrow, title, desc, items, visual, imageLeft }: StepProps) {
   const [openIdx, setOpenIdx] = useState<number | null>(0);
 
   const textSide = (
-    <div className="p-6 md:p-7" style={{ minWidth: 0 }}>
+    <div className="p-6 md:p-8" style={{ minWidth: 0 }}>
       <div
         className="inline-block uppercase tracking-wide"
         style={{ fontSize: 10, color: "#CC0000", fontWeight: 500, letterSpacing: "0.08em" }}
@@ -47,38 +47,34 @@ function StepCard({ num, eyebrow, title, desc, items, visual, wide }: StepProps)
     </div>
   );
 
+  const imageSide = (
+    <div className="p-4 md:p-5" style={{ minHeight: 260 }}>
+      <div
+        className="h-full w-full"
+        style={{
+          background: "#F5F5F5",
+          border: "0.5px solid #E0E0E0",
+          borderRadius: 10,
+          overflow: "hidden",
+        }}
+      >
+        {visual}
+      </div>
+    </div>
+  );
+
   return (
     <div
-      className={wide ? "md:col-span-2" : ""}
       style={{
         background: "white",
         border: "0.5px solid #E8E8E8",
         borderRadius: 14,
         overflow: "hidden",
-        display: "grid",
-        gridTemplateColumns: wide ? undefined : "1fr",
       }}
     >
-      <div
-        className={wide ? "grid md:grid-cols-[1fr_340px]" : "flex flex-col"}
-      >
-        {textSide}
-        <div
-          className={wide ? "pt-4 pr-4 md:pt-4 md:pr-4" : "px-3.5 pb-3.5"}
-          style={{ minHeight: wide ? 240 : 200 }}
-        >
-          <div
-            className="h-full w-full"
-            style={{
-              background: "#F5F5F5",
-              border: "0.5px solid #E0E0E0",
-              borderRadius: wide ? "10px 10px 0 0" : 10,
-              overflow: "hidden",
-            }}
-          >
-            {visual}
-          </div>
-        </div>
+      <div className={`grid md:grid-cols-2 ${imageLeft ? "md:[direction:rtl]" : ""}`}>
+        <div className={imageLeft ? "md:[direction:ltr]" : ""}>{textSide}</div>
+        <div className={imageLeft ? "md:[direction:ltr]" : ""}>{imageSide}</div>
       </div>
     </div>
   );
