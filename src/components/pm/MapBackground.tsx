@@ -38,6 +38,24 @@ export function MapBackground() {
         opacity="0.6"
       />
 
+      {/* Pond */}
+      <ellipse cx="720" cy="420" rx="55" ry="32" fill="#A8D0E8" />
+      <ellipse cx="720" cy="420" rx="55" ry="32" stroke="#8DBED9" strokeWidth="1.5" fill="none" opacity="0.6" />
+      <ellipse cx="700" cy="410" rx="18" ry="10" fill="#B8DAEC" opacity="0.5" />
+
+      {/* Large green area / park */}
+      <path
+        d="M 420 140 Q 460 120 500 140 T 540 180 T 520 240 T 460 250 T 400 220 T 390 170 Z"
+        fill="#A8D090"
+      />
+      <path
+        d="M 420 140 Q 460 120 500 140 T 540 180 T 520 240 T 460 250 T 400 220 T 390 170 Z"
+        stroke="#96C280"
+        strokeWidth="1"
+        fill="none"
+        opacity="0.5"
+      />
+
       {/* Parks */}
       {parks.map((p, i) => (
         <rect key={`p${i}`} x={p.x} y={p.y} width={p.w} height={p.h} rx={3} fill="#C8DEB8" />
