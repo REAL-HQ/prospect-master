@@ -27,10 +27,10 @@ function StepCard({ num, eyebrow, title, desc, items, visual, wide }: StepProps)
       >
         Step {num} · {eyebrow}
       </div>
-      <h3 className="mt-3" style={{ fontSize: 16, fontWeight: 500, color: "#0E1116" }}>
+      <h3 className="mt-3" style={{ fontSize: 22, fontWeight: 600, color: "#0E1116", lineHeight: 1.25 }}>
         {title}
       </h3>
-      <p className="mt-2" style={{ fontSize: 12.5, color: "#666", lineHeight: 1.6 }}>
+      <p className="mt-3" style={{ fontSize: 15, color: "#555", lineHeight: 1.6 }}>
         {desc}
       </p>
       <div className="mt-4">
@@ -51,7 +51,8 @@ function StepCard({ num, eyebrow, title, desc, items, visual, wide }: StepProps)
     <div
       className={wide ? "md:col-span-2" : ""}
       style={{
-        background: "#F5F5F5",
+        background: "white",
+        border: "0.5px solid #E8E8E8",
         borderRadius: 14,
         overflow: "hidden",
         display: "grid",
