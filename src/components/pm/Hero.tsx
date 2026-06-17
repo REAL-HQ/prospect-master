@@ -43,7 +43,10 @@ function PinCard({ pin }: { pin: Pin }) {
       }}
     >
       <div className="flex items-center gap-1.5 mb-0.5">
-        <MapPin size={10} strokeWidth={2.4} style={{ color: "#CC0000" }} />
+        {(() => {
+          const TypeIcon = typeIcons[pin.type];
+          return TypeIcon ? <TypeIcon size={10} strokeWidth={2.4} style={{ color: "#CC0000" }} /> : null;
+        })()}
         <div className="text-[9px] uppercase tracking-[0.08em] font-semibold" style={{ color: "#CC0000" }}>
           {pin.type}
         </div>
