@@ -159,7 +159,7 @@ export function FeaturesGrid() {
             </>
           }
           subtext="Other tools do one or two things. ProspectMaster is the only fully automated system."
-          maxWidth={620}
+          maxWidth={1100}
         />
 
         <div
