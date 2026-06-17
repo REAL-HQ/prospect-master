@@ -155,7 +155,7 @@ export function FeaturesGrid() {
           eyebrow="Why ProspectMaster"
           headline={
             <>
-              Everything Competitors Do. <span style={{ color: "#CC0000" }}>Plus Everything They Don't.</span>
+              Everything Competitors Do.<br /><span style={{ color: "#CC0000" }}>Plus Everything They Don't.</span>
             </>
           }
           subtext="Other systems help you find leads. Others help you build websites. ProspectMaster does all of it and keeps going until the deal is closed."
