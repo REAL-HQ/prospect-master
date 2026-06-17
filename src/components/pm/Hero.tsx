@@ -11,7 +11,7 @@ type Pin = {
 };
 
 const pins: Pin[] = [
-  { type: "Restaurant", name: "Bella Vista Trattoria", value: "$1,200", top: "6%", left: "-85%" },
+  { type: "Restaurant", name: "Bella Vista Trattoria", value: "$1,200", top: "6%", left: "-55%" },
   { type: "Dentist", name: "Lakeside Dental", value: "$2,500", top: "18%", left: "-2%" },
   { type: "Hair Salon", name: "Lux Hair Lounge", value: "$900", top: "38%", right: "4%" },
   { type: "Plumber", name: "Lone Star Plumbing", value: "$1,800", top: "60%", left: "-12%" },
