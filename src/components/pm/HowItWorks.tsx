@@ -182,316 +182,185 @@ function Visual2() {
 
 function Visual3() {
   return (
-    <div className="flex flex-col h-full overflow-y-auto" style={{ background: "white" }}>
+    <div
+      className="flex flex-col h-full"
+      style={{
+        background:
+          "linear-gradient(160deg,#E8F7EE 0%,#F4FBF6 45%,#FFFFFF 100%)",
+      }}
+    >
       {/* Browser chrome */}
       <div
-        className="flex items-center gap-2 px-3 py-2.5 sticky top-0 z-10"
+        className="flex items-center gap-2 px-3 py-2"
         style={{ background: "#f8f8f8", borderBottom: "0.5px solid #E8E8E8" }}
       >
         <span style={{ width: 7, height: 7, borderRadius: "50%", background: "#f09595" }} />
         <span style={{ width: 7, height: 7, borderRadius: "50%", background: "#EF9F27" }} />
         <span style={{ width: 7, height: 7, borderRadius: "50%", background: "#97C459" }} />
-        <span className="ml-2" style={{ fontSize: 10, color: "#bbb" }}>
+        <span className="ml-2" style={{ fontSize: 9, color: "#bbb" }}>
           preview.prospectmaster.com/lakeside-dental
         </span>
       </div>
 
-      {/* Site nav */}
+      {/* Pill nav */}
       <motion.div
         {...fadeRow(0.2)}
-        className="flex items-center justify-between px-4 py-1.5"
-        style={{ borderBottom: "0.5px solid #EEE", background: "white" }}
+        className="flex items-center justify-between px-4 py-2.5"
       >
         <div className="flex items-center gap-1.5">
           <div
             style={{
-              width: 16,
-              height: 16,
+              width: 14,
+              height: 14,
               borderRadius: 4,
-              background: "linear-gradient(135deg,#0E6BA8,#3FA7D6)",
+              background: "linear-gradient(135deg,#2EB872,#7DD3A0)",
             }}
           />
-          <span style={{ fontSize: 10, fontWeight: 700, color: "#0E1116", letterSpacing: "0.02em" }}>
-            LAKESIDE<span style={{ color: "#3FA7D6" }}>DENTAL</span>
+          <span style={{ fontSize: 10, fontWeight: 700, color: "#0E1116" }}>
+            Lakeside
           </span>
         </div>
-        <div className="flex items-center gap-3">
-          {["Services", "About", "Reviews"].map((l) => (
-            <span key={l} style={{ fontSize: 9, color: "#555" }}>
-              {l}
-            </span>
-          ))}
-          <span
-            style={{
-              fontSize: 9,
-              fontWeight: 600,
-              color: "white",
-              background: "#0E6BA8",
-              padding: "3px 7px",
-              borderRadius: 4,
-            }}
-          >
-            Book
-          </span>
-        </div>
-      </motion.div>
-
-      {/* Hero with real imagery */}
-      <motion.div
-        {...fadeRow(0.35)}
-        className="relative px-4 py-3"
-        style={{
-          background:
-            "linear-gradient(135deg,#EAF4FB 0%,#F7FBFD 60%,#FFFFFF 100%)",
-          overflow: "hidden",
-        }}
-      >
-        <div
-          aria-hidden
-          style={{
-            position: "absolute",
-            top: -40,
-            right: -40,
-            width: 120,
-            height: 120,
-            borderRadius: "50%",
-            background: "radial-gradient(circle,#3FA7D6 0%,transparent 70%)",
-            opacity: 0.3,
-          }}
-        />
-        <div className="grid grid-cols-[1fr_72px] gap-3 items-center relative">
-          <div className="min-w-0">
-            <motion.div
-              {...fadeRow(0.45)}
-              className="inline-flex items-center gap-1 mb-1"
+        <div className="flex items-center gap-1.5">
+          {["Services", "Technology", "About"].map((l) => (
+            <span
+              key={l}
               style={{
                 fontSize: 8,
-                fontWeight: 600,
-                letterSpacing: "0.1em",
-                color: "#0E6BA8",
-                background: "rgba(14,107,168,0.1)",
-                padding: "2px 6px",
+                color: "#1F3D2E",
+                fontWeight: 500,
+                padding: "3px 8px",
+                background: "white",
+                border: "0.5px solid #D6EADE",
                 borderRadius: 999,
               }}
             >
-              <Sparkles size={8} /> NEW PATIENTS WELCOME
-            </motion.div>
-            <motion.div
-              {...fadeRow(0.5)}
-              style={{
-                fontSize: 15,
-                fontWeight: 700,
-                color: "#0A2540",
-                lineHeight: 1.1,
-                letterSpacing: "-0.02em",
-              }}
-            >
-              Healthy Smiles,<br />Crafted On The Lake.
-            </motion.div>
-            <motion.div
-              {...fadeRow(0.6)}
-              style={{ fontSize: 9, color: "#5A6B7A", marginTop: 4, lineHeight: 1.4 }}
-            >
-              Modern, Gentle Dentistry In The Heart Of Tampa.
-            </motion.div>
-            <div className="flex items-center gap-2 mt-2">
-              <motion.button
-                {...fadeRow(0.7)}
-                style={{
-                  background: "#0E6BA8",
-                  color: "white",
-                  fontSize: 9,
-                  fontWeight: 600,
-                  padding: "5px 10px",
-                  borderRadius: 5,
-                  boxShadow: "0 4px 12px -4px rgba(14,107,168,0.5)",
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: 4,
-                }}
-              >
-                <Calendar size={9} /> Book A Consultation
-              </motion.button>
-              <motion.button
-                {...fadeRow(0.75)}
-                style={{
-                  background: "white",
-                  color: "#0E6BA8",
-                  fontSize: 9,
-                  fontWeight: 600,
-                  padding: "5px 9px",
-                  borderRadius: 5,
-                  border: "1px solid #D6E6F2",
-                }}
-              >
-                Our Story
-              </motion.button>
-            </div>
-          </div>
-          <motion.div
-            {...fadeRow(0.55)}
-            style={{
-              width: 72,
-              height: 88,
-              borderRadius: 10,
-              overflow: "hidden",
-              boxShadow: "0 10px 24px -8px rgba(14,107,168,0.5)",
-              position: "relative",
-            }}
-          >
-            <img
-              src={dentalHero}
-              alt="Dr. Chen with patient"
-              style={{ width: "100%", height: "100%", objectFit: "cover" }}
-            />
-            <div
-              style={{
-                position: "absolute",
-                inset: 0,
-                background:
-                  "linear-gradient(to top, rgba(10,37,64,0.7), transparent 50%)",
-              }}
-            />
-            <div
-              style={{
-                position: "absolute",
-                bottom: 4,
-                left: 5,
-                right: 5,
-                fontSize: 7,
-                color: "white",
-                fontWeight: 600,
-              }}
-            >
-              Dr. Chen, DDS
-            </div>
-          </motion.div>
+              {l}
+            </span>
+          ))}
+        </div>
+        <span style={{ fontSize: 8, color: "#1F3D2E", fontWeight: 600 }}>
+          (813) 555-0142
+        </span>
+      </motion.div>
+
+      {/* Headline */}
+      <motion.div {...fadeRow(0.35)} className="px-4 pt-1 pb-2">
+        <div
+          style={{
+            fontFamily: "'Cormorant Garamond', Georgia, serif",
+            fontSize: 22,
+            fontWeight: 500,
+            color: "#0A2E1F",
+            lineHeight: 1.05,
+            letterSpacing: "-0.01em",
+          }}
+        >
+          Brighten Your Smile<br />
+          <span style={{ fontStyle: "italic", color: "#2EB872" }}>With Expert</span> Dental Care
+        </div>
+        <div style={{ fontSize: 8.5, color: "#5A6B62", marginTop: 4, lineHeight: 1.4 }}>
+          A stress-free dental visit that puts you at the center — gentle care,
+          modern technology, a smile you'll love.
         </div>
       </motion.div>
 
-      {/* Stats */}
+      {/* Hero image with overlaid booking card */}
       <motion.div
-        {...fadeRow(0.85)}
-        className="grid grid-cols-3 gap-1.5 px-4 py-2"
-        style={{ background: "white" }}
+        {...fadeRow(0.5)}
+        className="mx-4 mb-2 relative"
+        style={{
+          borderRadius: 12,
+          overflow: "hidden",
+          height: 150,
+        }}
+      >
+        <img
+          src={dentalHero}
+          alt="Dental patient smiling"
+          style={{ width: "100%", height: "100%", objectFit: "cover" }}
+        />
+        {/* Booking pill card */}
+        <motion.div
+          {...fadeRow(0.7)}
+          className="absolute"
+          style={{
+            top: 10,
+            right: 10,
+            background: "rgba(255,255,255,0.78)",
+            backdropFilter: "blur(8px)",
+            WebkitBackdropFilter: "blur(8px)",
+            border: "0.5px solid rgba(255,255,255,0.7)",
+            borderRadius: 10,
+            padding: "8px 9px",
+            width: 110,
+            boxShadow: "0 8px 24px -8px rgba(10,46,31,0.25)",
+          }}
+        >
+          <div style={{ fontSize: 8, fontWeight: 600, color: "#0A2E1F", marginBottom: 5 }}>
+            Book Your Visit
+          </div>
+          {["Full Name", "Contact", "Choose Date"].map((p) => (
+            <div
+              key={p}
+              style={{
+                fontSize: 7,
+                color: "#9AAFA3",
+                background: "rgba(255,255,255,0.7)",
+                border: "0.5px solid #E2EFE8",
+                borderRadius: 5,
+                padding: "3px 6px",
+                marginBottom: 3,
+              }}
+            >
+              {p}
+            </div>
+          ))}
+          <div
+            style={{
+              fontSize: 8,
+              fontWeight: 600,
+              color: "#0A2E1F",
+              background: "#C7F271",
+              borderRadius: 5,
+              padding: "4px 6px",
+              textAlign: "center",
+              marginTop: 2,
+            }}
+          >
+            Submit →
+          </div>
+        </motion.div>
+      </motion.div>
+
+      {/* Stats row */}
+      <motion.div
+        {...fadeRow(0.9)}
+        className="grid grid-cols-3 gap-1.5 px-4 pb-3 mt-auto"
       >
         {[
-          { n: "20+", l: "Years Of Care" },
-          { n: "4.9★", l: "Google Rating" },
-          { n: "12k", l: "Happy Smiles" },
+          { n: "200+", l: "Expert Doctors" },
+          { n: "10k+", l: "Happy Smiles" },
+          { n: "98%", l: "Satisfied" },
         ].map((s) => (
           <div
             key={s.l}
             style={{
-              border: "0.5px solid #E8EEF3",
-              borderRadius: 6,
-              padding: "5px 4px",
+              background: "white",
+              border: "0.5px solid #D6EADE",
+              borderRadius: 10,
+              padding: "7px 4px",
               textAlign: "center",
-              background: "#FBFDFE",
             }}
           >
-            <div style={{ fontSize: 11, fontWeight: 700, color: "#0E6BA8" }}>{s.n}</div>
-            <div style={{ fontSize: 7, color: "#8896A4", letterSpacing: "0.05em" }}>{s.l}</div>
+            <div style={{ fontSize: 13, fontWeight: 700, color: "#0A2E1F" }}>{s.n}</div>
+            <div style={{ fontSize: 7, color: "#5A6B62", letterSpacing: "0.04em" }}>{s.l}</div>
           </div>
         ))}
-      </motion.div>
-
-      {/* Services */}
-      <motion.div {...fadeRow(0.95)} className="px-4 py-2" style={{ background: "#F7FBFD" }}>
-        <div
-          style={{
-            fontSize: 7,
-            fontWeight: 600,
-            letterSpacing: "0.12em",
-            color: "#3FA7D6",
-            marginBottom: 3,
-          }}
-        >
-          WHAT WE DO
-        </div>
-        <div
-          style={{
-            fontSize: 12,
-            fontWeight: 700,
-            color: "#0A2540",
-            letterSpacing: "-0.01em",
-            marginBottom: 6,
-          }}
-        >
-          Comprehensive Dental Care
-        </div>
-        <div className="grid grid-cols-3 gap-1.5">
-          {[
-            { i: Smile, t: "Cosmetic" },
-            { i: Shield, t: "Preventive" },
-            { i: Sparkles, t: "Whitening" },
-          ].map((s) => (
-            <div
-              key={s.t}
-              style={{
-                background: "white",
-                border: "0.5px solid #E8EEF3",
-                borderRadius: 8,
-                padding: "6px 4px",
-                textAlign: "center",
-              }}
-            >
-              <div
-                style={{
-                  width: 18,
-                  height: 18,
-                  borderRadius: "50%",
-                  background: "rgba(63,167,214,0.12)",
-                  margin: "0 auto 3px",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  color: "#0E6BA8",
-                }}
-              >
-                <s.i size={10} />
-              </div>
-              <div style={{ fontSize: 8, fontWeight: 600, color: "#0A2540" }}>{s.t}</div>
-            </div>
-          ))}
-        </div>
-      </motion.div>
-
-      {/* Footer CTA */}
-      <motion.div
-        {...fadeRow(1.05)}
-        className="px-4 py-2 flex items-center justify-between mt-auto"
-        style={{ background: "#0A2540", color: "white" }}
-      >
-        <div>
-          <div style={{ fontSize: 9, fontWeight: 600, marginBottom: 1 }}>
-            Ready For A Brighter Smile?
-          </div>
-          <div className="flex items-center gap-2" style={{ fontSize: 7, opacity: 0.7 }}>
-            <span className="inline-flex items-center gap-0.5">
-              <MapPin size={7} /> Tampa, FL
-            </span>
-            <span className="inline-flex items-center gap-0.5">
-              <Phone size={7} /> (813) 555-0142
-            </span>
-          </div>
-        </div>
-        <span
-          style={{
-            fontSize: 9,
-            fontWeight: 600,
-            color: "#0A2540",
-            background: "white",
-            padding: "4px 8px",
-            borderRadius: 4,
-          }}
-        >
-          Book Now →
-        </span>
       </motion.div>
     </div>
   );
 }
+
 
 
 
