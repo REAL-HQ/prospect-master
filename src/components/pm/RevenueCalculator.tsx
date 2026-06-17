@@ -67,7 +67,7 @@ export function RevenueCalculator() {
         <SectionHeader
           icon={TrendingUp}
           eyebrow="Revenue Calculator"
-          headline={<>See Exactly What You'll <span style={{ color: "#CC0000" }}>Make.</span></>}
+          headline="See Exactly What You'll Make."
           subtext="Drag the sliders and watch your income update in real time."
           maxWidth={560}
         />
