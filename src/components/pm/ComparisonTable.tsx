@@ -38,7 +38,6 @@ export function ComparisonTable() {
           eyebrow="vs. The Competition"
           headline="Nobody Else Does All Of This."
           subtext="See how ProspectMaster stacks up against the most popular alternatives."
-          maxWidth={520}
         />
 
         <div
