@@ -92,12 +92,12 @@ export function Pricing() {
               }}
             >
               {opt.label}
-              {opt.id && (
+            {opt.id && (
                 <span
                   className="ml-2 text-[10px] px-1.5 py-0.5"
                   style={{ background: "#FFF0F0", color: "#CC0000", borderRadius: 10 }}
                 >
-                  2 months free
+                  2 Months Free
                 </span>
               )}
             </button>
