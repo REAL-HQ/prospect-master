@@ -66,10 +66,25 @@ export function Hero() {
       <div className="relative z-[2] mx-auto max-w-[1280px] grid lg:grid-cols-2">
         <div className="px-6 md:px-10 lg:px-12 py-14 lg:py-[60px] max-w-[560px]">
           <div className="pm-eyebrow mb-4">AI-Powered · Fully Automated</div>
-          <h1 className="mb-5" style={{ fontSize: "clamp(32px, 5vw, 44px)", lineHeight: 1.1 }}>
+          <h1
+            className="mb-5 font-extrabold tracking-tight"
+            style={{
+              fontSize: "clamp(44px, 6.5vw, 76px)",
+              lineHeight: 1.02,
+              color: "#0E1116",
+              letterSpacing: "-0.02em",
+            }}
+          >
             Your AI Closes<br />
             Website Deals<br />
-            <span style={{ color: "#CC0000" }}>While You Sleep.</span>
+            <span className="relative inline-block">
+              <span
+                aria-hidden="true"
+                className="absolute inset-x-[-6px] bottom-[6px] h-[55%] -z-0"
+                style={{ background: "#FFE14D", transform: "skew(-4deg)" }}
+              />
+              <span className="relative z-[1]">While You Sleep.</span>
+            </span>
           </h1>
           <p className="text-[15px]" style={{ color: "#666" }}>
             ProspectMaster Finds Local Businesses With No Website, Builds Their Site, Pitches It, And Closes The Deal. Automatically.
