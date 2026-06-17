@@ -1,7 +1,9 @@
 import type { ReactNode } from "react";
+import type { LucideIcon } from "lucide-react";
 
 type SectionHeaderProps = {
   eyebrow?: string;
+  icon?: LucideIcon;
   headline: ReactNode;
   subtext?: ReactNode;
   align?: "left" | "center";
@@ -10,6 +12,7 @@ type SectionHeaderProps = {
 
 export function SectionHeader({
   eyebrow,
+  icon,
   headline,
   subtext,
   align = "center",
@@ -22,7 +25,7 @@ export function SectionHeader({
           className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-5"
           style={{ background: "#FFF0F0" }}
         >
-          <span className="w-2 h-2 rounded-full" style={{ background: "#CC0000" }} />
+          {icon && <icon size={14} style={{ color: "#CC0000" }} />}
           <span className="text-[13px] font-medium" style={{ color: "#CC0000" }}>
             {eyebrow}
           </span>
