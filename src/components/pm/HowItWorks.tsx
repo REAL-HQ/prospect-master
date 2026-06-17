@@ -226,7 +226,7 @@ function Visual4() {
       tag: "Day 1 — Initial Email",
       status: "Sent",
       subj: "I built a website for Lakeside Dental",
-      body: "Hi — I noticed Lakeside Dental isn't online yet, so I built you a free preview...",
+      body: "Hi — I noticed Lakeside Dental isn't online yet, so I built you a free preview site so you can see what you're missing...",
       delay: 0.2,
       tagColor: "#CC0000",
       statusColor: "#999",
@@ -238,8 +238,20 @@ function Visual4() {
       tag: "Day 3 — Follow-Up",
       status: "Opened 2x",
       subj: "86% of patients search before booking",
-      body: "Just wanted to check — most new patients find dentists on Google first...",
-      delay: 0.55,
+      body: "Just wanted to check — most new patients find dentists on Google first. Without a site, you're invisible to them...",
+      delay: 0.45,
+      tagColor: "#CC0000",
+      statusColor: "#CC0000",
+      bg: "#fff0f0",
+      border: "1px solid rgba(204,0,0,0.2)",
+      opacity: 1,
+    },
+    {
+      tag: "Day 5 — Second Follow-Up",
+      status: "Clicked link",
+      subj: "Your preview site got 12 views this week",
+      body: "People are already checking out the preview I built. Imagine what happens when it goes live with your branding...",
+      delay: 0.65,
       tagColor: "#CC0000",
       statusColor: "#CC0000",
       bg: "#fff0f0",
@@ -250,7 +262,7 @@ function Visual4() {
       tag: "Day 7 — Final Notice",
       status: "Scheduled",
       subj: "Holding your site for 48 more hours",
-      body: "Last note before this preview goes to your competitor...",
+      body: "Last note before this preview goes to your competitor down the street. Ready to claim it?",
       delay: 0.85,
       tagColor: "#999",
       statusColor: "#999",
@@ -260,7 +272,7 @@ function Visual4() {
     },
   ];
   return (
-    <div className="p-3 flex flex-col gap-2 h-full">
+    <div className="p-4 flex flex-col gap-2.5 h-full">
       {cards.map((c) => (
         <motion.div
           key={c.tag}
@@ -268,19 +280,19 @@ function Visual4() {
           style={{
             background: c.bg,
             border: c.border,
-            borderRadius: 8,
-            padding: "8px 10px",
+            borderRadius: 10,
+            padding: "10px 12px",
             opacity: c.opacity,
           }}
         >
           <div className="flex items-center justify-between">
-            <span style={{ fontSize: 9, fontWeight: 500, color: c.tagColor, letterSpacing: "0.05em" }}>
+            <span style={{ fontSize: 10, fontWeight: 500, color: c.tagColor, letterSpacing: "0.05em" }}>
               {c.tag.toUpperCase()}
             </span>
-            <span style={{ fontSize: 9, color: c.statusColor }}>{c.status}</span>
+            <span style={{ fontSize: 10, color: c.statusColor }}>{c.status}</span>
           </div>
-          <div style={{ fontSize: 10.5, fontWeight: 500, color: "#111", marginTop: 3 }}>{c.subj}</div>
-          <div style={{ fontSize: 9.5, color: "#888", marginTop: 1, lineHeight: 1.4 }}>{c.body}</div>
+          <div style={{ fontSize: 11, fontWeight: 500, color: "#111", marginTop: 4 }}>{c.subj}</div>
+          <div style={{ fontSize: 10, color: "#888", marginTop: 2, lineHeight: 1.4 }}>{c.body}</div>
         </motion.div>
       ))}
     </div>
