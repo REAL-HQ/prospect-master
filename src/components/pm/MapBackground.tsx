@@ -46,10 +46,10 @@ export function MapBackground() {
       viewBox="0 0 900 520"
       preserveAspectRatio="xMidYMid slice"
       className="absolute inset-0 w-full h-full pointer-events-none"
-      style={{ opacity: 0.13 }}
+      style={{ opacity: 0.55 }}
       aria-hidden="true"
     >
-      <rect width="900" height="520" fill="#f5f5f3" />
+      <rect width="900" height="520" fill="#FAF8F5" />
       {buildings.map((b, i) => (
         <rect
           key={i}
@@ -58,7 +58,7 @@ export function MapBackground() {
           width={b.w}
           height={b.h}
           fill={b.c}
-          opacity={b.o}
+          opacity={b.o * 0.55}
           rx="2"
         />
       ))}
@@ -69,9 +69,9 @@ export function MapBackground() {
           y1={y}
           x2="900"
           y2={y}
-          stroke="#b8b4ac"
-          strokeWidth="1.5"
-          opacity="0.3"
+          stroke="#c8c4bc"
+          strokeWidth="1"
+          opacity="0.4"
         />
       ))}
       {vRoads.map((x, i) => (
@@ -81,39 +81,14 @@ export function MapBackground() {
           y1="0"
           x2={x}
           y2="520"
-          stroke="#b8b4ac"
+          stroke="#c8c4bc"
           strokeWidth="1"
-          opacity="0.28"
+          opacity="0.35"
         />
       ))}
-      <path
-        d="M 0 80 Q 200 60 450 100 T 900 90"
-        stroke="#a8a49c"
-        strokeWidth="2"
-        fill="none"
-        opacity="0.32"
-      />
-      <path
-        d="M 0 350 Q 300 380 600 340 T 900 360"
-        stroke="#a8a49c"
-        strokeWidth="2"
-        fill="none"
-        opacity="0.3"
-      />
-      <path
-        d="M 200 0 Q 220 200 180 400 T 200 520"
-        stroke="#a8a49c"
-        strokeWidth="2"
-        fill="none"
-        opacity="0.28"
-      />
-      <path
-        d="M 720 0 Q 700 200 740 400 T 720 520"
-        stroke="#a8a49c"
-        strokeWidth="2"
-        fill="none"
-        opacity="0.28"
-      />
+      {/* Warm diagonal rays */}
+      <line x1="-50" y1="520" x2="950" y2="80" stroke="#F5C97A" strokeWidth="3" opacity="0.35" />
+      <line x1="-50" y1="600" x2="950" y2="180" stroke="#F5C97A" strokeWidth="2" opacity="0.22" />
     </svg>
   );
 }

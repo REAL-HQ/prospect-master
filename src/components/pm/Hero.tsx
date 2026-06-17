@@ -10,11 +10,11 @@ type Pin = {
 };
 
 const pins: Pin[] = [
-  { type: "Restaurant", name: "Bella Vista Trattoria", value: "$1,200", top: 44, right: 214 },
-  { type: "Dentist", name: "Lakeside Dental", value: "$2,500", top: 128, right: 68 },
-  { type: "Hair Salon", name: "Lux Hair Lounge", value: "$900", top: 268, right: 154 },
-  { type: "Plumber", name: "Lone Star Plumbing", value: "$1,800", top: 362, right: 52 },
-  { type: "Gym", name: "Desert Iron Fitness", value: "$1,500", top: 424, right: 272 },
+  { type: "Restaurant", name: "Bella Vista Trattoria", value: "$1,200", top: 20, right: 260 },
+  { type: "Dentist", name: "Lakeside Dental", value: "$2,500", top: 150, right: 30 },
+  { type: "Hair Salon", name: "Lux Hair Lounge", value: "$900", top: 330, right: 210 },
+  { type: "Plumber", name: "Lone Star Plumbing", value: "$1,800", top: 470, right: 20 },
+  { type: "Gym", name: "Desert Iron Fitness", value: "$1,500", top: 600, right: 280 },
 ];
 
 function PinCard({ pin }: { pin: Pin }) {
@@ -66,10 +66,25 @@ export function Hero() {
       <div className="relative z-[2] mx-auto max-w-[1280px] grid lg:grid-cols-2">
         <div className="px-6 md:px-10 lg:px-12 py-14 lg:py-[60px] max-w-[560px]">
           <div className="pm-eyebrow mb-4">AI-Powered · Fully Automated</div>
-          <h1 className="mb-5" style={{ fontSize: "clamp(32px, 5vw, 44px)", lineHeight: 1.1 }}>
+          <h1
+            className="mb-5 font-extrabold tracking-tight"
+            style={{
+              fontSize: "clamp(44px, 6.5vw, 76px)",
+              lineHeight: 1.02,
+              color: "#0E1116",
+              letterSpacing: "-0.02em",
+            }}
+          >
             Your AI Closes<br />
             Website Deals<br />
-            <span style={{ color: "#CC0000" }}>While You Sleep.</span>
+            <span className="relative inline-block">
+              <span
+                aria-hidden="true"
+                className="absolute inset-x-[-6px] bottom-[6px] h-[55%] -z-0"
+                style={{ background: "#FFE14D", transform: "skew(-4deg)" }}
+              />
+              <span className="relative z-[1]">While You Sleep.</span>
+            </span>
           </h1>
           <p className="text-[15px]" style={{ color: "#666" }}>
             ProspectMaster Finds Local Businesses With No Website, Builds Their Site, Pitches It, And Closes The Deal. Automatically.
@@ -120,7 +135,7 @@ export function Hero() {
           </div>
         </div>
 
-        <div className="relative hidden lg:block" style={{ minHeight: 520 }}>
+        <div className="relative hidden lg:block" style={{ minHeight: 760 }}>
           {pins.map((p) => (
             <PinCard key={p.name} pin={p} />
           ))}
