@@ -86,7 +86,14 @@ function PinCard({ pin }: { pin: Pin }) {
 }
 
 export function Hero() {
-  return (
+  const navigate = useNavigate();
+  const [location, setLocation] = useState("");
+  const [niche, setNiche] = useState("");
+  const onScan = (e: React.FormEvent) => {
+    e.preventDefault();
+    navigate({ to: "/auth", search: { location, niche } as never });
+  };
+
     <section id="top" className="relative overflow-hidden">
       <MapBackground />
       <div className="relative z-[2] mx-auto max-w-[1280px] grid lg:grid-cols-[1fr_460px] gap-6">
