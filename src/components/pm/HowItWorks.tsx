@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { Search, BarChart3, Layout, Mail, DollarSign, Check } from "lucide-react";
+import { Search, BarChart3, Layout, Mail, DollarSign, Check, ListChecks } from "lucide-react";
 import { SectionHeader } from "./SectionHeader";
 
 type Step = {
@@ -291,9 +291,10 @@ export function HowItWorks() {
     <section id="how-it-works" className="px-6 md:px-10 py-16 md:py-20">
       <div className="mx-auto max-w-[1100px]">
         <SectionHeader
+          icon={ListChecks}
           eyebrow="The System"
           headline={<>Five Steps. <span style={{ color: "#CC0000" }}>Zero Manual Work.</span></>}
-          subtext="Every other tool hands you leads and walks away. ProspectMaster runs the entire pipeline from the first scan to the signed deal."
+          subtext="Other tools hand you leads and walk away. ProspectMaster runs the full pipeline."
           maxWidth={520}
         />
 
