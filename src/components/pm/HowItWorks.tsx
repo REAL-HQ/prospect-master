@@ -297,19 +297,21 @@ export function HowItWorks() {
           Every other tool hands you leads and walks away. ProspectMaster runs the entire pipeline from the first scan to the signed deal.
         </p>
 
-        <div
-          className="mt-10 overflow-hidden"
-          style={{ border: "0.5px solid #E0E0E0", borderRadius: 12 }}
-        >
+        <div className="mt-10 flex flex-col gap-4">
           {steps.map((s, i) => {
             const Icon = stepIcons[i];
+            const isEven = i % 2 === 1;
             return (
               <div
                 key={s.num}
-                className="grid md:grid-cols-[1fr_300px]"
-                style={i < steps.length - 1 ? { borderBottom: "0.5px solid #E0E0E0" } : {}}
+                className="grid md:grid-cols-[1fr_300px] overflow-hidden"
+                style={{
+                  border: "0.5px solid #E0E0E0",
+                  borderRadius: 12,
+                  direction: isEven ? "rtl" : "ltr",
+                }}
               >
-                <div className="p-7 md:p-8">
+                <div className="p-7 md:p-8" style={{ direction: "ltr" }}>
                   <div className="flex items-center gap-3">
                     <div
                       className="flex items-center justify-center text-white text-[12px] font-medium"
@@ -345,7 +347,9 @@ export function HowItWorks() {
                   className="min-h-[200px]"
                   style={{
                     background: "#F5F5F5",
-                    borderLeft: "0.5px solid #E0E0E0",
+                    borderLeft: isEven ? undefined : "0.5px solid #E0E0E0",
+                    borderRight: isEven ? "0.5px solid #E0E0E0" : undefined,
+                    direction: "ltr",
                   }}
                 >
                   {s.visual}
