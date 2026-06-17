@@ -11,7 +11,7 @@ export function CTABanner() {
         <SectionHeader
           icon={Rocket}
           eyebrow="Ready To Start"
-          headline={<>37% Of Local Businesses Need A Website. <span style={{ color: "#CC0000" }}>Your AI Is About To Call All Of Them.</span></>}
+          headline={<>37% Of Local Businesses Need A Website. <br /><span style={{ color: "#CC0000" }}>Your AI Is About To Call All Of Them.</span></>}
           subtext="Start free. No credit card. First 10 prospects on us."
           maxWidth={760}
         />
