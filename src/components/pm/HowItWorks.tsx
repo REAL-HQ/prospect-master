@@ -181,39 +181,39 @@ function Visual3() {
   return (
     <div className="flex flex-col h-full">
       <div
-        className="flex items-center gap-1.5 px-2 py-1.5"
+        className="flex items-center gap-2 px-3 py-2.5"
         style={{ background: "#f8f8f8", borderBottom: "0.5px solid #E8E8E8" }}
       >
-        <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#f09595" }} />
-        <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#EF9F27" }} />
-        <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#97C459" }} />
-        <span className="ml-2" style={{ fontSize: 9, color: "#bbb" }}>
+        <span style={{ width: 7, height: 7, borderRadius: "50%", background: "#f09595" }} />
+        <span style={{ width: 7, height: 7, borderRadius: "50%", background: "#EF9F27" }} />
+        <span style={{ width: 7, height: 7, borderRadius: "50%", background: "#97C459" }} />
+        <span className="ml-2" style={{ fontSize: 10, color: "#bbb" }}>
           preview.prospectmaster.com/lakeside-dental
         </span>
       </div>
-      <motion.div {...fadeRow(0.3)} className="p-3" style={{ background: "#CC0000" }}>
-        <div style={{ fontSize: 13, fontWeight: 500, color: "white" }}>Lakeside Dental</div>
-        <motion.div {...fadeRow(0.5)} style={{ fontSize: 10, color: "rgba(255,255,255,0.9)", marginTop: 2 }}>
+      <motion.div {...fadeRow(0.3)} className="p-4" style={{ background: "#CC0000" }}>
+        <div style={{ fontSize: 15, fontWeight: 500, color: "white" }}>Lakeside Dental</div>
+        <motion.div {...fadeRow(0.5)} style={{ fontSize: 11, color: "rgba(255,255,255,0.9)", marginTop: 4 }}>
           Your smile is our priority. Book today.
         </motion.div>
         <motion.button
           {...fadeRow(0.7)}
           style={{
-            marginTop: 8,
+            marginTop: 12,
             background: "white",
             color: "#CC0000",
-            fontSize: 10,
+            fontSize: 11,
             fontWeight: 500,
-            padding: "5px 10px",
-            borderRadius: 4,
+            padding: "7px 14px",
+            borderRadius: 5,
           }}
         >
           Book A Consultation
         </motion.button>
       </motion.div>
-      <motion.div {...fadeRow(0.9)} className="p-3 flex flex-col gap-1.5">
-        {[90, 75, 60].map((w) => (
-          <div key={w} style={{ height: 6, width: `${w}%`, background: "#E8E8E8", borderRadius: 3 }} />
+      <motion.div {...fadeRow(0.9)} className="p-4 flex flex-col gap-2.5">
+        {[90, 75, 60, 85, 70, 55].map((w, i) => (
+          <div key={i} style={{ height: 8, width: `${w}%`, background: "#E8E8E8", borderRadius: 4 }} />
         ))}
       </motion.div>
     </div>
