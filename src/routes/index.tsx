@@ -1,29 +1,48 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { Navigation } from "@/components/pm/Navigation";
+import { Hero } from "@/components/pm/Hero";
+import { HowItWorks } from "@/components/pm/HowItWorks";
+import { FeaturesGrid } from "@/components/pm/FeaturesGrid";
+import { ComparisonTable } from "@/components/pm/ComparisonTable";
+import { RevenueCalculator } from "@/components/pm/RevenueCalculator";
+import { Pricing } from "@/components/pm/Pricing";
+import { CTABanner } from "@/components/pm/CTABanner";
+import { Footer } from "@/components/pm/Footer";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Your App" },
-      { name: "description", content: "Replace this with a one-sentence description of your app." },
-      { property: "og:title", content: "Your App" },
-      { property: "og:description", content: "Replace this with a one-sentence description of your app." },
+      { title: "ProspectMaster — Your AI Closes Website Deals While You Sleep" },
+      {
+        name: "description",
+        content:
+          "ProspectMaster finds local businesses with no website, builds their demo site, sends personalized outreach, and closes the deal. Automatically.",
+      },
+      { property: "og:title", content: "ProspectMaster — AI Prospect Discovery + Auto-Close" },
+      {
+        property: "og:description",
+        content:
+          "Find no-website businesses, auto-build their site, send personalized outreach, close the deal — fully automated.",
+      },
     ],
   }),
-  component: Index,
+  component: Home,
 });
 
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
-function Index() {
+function Home() {
   return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
+    <div className="bg-white">
+      <Navigation />
+      <main>
+        <Hero />
+        <HowItWorks />
+        <FeaturesGrid />
+        <ComparisonTable />
+        <RevenueCalculator />
+        <Pricing />
+        <CTABanner />
+      </main>
+      <Footer />
     </div>
   );
 }
