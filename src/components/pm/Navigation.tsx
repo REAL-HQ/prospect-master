@@ -4,6 +4,7 @@ import { Menu, X } from "lucide-react";
 const links = [
   { href: "#how-it-works", label: "How It Works" },
   { href: "#features", label: "Features" },
+  { href: "#calculator", label: "Calculator" },
   { href: "#pricing", label: "Pricing" },
 ];
 
@@ -27,7 +28,7 @@ export function Navigation() {
       className="sticky top-0 z-[100] bg-white"
       style={{ borderBottom: "0.5px solid #E0E0E0" }}
     >
-      <nav className="mx-auto flex h-[56px] items-center justify-between px-10 md:px-16 lg:px-20">
+      <nav className="mx-auto flex h-[56px] items-center justify-between px-6 md:px-10 max-w-[1280px]">
         <Logo />
         <div className="hidden md:flex items-center gap-7">
           {links.map((l) => (
