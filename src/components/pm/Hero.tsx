@@ -1,7 +1,8 @@
-import { Link } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { Search, Play, MapPin, Sparkles, UtensilsCrossed, Smile, Scissors, Wrench, Dumbbell } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { MapBackground } from "./MapBackground";
+import { useState } from "react";
 
 type Pin = {
   type: string;
