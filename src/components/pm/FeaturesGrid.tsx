@@ -158,7 +158,7 @@ export function FeaturesGrid() {
               Everything Competitors Do. <span style={{ color: "#CC0000" }}>Plus Everything They Don't.</span>
             </>
           }
-          subtext="SiteSeeker generates scripts. NoSiteSearch finds leads. Durable builds sites. ProspectMaster does all of it and keeps going until the deal is closed."
+          subtext="Other systems help you find leads. Others help you build websites. ProspectMaster does all of it and keeps going until the deal is closed."
           maxWidth={620}
         />
 
