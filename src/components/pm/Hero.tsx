@@ -26,11 +26,11 @@ function PinCard({ pin }: { pin: Pin }) {
         top: pin.top,
         right: pin.right,
         left: pin.left,
-        padding: "8px 11px",
-        minWidth: 168,
+        padding: "10px 13px",
+        minWidth: 180,
         borderRadius: 10,
         border: "1px solid #E8E2D5",
-        boxShadow: "0 6px 20px -8px rgba(20,20,20,0.18), 0 2px 6px -2px rgba(20,20,20,0.08)",
+        boxShadow: "0 8px 24px -6px rgba(20,20,20,0.2), 0 2px 8px -2px rgba(20,20,20,0.1)",
       }}
     >
       <div className="flex items-center gap-1.5 mb-0.5">
@@ -53,20 +53,47 @@ function PinCard({ pin }: { pin: Pin }) {
           No Site
         </span>
       </div>
+
+      {/* Pin icon overlapping both card and map */}
       <div
         className="absolute"
         style={{
-          bottom: -6,
+          bottom: -14,
           left: "50%",
           transform: "translateX(-50%)",
-          width: 11,
-          height: 11,
-          borderRadius: "50%",
-          background: "#CC0000",
-          border: "2.5px solid white",
-          boxShadow: "0 2px 4px rgba(0,0,0,0.25)",
+          width: 0,
+          height: 0,
+          zIndex: 10,
         }}
-      />
+      >
+        {/* Pin needle line */}
+        <div
+          style={{
+            position: "absolute",
+            left: "50%",
+            top: -6,
+            transform: "translateX(-50%)",
+            width: 2,
+            height: 14,
+            background: "#CC0000",
+          }}
+        />
+        {/* Pin head - half on card, half on map */}
+        <div
+          style={{
+            position: "absolute",
+            left: "50%",
+            top: -6,
+            transform: "translate(-50%, -50%)",
+            width: 18,
+            height: 18,
+            borderRadius: "50%",
+            background: "#CC0000",
+            border: "3px solid white",
+            boxShadow: "0 2px 6px rgba(0,0,0,0.3)",
+          }}
+        />
+      </div>
     </div>
   );
 }
