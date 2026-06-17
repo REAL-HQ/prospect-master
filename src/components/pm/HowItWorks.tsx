@@ -1,6 +1,9 @@
 import { useState, type ReactNode } from "react";
 import { motion } from "framer-motion";
-import { Search, ListChecks, Check } from "lucide-react";
+import { Search, ListChecks, Check, Sparkles, Shield, Smile, Star, MapPin, Phone, Calendar } from "lucide-react";
+import dentalHero from "@/assets/dental-hero.jpg";
+import dentalSmile from "@/assets/dental-smile.jpg";
+import dentalClinic from "@/assets/dental-clinic.jpg";
 import { SectionHeader } from "./SectionHeader";
 import { AccordionItem } from "./AccordionItem";
 
