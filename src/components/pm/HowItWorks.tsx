@@ -199,7 +199,7 @@ function Visual3() {
       {/* Site nav */}
       <motion.div
         {...fadeRow(0.2)}
-        className="flex items-center justify-between px-4 py-2.5"
+        className="flex items-center justify-between px-4 py-1.5"
         style={{ borderBottom: "0.5px solid #EEE", background: "white" }}
       >
         <div className="flex items-center gap-1.5">
@@ -239,7 +239,7 @@ function Visual3() {
       {/* Hero with real imagery */}
       <motion.div
         {...fadeRow(0.35)}
-        className="relative px-4 py-4"
+        className="relative px-4 py-3"
         style={{
           background:
             "linear-gradient(135deg,#EAF4FB 0%,#F7FBFD 60%,#FFFFFF 100%)",
@@ -259,11 +259,11 @@ function Visual3() {
             opacity: 0.3,
           }}
         />
-        <div className="grid grid-cols-[1fr_88px] gap-3 items-center relative">
+        <div className="grid grid-cols-[1fr_72px] gap-3 items-center relative">
           <div className="min-w-0">
             <motion.div
               {...fadeRow(0.45)}
-              className="inline-flex items-center gap-1 mb-1.5"
+              className="inline-flex items-center gap-1 mb-1"
               style={{
                 fontSize: 8,
                 fontWeight: 600,
@@ -279,7 +279,7 @@ function Visual3() {
             <motion.div
               {...fadeRow(0.5)}
               style={{
-                fontSize: 16,
+                fontSize: 15,
                 fontWeight: 700,
                 color: "#0A2540",
                 lineHeight: 1.1,
@@ -290,11 +290,11 @@ function Visual3() {
             </motion.div>
             <motion.div
               {...fadeRow(0.6)}
-              style={{ fontSize: 9, color: "#5A6B7A", marginTop: 5, lineHeight: 1.4 }}
+              style={{ fontSize: 9, color: "#5A6B7A", marginTop: 4, lineHeight: 1.4 }}
             >
               Modern, Gentle Dentistry In The Heart Of Tampa.
             </motion.div>
-            <div className="flex items-center gap-2 mt-2.5">
+            <div className="flex items-center gap-2 mt-2">
               <motion.button
                 {...fadeRow(0.7)}
                 style={{
@@ -302,7 +302,7 @@ function Visual3() {
                   color: "white",
                   fontSize: 9,
                   fontWeight: 600,
-                  padding: "6px 11px",
+                  padding: "5px 10px",
                   borderRadius: 5,
                   boxShadow: "0 4px 12px -4px rgba(14,107,168,0.5)",
                   display: "inline-flex",
@@ -319,7 +319,7 @@ function Visual3() {
                   color: "#0E6BA8",
                   fontSize: 9,
                   fontWeight: 600,
-                  padding: "6px 10px",
+                  padding: "5px 9px",
                   borderRadius: 5,
                   border: "1px solid #D6E6F2",
                 }}
@@ -331,8 +331,8 @@ function Visual3() {
           <motion.div
             {...fadeRow(0.55)}
             style={{
-              width: 88,
-              height: 110,
+              width: 72,
+              height: 88,
               borderRadius: 10,
               overflow: "hidden",
               boxShadow: "0 10px 24px -8px rgba(14,107,168,0.5)",
@@ -355,9 +355,9 @@ function Visual3() {
             <div
               style={{
                 position: "absolute",
-                bottom: 5,
-                left: 6,
-                right: 6,
+                bottom: 4,
+                left: 5,
+                right: 5,
                 fontSize: 7,
                 color: "white",
                 fontWeight: 600,
@@ -372,7 +372,7 @@ function Visual3() {
       {/* Stats */}
       <motion.div
         {...fadeRow(0.85)}
-        className="grid grid-cols-3 gap-1.5 px-4 py-3"
+        className="grid grid-cols-3 gap-1.5 px-4 py-2"
         style={{ background: "white" }}
       >
         {[
@@ -385,7 +385,7 @@ function Visual3() {
             style={{
               border: "0.5px solid #E8EEF3",
               borderRadius: 6,
-              padding: "6px 6px",
+              padding: "5px 4px",
               textAlign: "center",
               background: "#FBFDFE",
             }}
@@ -397,14 +397,14 @@ function Visual3() {
       </motion.div>
 
       {/* Services */}
-      <motion.div {...fadeRow(0.95)} className="px-4 py-3" style={{ background: "#F7FBFD" }}>
+      <motion.div {...fadeRow(0.95)} className="px-4 py-2" style={{ background: "#F7FBFD" }}>
         <div
           style={{
             fontSize: 7,
             fontWeight: 600,
             letterSpacing: "0.12em",
             color: "#3FA7D6",
-            marginBottom: 4,
+            marginBottom: 3,
           }}
         >
           WHAT WE DO
@@ -415,7 +415,7 @@ function Visual3() {
             fontWeight: 700,
             color: "#0A2540",
             letterSpacing: "-0.01em",
-            marginBottom: 8,
+            marginBottom: 6,
           }}
         >
           Comprehensive Dental Care
@@ -432,7 +432,7 @@ function Visual3() {
                 background: "white",
                 border: "0.5px solid #E8EEF3",
                 borderRadius: 8,
-                padding: "8px 6px",
+                padding: "6px 4px",
                 textAlign: "center",
               }}
             >
@@ -442,7 +442,7 @@ function Visual3() {
                   height: 18,
                   borderRadius: "50%",
                   background: "rgba(63,167,214,0.12)",
-                  margin: "0 auto 4px",
+                  margin: "0 auto 3px",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
@@ -458,12 +458,12 @@ function Visual3() {
       </motion.div>
 
       {/* Gallery */}
-      <motion.div {...fadeRow(1.05)} className="grid grid-cols-2 gap-1.5 px-4 py-3" style={{ background: "white" }}>
+      <motion.div {...fadeRow(1.05)} className="grid grid-cols-2 gap-1.5 px-4 py-2" style={{ background: "white" }}>
         <div
           style={{
             borderRadius: 8,
             overflow: "hidden",
-            height: 60,
+            height: 44,
             position: "relative",
           }}
         >
@@ -476,8 +476,8 @@ function Visual3() {
           <div
             style={{
               position: "absolute",
-              bottom: 4,
-              left: 5,
+              bottom: 3,
+              left: 4,
               fontSize: 7,
               color: "white",
               fontWeight: 600,
@@ -491,7 +491,7 @@ function Visual3() {
           style={{
             borderRadius: 8,
             overflow: "hidden",
-            height: 60,
+            height: 44,
             position: "relative",
           }}
         >
@@ -504,8 +504,8 @@ function Visual3() {
           <div
             style={{
               position: "absolute",
-              bottom: 4,
-              left: 5,
+              bottom: 3,
+              left: 4,
               fontSize: 7,
               color: "white",
               fontWeight: 600,
@@ -520,14 +520,14 @@ function Visual3() {
       {/* Testimonial */}
       <motion.div
         {...fadeRow(1.15)}
-        className="mx-4 mb-3 p-3"
+        className="mx-4 mb-2 p-2.5"
         style={{
           background: "linear-gradient(135deg,#0E6BA8,#3FA7D6)",
           borderRadius: 10,
           color: "white",
         }}
       >
-        <div className="flex items-center gap-0.5 mb-1.5">
+        <div className="flex items-center gap-0.5 mb-1">
           {[0, 1, 2, 3, 4].map((i) => (
             <Star key={i} size={8} fill="#FFD166" stroke="#FFD166" />
           ))}
@@ -535,7 +535,7 @@ function Visual3() {
         <div style={{ fontSize: 9, lineHeight: 1.4, fontWeight: 500 }}>
           "Best Dental Experience I've Ever Had. The Team Made Me Feel Right At Home."
         </div>
-        <div style={{ fontSize: 7, marginTop: 5, opacity: 0.85, fontWeight: 500 }}>
+        <div style={{ fontSize: 7, marginTop: 4, opacity: 0.85, fontWeight: 500 }}>
           — Sarah M., Tampa
         </div>
       </motion.div>
@@ -543,11 +543,11 @@ function Visual3() {
       {/* Footer CTA */}
       <motion.div
         {...fadeRow(1.25)}
-        className="px-4 py-3 flex items-center justify-between"
+        className="px-4 py-2 flex items-center justify-between"
         style={{ background: "#0A2540", color: "white" }}
       >
         <div>
-          <div style={{ fontSize: 9, fontWeight: 600, marginBottom: 2 }}>
+          <div style={{ fontSize: 9, fontWeight: 600, marginBottom: 1 }}>
             Ready For A Brighter Smile?
           </div>
           <div className="flex items-center gap-2" style={{ fontSize: 7, opacity: 0.7 }}>
@@ -565,7 +565,7 @@ function Visual3() {
             fontWeight: 600,
             color: "#0A2540",
             background: "white",
-            padding: "5px 9px",
+            padding: "4px 8px",
             borderRadius: 4,
           }}
         >
