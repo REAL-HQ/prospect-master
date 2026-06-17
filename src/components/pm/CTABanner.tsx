@@ -1,4 +1,6 @@
 import { SectionHeader } from "./SectionHeader";
+
+export function CTABanner() {
   return (
     <section
       className="px-6 md:px-10 py-16 md:py-20 text-center"
