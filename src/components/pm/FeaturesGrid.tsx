@@ -112,7 +112,7 @@ const features: Feature[] = [
   },
   {
     icon: TrendingUp,
-    title: "MRR Dashboard",
+    title: "Revenue Dashboard",
     desc: "Track every dollar earned, active hosting subscriptions, and which markets convert best.",
     bullets: [
       "Monthly revenue breakdown — upfront sales vs. recurring hosting",
