@@ -1,4 +1,5 @@
-import { Search, Play, MapPin, Sparkles } from "lucide-react";
+import { Search, Play, MapPin, Sparkles, UtensilsCrossed, Smile, Scissors, Wrench, Dumbbell } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 import { MapBackground } from "./MapBackground";
 
 type Pin = {
@@ -8,6 +9,14 @@ type Pin = {
   top: string;
   left?: string;
   right?: string;
+};
+
+const typeIcons: Record<string, LucideIcon> = {
+  Restaurant: UtensilsCrossed,
+  Dentist: Smile,
+  "Hair Salon": Scissors,
+  Plumber: Wrench,
+  Gym: Dumbbell,
 };
 
 const pins: Pin[] = [
@@ -34,7 +43,10 @@ function PinCard({ pin }: { pin: Pin }) {
       }}
     >
       <div className="flex items-center gap-1.5 mb-0.5">
-        <MapPin size={10} strokeWidth={2.4} style={{ color: "#CC0000" }} />
+        {(() => {
+          const TypeIcon = typeIcons[pin.type];
+          return TypeIcon ? <TypeIcon size={10} strokeWidth={2.4} style={{ color: "#CC0000" }} /> : null;
+        })()}
         <div className="text-[9px] uppercase tracking-[0.08em] font-semibold" style={{ color: "#CC0000" }}>
           {pin.type}
         </div>
