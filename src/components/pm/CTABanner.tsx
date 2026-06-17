@@ -7,11 +7,17 @@ export function CTABanner() {
       className="px-6 md:px-10 py-16 md:py-20 text-center"
       style={{ background: "#F5F5F5" }}
     >
-      <div className="mx-auto max-w-[760px]">
+      <div className="mx-auto">
         <SectionHeader
           icon={Rocket}
           eyebrow="Ready To Start"
-          headline={<>37% Of Local Businesses Need A Website. <br /><span style={{ color: "#CC0000" }}>Your AI Is About To Call All Of Them.</span></>}
+          headline={
+            <span style={{ fontSize: "clamp(24px, 3.5vw, 40px)" }}>
+              <span className="whitespace-normal md:whitespace-nowrap">37% Of Local Businesses Need A Website.</span>
+              <br />
+              <span className="whitespace-normal md:whitespace-nowrap" style={{ color: "#CC0000" }}>Your AI Is About To Call All Of Them.</span>
+            </span>
+          }
           subtext="Start free. No credit card. First 10 prospects on us."
           maxWidth={760}
         />
@@ -24,3 +30,4 @@ export function CTABanner() {
     </section>
   );
 }
+
