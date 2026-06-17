@@ -97,10 +97,10 @@ export function Hero() {
               <span className="relative z-[1]">While You Sleep.</span>
             </span>
           </h1>
-          <p className="text-[20px] md:text-[22px] leading-relaxed" style={{ color: "#555" }}>
-            ProspectMaster Finds Local Businesses With No Website, Builds Their Site, Pitches It, And Closes The Deal. Automatically.
-          </p>
-          <p className="text-[20px] md:text-[22px] font-semibold mt-2" style={{ color: "#111" }}>
+          <p className="text-[20px] md:text-[22px] leading-relaxed font-semibold" style={{ color: "#111" }}>
+            Prospect Master Finds Local Businesses<br />
+            With No Website, Builds Their Site, Pitches It,<br />
+            And Closes The Deal. Automatically.<br />
             Zero Human Follow-Up Required.
           </p>
 
