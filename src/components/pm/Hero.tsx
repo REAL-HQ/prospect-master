@@ -93,8 +93,9 @@ export function Hero() {
     e.preventDefault();
     navigate({ to: "/auth", search: { location, niche } as never });
   };
-
+  return (
     <section id="top" className="relative overflow-hidden">
+
       <MapBackground />
       <div className="relative z-[2] mx-auto max-w-[1280px] grid lg:grid-cols-[1fr_460px] gap-6">
         <div className="px-6 md:px-10 lg:px-12 pt-8 pb-6 max-w-[640px]">
