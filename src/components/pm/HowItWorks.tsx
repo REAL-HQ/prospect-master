@@ -94,36 +94,36 @@ const slideIn = (delay: number) => ({
 });
 
 function Visual1() {
-  const rows = ["Lakeside Dental", "Smile Bay Co.", "Bright Family Dental", "Coastal Orthodontics"];
-  const delays = [0.2, 0.55, 0.85, 1.1];
+  const rows = ["Lakeside Dental", "Smile Bay Co.", "Bright Family Dental", "Coastal Orthodontics", "Harbor View Dental", "Sunshine Smile Clinic", "Bay Bridge Dental"];
+  const delays = [0.2, 0.4, 0.6, 0.8, 1.0, 1.2, 1.4];
   return (
     <div className="flex flex-col h-full">
       <div
-        className="flex items-center justify-between px-3 py-2"
+        className="flex items-center justify-between px-4 py-3"
         style={{ background: "#f8f8f8", borderBottom: "0.5px solid #E8E8E8" }}
       >
-        <div className="flex items-center gap-1.5">
-          <Search size={11} style={{ color: "#CC0000" }} />
-          <span style={{ fontSize: 10, color: "#444" }}>Search · Tampa, FL · Dentists</span>
+        <div className="flex items-center gap-2">
+          <Search size={13} style={{ color: "#CC0000" }} />
+          <span style={{ fontSize: 11, color: "#444" }}>Search · Tampa, FL · Dentists</span>
         </div>
-        <span style={{ fontSize: 9, color: "#CC0000", fontWeight: 500, letterSpacing: "0.06em" }}>
+        <span style={{ fontSize: 10, color: "#CC0000", fontWeight: 500, letterSpacing: "0.06em" }}>
           SCANNING...
         </span>
       </div>
-      <div className="flex items-center justify-between px-3 py-2" style={{ borderBottom: "0.5px solid #E8E8E8" }}>
-        <span style={{ fontSize: 10, color: "#888", fontWeight: 500 }}>Business</span>
-        <span style={{ fontSize: 10, color: "#CC0000", fontWeight: 500 }}>No Website</span>
+      <div className="flex items-center justify-between px-4 py-3" style={{ borderBottom: "0.5px solid #E8E8E8" }}>
+        <span style={{ fontSize: 11, color: "#888", fontWeight: 500 }}>Business</span>
+        <span style={{ fontSize: 11, color: "#CC0000", fontWeight: 500 }}>No Website</span>
       </div>
       <div className="flex-1 flex flex-col">
         {rows.map((r, i) => (
           <motion.div
             key={r}
             {...fadeRow(delays[i])}
-            className="flex items-center justify-between px-3 py-2"
+            className="flex items-center justify-between px-4 py-3"
             style={{ borderBottom: i < rows.length - 1 ? "0.5px solid #F0F0F0" : undefined }}
           >
-            <span style={{ fontSize: 11, color: "#222" }}>{r}</span>
-            <span style={{ fontSize: 10, color: "#CC0000", fontWeight: 500 }}>YES</span>
+            <span style={{ fontSize: 13, color: "#222" }}>{r}</span>
+            <span style={{ fontSize: 11, color: "#CC0000", fontWeight: 500 }}>YES</span>
           </motion.div>
         ))}
       </div>
@@ -136,31 +136,33 @@ function Visual2() {
     { name: "Lakeside Dental", score: "9.4", tag: "HOT", hot: true, scoreColor: "#CC0000" },
     { name: "Bella Vista Trattoria", score: "7.1", tag: "WARM", hot: false, scoreColor: "#666", bg: "#f0f0f0", tc: "#888" },
     { name: "Lux Hair Lounge", score: "4.8", tag: "COLD", hot: false, scoreColor: "#bbb", bg: "#f4f4f4", tc: "#aaa" },
+    { name: "Coastal Orthodontics", score: "8.7", tag: "HOT", hot: true, scoreColor: "#CC0000" },
+    { name: "Harbor View Dental", score: "6.2", tag: "WARM", hot: false, scoreColor: "#666", bg: "#f0f0f0", tc: "#888" },
   ];
-  const delays = [0.2, 0.45, 0.65];
+  const delays = [0.2, 0.4, 0.6, 0.8, 1.0];
   return (
-    <div className="p-3 flex flex-col gap-1.5 h-full justify-center">
+    <div className="p-4 flex flex-col gap-2.5 h-full justify-center">
       {cards.map((c, i) => (
         <motion.div
           key={c.name}
           {...slideIn(delays[i])}
-          className="flex items-center justify-between px-3 py-2"
+          className="flex items-center justify-between px-4 py-3"
           style={{
             border: c.hot ? "1.5px solid #CC0000" : "0.5px solid #E0E0E0",
-            borderRadius: 8,
+            borderRadius: 10,
           }}
         >
           <div>
-            <div style={{ fontSize: 11, color: "#111", fontWeight: 500 }}>{c.name}</div>
-            <div style={{ fontSize: 9, color: "#999" }}>Signal score</div>
+            <div style={{ fontSize: 13, color: "#111", fontWeight: 500 }}>{c.name}</div>
+            <div style={{ fontSize: 10, color: "#999" }}>Signal score</div>
           </div>
-          <div className="flex items-center gap-2">
-            <span style={{ fontSize: 16, fontWeight: 500, color: c.scoreColor }}>{c.score}</span>
+          <div className="flex items-center gap-3">
+            <span style={{ fontSize: 18, fontWeight: 500, color: c.scoreColor }}>{c.score}</span>
             <span
               style={{
-                fontSize: 9,
+                fontSize: 10,
                 fontWeight: 500,
-                padding: "2px 6px",
+                padding: "3px 8px",
                 borderRadius: 10,
                 background: c.hot ? "#CC0000" : c.bg,
                 color: c.hot ? "white" : c.tc,
