@@ -1,49 +1,47 @@
 export function MapBackground() {
-  const gridStep = 60;
-  const hLines = Array.from({ length: 9 }, (_, i) => (i + 1) * gridStep);
-  const vLines = Array.from({ length: 15 }, (_, i) => (i + 1) * gridStep);
-
-  // Gray building blocks representing businesses on the map
+  // Gray building blocks scattered across the map
   const buildings = [
-    { x: 40, y: 40, w: 35, h: 25 },
-    { x: 90, y: 85, w: 28, h: 22 },
-    { x: 160, y: 30, w: 40, h: 30 },
-    { x: 220, y: 120, w: 32, h: 24 },
-    { x: 300, y: 70, w: 45, h: 28 },
-    { x: 380, y: 140, w: 30, h: 20 },
-    { x: 450, y: 50, w: 38, h: 26 },
-    { x: 520, y: 110, w: 35, h: 25 },
-    { x: 600, y: 60, w: 42, h: 32 },
-    { x: 680, y: 150, w: 30, h: 22 },
-    { x: 750, y: 40, w: 36, h: 28 },
-    { x: 820, y: 100, w: 28, h: 20 },
-    { x: 50, y: 200, w: 40, h: 30 },
-    { x: 130, y: 260, w: 32, h: 24 },
-    { x: 210, y: 210, w: 35, h: 26 },
-    { x: 280, y: 280, w: 45, h: 30 },
-    { x: 360, y: 220, w: 30, h: 22 },
-    { x: 430, y: 290, w: 38, h: 28 },
-    { x: 510, y: 240, w: 34, h: 26 },
-    { x: 580, y: 310, w: 40, h: 30 },
-    { x: 660, y: 250, w: 32, h: 24 },
-    { x: 740, y: 320, w: 36, h: 28 },
-    { x: 810, y: 220, w: 30, h: 22 },
-    { x: 80, y: 350, w: 42, h: 32 },
-    { x: 160, y: 400, w: 35, h: 26 },
-    { x: 240, y: 340, w: 30, h: 22 },
-    { x: 320, y: 420, w: 40, h: 30 },
-    { x: 400, y: 360, w: 34, h: 26 },
-    { x: 480, y: 430, w: 38, h: 28 },
-    { x: 560, y: 370, w: 32, h: 24 },
-    { x: 640, y: 440, w: 36, h: 28 },
-    { x: 720, y: 380, w: 30, h: 22 },
-    { x: 800, y: 460, w: 42, h: 32 },
-    { x: 860, y: 350, w: 28, h: 20 },
-    { x: 110, y: 480, w: 35, h: 26 },
-    { x: 280, y: 490, w: 40, h: 28 },
-    { x: 450, y: 490, w: 32, h: 24 },
-    { x: 600, y: 500, w: 38, h: 28 },
-    { x: 780, y: 500, w: 30, h: 22 },
+    { x: 40, y: 40, w: 60, h: 40 }, { x: 115, y: 50, w: 45, h: 30 },
+    { x: 180, y: 30, w: 70, h: 45 }, { x: 270, y: 45, w: 50, h: 35 },
+    { x: 340, y: 30, w: 80, h: 50 }, { x: 440, y: 50, w: 55, h: 35 },
+    { x: 515, y: 35, w: 65, h: 45 }, { x: 600, y: 45, w: 50, h: 35 },
+    { x: 670, y: 30, w: 75, h: 50 }, { x: 765, y: 50, w: 50, h: 35 },
+    { x: 830, y: 35, w: 55, h: 45 },
+    { x: 40, y: 110, w: 50, h: 40 }, { x: 105, y: 120, w: 65, h: 35 },
+    { x: 190, y: 105, w: 55, h: 45 }, { x: 265, y: 120, w: 70, h: 35 },
+    { x: 355, y: 110, w: 50, h: 40 }, { x: 425, y: 120, w: 60, h: 35 },
+    { x: 505, y: 105, w: 55, h: 45 }, { x: 580, y: 120, w: 70, h: 35 },
+    { x: 670, y: 110, w: 50, h: 40 }, { x: 740, y: 120, w: 65, h: 35 },
+    { x: 825, y: 105, w: 55, h: 45 },
+    { x: 40, y: 185, w: 70, h: 45 }, { x: 130, y: 195, w: 50, h: 35 },
+    { x: 200, y: 180, w: 60, h: 50 }, { x: 280, y: 195, w: 55, h: 35 },
+    { x: 355, y: 185, w: 75, h: 45 }, { x: 450, y: 195, w: 50, h: 35 },
+    { x: 520, y: 185, w: 65, h: 45 }, { x: 605, y: 195, w: 55, h: 35 },
+    { x: 680, y: 185, w: 60, h: 45 }, { x: 760, y: 195, w: 50, h: 35 },
+    { x: 830, y: 185, w: 60, h: 45 },
+    { x: 40, y: 270, w: 55, h: 40 }, { x: 115, y: 280, w: 70, h: 35 },
+    { x: 205, y: 265, w: 50, h: 45 }, { x: 275, y: 280, w: 60, h: 35 },
+    { x: 355, y: 270, w: 55, h: 40 }, { x: 430, y: 280, w: 75, h: 35 },
+    { x: 525, y: 265, w: 50, h: 45 }, { x: 595, y: 280, w: 60, h: 35 },
+    { x: 675, y: 270, w: 70, h: 40 }, { x: 765, y: 280, w: 50, h: 35 },
+    { x: 835, y: 265, w: 55, h: 45 },
+    { x: 40, y: 355, w: 65, h: 40 }, { x: 125, y: 365, w: 50, h: 30 },
+    { x: 195, y: 350, w: 70, h: 45 }, { x: 285, y: 365, w: 55, h: 30 },
+    { x: 360, y: 355, w: 60, h: 40 }, { x: 440, y: 365, w: 50, h: 30 },
+    { x: 510, y: 350, w: 70, h: 45 }, { x: 600, y: 365, w: 55, h: 30 },
+    { x: 675, y: 355, w: 60, h: 40 }, { x: 755, y: 365, w: 50, h: 30 },
+    { x: 825, y: 350, w: 65, h: 45 },
+    { x: 60, y: 435, w: 70, h: 45 }, { x: 150, y: 445, w: 55, h: 35 },
+    { x: 225, y: 435, w: 65, h: 45 }, { x: 310, y: 445, w: 50, h: 35 },
+    { x: 380, y: 435, w: 70, h: 45 }, { x: 470, y: 445, w: 55, h: 35 },
+  ];
+
+  // Parks / green spaces
+  const parks = [
+    { x: 25, y: 60, w: 55, h: 38, r: 4 },
+    { x: 380, y: 200, w: 65, h: 45, r: 6 },
+    { x: 720, y: 360, w: 80, h: 50, r: 6 },
+    { x: 250, y: 410, w: 50, h: 35, r: 4 },
   ];
 
   return (
@@ -53,19 +51,13 @@ export function MapBackground() {
       className="absolute inset-0 w-full h-full pointer-events-none"
       aria-hidden="true"
     >
-      <rect width="900" height="520" fill="#FAFAFA" />
+      {/* Base map color */}
+      <rect width="900" height="520" fill="#E8E6E1" />
 
-      {/* Lake */}
-      <path
-        d="M -20 320 Q 60 280 120 310 T 240 340 Q 320 380 400 340 T 520 320 Q 600 290 680 340 T 820 360 L 900 380 L 900 520 L -20 520 Z"
-        fill="#B8D4E8"
-        opacity="0.35"
-      />
-      <path
-        d="M -20 350 Q 80 320 160 360 T 300 380 Q 400 410 480 370 T 620 360 Q 720 330 800 390 L 900 420 L 900 520 L -20 520 Z"
-        fill="#A8C8E0"
-        opacity="0.2"
-      />
+      {/* Parks (green) */}
+      {parks.map((p, i) => (
+        <rect key={`p${i}`} x={p.x} y={p.y} width={p.w} height={p.h} rx={p.r} fill="#C9E4C5" />
+      ))}
 
       {/* Gray building blocks */}
       {buildings.map((b, i) => (
@@ -75,44 +67,52 @@ export function MapBackground() {
           y={b.y}
           width={b.w}
           height={b.h}
-          rx={3}
-          fill="#E0E0E0"
-          opacity="0.6"
+          rx={2}
+          fill="#D4D2CD"
         />
       ))}
 
-      {/* Faint grid */}
-      {hLines.map((y, i) => (
-        <line key={`h${i}`} x1="0" y1={y} x2="900" y2={y} stroke="#EEEEEE" strokeWidth="1" />
+      {/* White street grid - horizontals */}
+      {[85, 160, 245, 325, 410, 495].map((y, i) => (
+        <line key={`sh${i}`} x1="0" y1={y} x2="900" y2={y} stroke="#FFFFFF" strokeWidth="10" />
       ))}
-      {vLines.map((x, i) => (
-        <line key={`v${i}`} x1={x} y1="0" x2={x} y2="520" stroke="#EEEEEE" strokeWidth="1" />
+      {/* White street grid - verticals */}
+      {[100, 185, 260, 345, 420, 500, 585, 660, 745, 820].map((x, i) => (
+        <line key={`sv${i}`} x1={x} y1="0" x2={x} y2="520" stroke="#FFFFFF" strokeWidth="10" />
       ))}
 
-      {/* Single warm diagonal accent */}
-      <line x1="-50" y1="520" x2="950" y2="80" stroke="#F5C97A" strokeWidth="3" opacity="0.35" />
-      <line x1="-50" y1="520" x2="950" y2="80" stroke="#F5B547" strokeWidth="1" opacity="0.5" strokeDasharray="5 7" />
-
-      {/* Subtle background pin dots scattered around the map */}
-      {[
-        { x: 90, y: 90 },
-        { x: 260, y: 170 },
-        { x: 430, y: 110 },
-        { x: 610, y: 200 },
-        { x: 740, y: 130 },
-        { x: 150, y: 290 },
-        { x: 350, y: 330 },
-        { x: 500, y: 380 },
-        { x: 680, y: 320 },
-        { x: 230, y: 440 },
-        { x: 460, y: 470 },
-        { x: 770, y: 460 },
-      ].map((d, i) => (
-        <g key={`d${i}`} opacity="0.4">
-          <circle cx={d.x} cy={d.y} r={7} fill="#CC0000" opacity="0.12" />
-          <circle cx={d.x} cy={d.y} r={3} fill="#CC0000" />
-        </g>
+      {/* Thinner cross streets */}
+      {[120, 205, 290, 370, 455].map((y, i) => (
+        <line key={`th${i}`} x1="0" y1={y} x2="900" y2={y} stroke="#FFFFFF" strokeWidth="4" opacity="0.7" />
       ))}
+
+      {/* Orange highway diagonals */}
+      <path d="M -20 380 L 380 -20" stroke="#F5B96B" strokeWidth="14" fill="none" opacity="0.85" />
+      <path d="M -20 380 L 380 -20" stroke="#F4A94A" strokeWidth="2" fill="none" opacity="0.6" strokeDasharray="2 10" />
+
+      <path d="M 540 540 L 940 140" stroke="#F5B96B" strokeWidth="14" fill="none" opacity="0.85" />
+      <path d="M 540 540 L 940 140" stroke="#F4A94A" strokeWidth="2" fill="none" opacity="0.6" strokeDasharray="2 10" />
+
+      {/* Blue river diagonal across lower right */}
+      <path
+        d="M 600 540 Q 700 460 780 420 T 940 320 L 940 540 Z"
+        fill="#9CC8E8"
+      />
+      <path
+        d="M 600 540 Q 700 460 780 420 T 940 320"
+        stroke="#7FB5DC"
+        strokeWidth="2"
+        fill="none"
+        opacity="0.6"
+      />
+      {/* River banks - small green strip */}
+      <path
+        d="M 605 540 Q 705 462 785 422 T 945 322"
+        stroke="#B8D9B0"
+        strokeWidth="6"
+        fill="none"
+        opacity="0.5"
+      />
     </svg>
   );
 }
