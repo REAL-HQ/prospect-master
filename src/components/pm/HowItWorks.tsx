@@ -338,8 +338,8 @@ function Visual3() {
         className="grid grid-cols-3 gap-1.5 px-4 pb-3 mt-auto"
       >
         {[
-          { n: "200+", l: "Expert Doctors" },
-          { n: "10k+", l: "Happy Smiles" },
+          { n: "15+", l: "Years of Care" },
+          { n: "2k+", l: "Happy Smiles" },
           { n: "98%", l: "Satisfied" },
         ].map((s) => (
           <div
