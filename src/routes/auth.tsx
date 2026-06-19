@@ -73,16 +73,77 @@ function AuthPage() {
   };
 
   return (
-    <div className="min-h-screen bg-white flex flex-col">
-      <div className="px-6 md:px-10 py-4">
-        <Link to="/" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors">
-          <ArrowLeft size={16} />
-          Back to home
-        </Link>
+    <div className="min-h-screen bg-white grid lg:grid-cols-2">
+      {/* Left visual panel */}
+      <div className="relative hidden lg:block overflow-hidden" style={{ background: "#0E1116" }}>
+        <img
+          src={authPanel}
+          alt="ProspectMaster"
+          className="absolute inset-0 w-full h-full object-cover opacity-90"
+          width={1024}
+          height={1280}
+        />
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              "linear-gradient(180deg, rgba(14,17,22,0.35) 0%, rgba(14,17,22,0.55) 60%, rgba(14,17,22,0.92) 100%)",
+          }}
+        />
+        <div className="relative z-10 flex flex-col justify-between h-full p-10 text-white">
+          <Link to="/" className="inline-flex items-center gap-2 text-sm text-white/80 hover:text-white transition-colors w-fit">
+            <ArrowLeft size={16} />
+            Back to home
+          </Link>
+
+          <div>
+            <div className="font-medium tracking-[0.09em] uppercase text-[14px] mb-6">
+              <span className="text-white">PROSPECT</span>
+              <span style={{ color: "#FF4D4D" }}>MASTER</span>
+            </div>
+            <h2 style={{ fontSize: 30, fontWeight: 500, lineHeight: 1.2, letterSpacing: "-0.01em" }}>
+              Turn local businesses<br />into recurring revenue.
+            </h2>
+            <p className="mt-4 text-white/70 text-sm max-w-md leading-relaxed">
+              The only fully automated platform that finds no-website businesses,
+              builds them a site, and closes the deal for you.
+            </p>
+
+            <ul className="mt-8 flex flex-col gap-3 max-w-md">
+              {[
+                "Live Google Maps prospecting in 190+ countries",
+                "AI-built demo site on every lead in 60 seconds",
+                "Stripe checkout + auto-deploy when they pay",
+              ].map((b) => (
+                <li key={b} className="flex items-start gap-3 text-sm text-white/85">
+                  <span
+                    className="flex items-center justify-center flex-shrink-0 mt-0.5"
+                    style={{ width: 18, height: 18, borderRadius: 9, background: "#CC0000" }}
+                  >
+                    <Check size={11} strokeWidth={3} className="text-white" />
+                  </span>
+                  {b}
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div className="text-xs text-white/50">
+            © {new Date().getFullYear()} ProspectMaster. All rights reserved.
+          </div>
+        </div>
       </div>
 
-      <div className="flex-1 flex items-center justify-center px-6 py-12">
-        <div className="w-full max-w-[380px]">
+      {/* Right form panel */}
+      <div className="flex flex-col">
+        <div className="lg:hidden px-6 py-4">
+          <Link to="/" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors">
+            <ArrowLeft size={16} />
+            Back to home
+          </Link>
+        </div>
+        <div className="flex-1 flex items-center justify-center px-6 py-12">
+          <div className="w-full max-w-[380px]">
           <div className="text-center mb-8">
             <div className="font-medium tracking-[0.09em] uppercase text-[16px] select-none mb-4">
               <span style={{ color: "#111" }}>PROSPECT</span>
