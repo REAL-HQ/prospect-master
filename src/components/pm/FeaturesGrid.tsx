@@ -349,7 +349,7 @@ function MockRevenue() {
   );
 }
 
-const visuals: Record<string, () => JSX.Element> = {
+const visuals: Record<string, () => React.ReactElement> = {
   "Live Prospect Search": MockSearch,
   "Lead Scoring Engine": MockScore,
   "AI Website Builder": MockSite,
