@@ -2,7 +2,8 @@ import { useState } from "react";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable";
-import { LogIn, Mail, Lock, Chrome, ArrowLeft, Eye, EyeOff } from "lucide-react";
+import { LogIn, Mail, Lock, Chrome, ArrowLeft, Eye, EyeOff, Check } from "lucide-react";
+import authPanel from "@/assets/auth-panel.jpg";
 
 export const Route = createFileRoute("/auth")({
   head: () => ({
