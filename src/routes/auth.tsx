@@ -93,7 +93,7 @@ function AuthPage() {
         <div className="relative z-10 flex flex-col justify-between h-full p-10 text-white">
           <Link to="/" className="inline-flex items-center gap-2 text-sm text-white/80 hover:text-white transition-colors w-fit">
             <ArrowLeft size={16} />
-            Back to home
+            Back to Home
           </Link>
 
           <div>
@@ -102,7 +102,7 @@ function AuthPage() {
               <span style={{ color: "#FF4D4D" }}>MASTER</span>
             </div>
             <h2 style={{ fontSize: 30, fontWeight: 500, lineHeight: 1.2, letterSpacing: "-0.01em" }}>
-              Turn local businesses<br />into recurring revenue.
+              Turn Local Businesses<br />Into Recurring Revenue.
             </h2>
             <p className="mt-4 text-white/70 text-sm max-w-md leading-relaxed">
               The only fully automated platform that finds no-website businesses,
@@ -139,7 +139,7 @@ function AuthPage() {
         <div className="lg:hidden px-6 py-4">
           <Link to="/" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors">
             <ArrowLeft size={16} />
-            Back to home
+            Back to Home
           </Link>
         </div>
         <div className="flex-1 flex items-center justify-center px-6 py-12">
