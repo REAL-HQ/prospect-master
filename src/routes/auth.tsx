@@ -247,7 +247,7 @@ function AuthPage() {
                   onClick={() => { setMode("signup"); setError(""); }}
                   className="font-medium text-[#CC0000] hover:underline"
                 >
-                  Start free
+                  Start Free
                 </button>
               </>
             ) : (
