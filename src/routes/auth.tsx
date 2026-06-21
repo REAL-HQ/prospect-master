@@ -93,7 +93,7 @@ function AuthPage() {
         <div className="relative z-10 flex flex-col justify-between h-full p-10 text-white">
           <Link to="/" className="inline-flex items-center gap-2 text-sm text-white/80 hover:text-white transition-colors w-fit">
             <ArrowLeft size={16} />
-            Back to Home
+            Back To Home
           </Link>
 
           <div>
@@ -139,7 +139,7 @@ function AuthPage() {
         <div className="lg:hidden px-6 py-4">
           <Link to="/" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors">
             <ArrowLeft size={16} />
-            Back to Home
+            Back To Home
           </Link>
         </div>
         <div className="flex-1 flex items-center justify-center px-6 py-12">
@@ -150,7 +150,7 @@ function AuthPage() {
               <span style={{ color: "#CC0000" }}>MASTER</span>
             </div>
             <h1 style={{ fontSize: 24, fontWeight: 500, color: "#0E1116" }}>
-              {mode === "signin" ? "Welcome back" : "Create your account"}
+              {mode === "signin" ? "Welcome Back" : "Create your account"}
             </h1>
             <p className="mt-2 text-sm text-muted-foreground">
               {mode === "signin"
