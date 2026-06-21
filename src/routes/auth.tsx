@@ -31,26 +31,31 @@ function AuthPage() {
 
     try {
       if (mode === "signin") {
-        const { error: signInError } = await supabase.auth.signInWithPassword({
+        const { data, error: signInError } = await supabase.auth.signInWithPassword({
           email,
           password,
         });
         if (signInError) throw signInError;
-        navigate({ to: "/dashboard" });
+        if (!data.session) throw new Error("No session returned. Please try again.");
+        window.location.href = "/dashboard";
       } else {
-        const { error: signUpError } = await supabase.auth.signUp({
+        const { data, error: signUpError } = await supabase.auth.signUp({
           email,
           password,
           options: {
-            emailRedirectTo: window.location.origin,
+            emailRedirectTo: `${window.location.origin}/dashboard`,
           },
         });
         if (signUpError) throw signUpError;
-        navigate({ to: "/dashboard" });
+        if (data.session) {
+          window.location.href = "/dashboard";
+        } else {
+          setError("Check your email to confirm your account before signing in.");
+          setLoading(false);
+        }
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : "An error occurred");
-    } finally {
       setLoading(false);
     }
   };
