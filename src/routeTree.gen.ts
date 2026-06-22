@@ -13,6 +13,15 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedDashboardIndexRouteImport } from './routes/_authenticated/dashboard.index'
+import { Route as AuthenticatedDashboardSitesRouteImport } from './routes/_authenticated/dashboard.sites'
+import { Route as AuthenticatedDashboardSearchRouteImport } from './routes/_authenticated/dashboard.search'
+import { Route as AuthenticatedDashboardRevenueRouteImport } from './routes/_authenticated/dashboard.revenue'
+import { Route as AuthenticatedDashboardPreviewsRouteImport } from './routes/_authenticated/dashboard.previews'
+import { Route as AuthenticatedDashboardPaymentsRouteImport } from './routes/_authenticated/dashboard.payments'
+import { Route as AuthenticatedDashboardOutreachRouteImport } from './routes/_authenticated/dashboard.outreach'
+import { Route as AuthenticatedDashboardLeadsRouteImport } from './routes/_authenticated/dashboard.leads'
+import { Route as AuthenticatedDashboardCrmRouteImport } from './routes/_authenticated/dashboard.crm'
 
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
@@ -33,35 +42,147 @@ const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedDashboardIndexRoute =
+  AuthenticatedDashboardIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => AuthenticatedDashboardRoute,
+  } as any)
+const AuthenticatedDashboardSitesRoute =
+  AuthenticatedDashboardSitesRouteImport.update({
+    id: '/sites',
+    path: '/sites',
+    getParentRoute: () => AuthenticatedDashboardRoute,
+  } as any)
+const AuthenticatedDashboardSearchRoute =
+  AuthenticatedDashboardSearchRouteImport.update({
+    id: '/search',
+    path: '/search',
+    getParentRoute: () => AuthenticatedDashboardRoute,
+  } as any)
+const AuthenticatedDashboardRevenueRoute =
+  AuthenticatedDashboardRevenueRouteImport.update({
+    id: '/revenue',
+    path: '/revenue',
+    getParentRoute: () => AuthenticatedDashboardRoute,
+  } as any)
+const AuthenticatedDashboardPreviewsRoute =
+  AuthenticatedDashboardPreviewsRouteImport.update({
+    id: '/previews',
+    path: '/previews',
+    getParentRoute: () => AuthenticatedDashboardRoute,
+  } as any)
+const AuthenticatedDashboardPaymentsRoute =
+  AuthenticatedDashboardPaymentsRouteImport.update({
+    id: '/payments',
+    path: '/payments',
+    getParentRoute: () => AuthenticatedDashboardRoute,
+  } as any)
+const AuthenticatedDashboardOutreachRoute =
+  AuthenticatedDashboardOutreachRouteImport.update({
+    id: '/outreach',
+    path: '/outreach',
+    getParentRoute: () => AuthenticatedDashboardRoute,
+  } as any)
+const AuthenticatedDashboardLeadsRoute =
+  AuthenticatedDashboardLeadsRouteImport.update({
+    id: '/leads',
+    path: '/leads',
+    getParentRoute: () => AuthenticatedDashboardRoute,
+  } as any)
+const AuthenticatedDashboardCrmRoute =
+  AuthenticatedDashboardCrmRouteImport.update({
+    id: '/crm',
+    path: '/crm',
+    getParentRoute: () => AuthenticatedDashboardRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
-  '/dashboard': typeof AuthenticatedDashboardRoute
+  '/dashboard': typeof AuthenticatedDashboardRouteWithChildren
+  '/dashboard/crm': typeof AuthenticatedDashboardCrmRoute
+  '/dashboard/leads': typeof AuthenticatedDashboardLeadsRoute
+  '/dashboard/outreach': typeof AuthenticatedDashboardOutreachRoute
+  '/dashboard/payments': typeof AuthenticatedDashboardPaymentsRoute
+  '/dashboard/previews': typeof AuthenticatedDashboardPreviewsRoute
+  '/dashboard/revenue': typeof AuthenticatedDashboardRevenueRoute
+  '/dashboard/search': typeof AuthenticatedDashboardSearchRoute
+  '/dashboard/sites': typeof AuthenticatedDashboardSitesRoute
+  '/dashboard/': typeof AuthenticatedDashboardIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
-  '/dashboard': typeof AuthenticatedDashboardRoute
+  '/dashboard/crm': typeof AuthenticatedDashboardCrmRoute
+  '/dashboard/leads': typeof AuthenticatedDashboardLeadsRoute
+  '/dashboard/outreach': typeof AuthenticatedDashboardOutreachRoute
+  '/dashboard/payments': typeof AuthenticatedDashboardPaymentsRoute
+  '/dashboard/previews': typeof AuthenticatedDashboardPreviewsRoute
+  '/dashboard/revenue': typeof AuthenticatedDashboardRevenueRoute
+  '/dashboard/search': typeof AuthenticatedDashboardSearchRoute
+  '/dashboard/sites': typeof AuthenticatedDashboardSitesRoute
+  '/dashboard': typeof AuthenticatedDashboardIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/auth': typeof AuthRoute
-  '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/dashboard': typeof AuthenticatedDashboardRouteWithChildren
+  '/_authenticated/dashboard/crm': typeof AuthenticatedDashboardCrmRoute
+  '/_authenticated/dashboard/leads': typeof AuthenticatedDashboardLeadsRoute
+  '/_authenticated/dashboard/outreach': typeof AuthenticatedDashboardOutreachRoute
+  '/_authenticated/dashboard/payments': typeof AuthenticatedDashboardPaymentsRoute
+  '/_authenticated/dashboard/previews': typeof AuthenticatedDashboardPreviewsRoute
+  '/_authenticated/dashboard/revenue': typeof AuthenticatedDashboardRevenueRoute
+  '/_authenticated/dashboard/search': typeof AuthenticatedDashboardSearchRoute
+  '/_authenticated/dashboard/sites': typeof AuthenticatedDashboardSitesRoute
+  '/_authenticated/dashboard/': typeof AuthenticatedDashboardIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth' | '/dashboard'
+  fullPaths:
+    | '/'
+    | '/auth'
+    | '/dashboard'
+    | '/dashboard/crm'
+    | '/dashboard/leads'
+    | '/dashboard/outreach'
+    | '/dashboard/payments'
+    | '/dashboard/previews'
+    | '/dashboard/revenue'
+    | '/dashboard/search'
+    | '/dashboard/sites'
+    | '/dashboard/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/dashboard'
+  to:
+    | '/'
+    | '/auth'
+    | '/dashboard/crm'
+    | '/dashboard/leads'
+    | '/dashboard/outreach'
+    | '/dashboard/payments'
+    | '/dashboard/previews'
+    | '/dashboard/revenue'
+    | '/dashboard/search'
+    | '/dashboard/sites'
+    | '/dashboard'
   id:
     | '__root__'
     | '/'
     | '/_authenticated'
     | '/auth'
     | '/_authenticated/dashboard'
+    | '/_authenticated/dashboard/crm'
+    | '/_authenticated/dashboard/leads'
+    | '/_authenticated/dashboard/outreach'
+    | '/_authenticated/dashboard/payments'
+    | '/_authenticated/dashboard/previews'
+    | '/_authenticated/dashboard/revenue'
+    | '/_authenticated/dashboard/search'
+    | '/_authenticated/dashboard/sites'
+    | '/_authenticated/dashboard/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -100,15 +221,108 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/dashboard/': {
+      id: '/_authenticated/dashboard/'
+      path: '/'
+      fullPath: '/dashboard/'
+      preLoaderRoute: typeof AuthenticatedDashboardIndexRouteImport
+      parentRoute: typeof AuthenticatedDashboardRoute
+    }
+    '/_authenticated/dashboard/sites': {
+      id: '/_authenticated/dashboard/sites'
+      path: '/sites'
+      fullPath: '/dashboard/sites'
+      preLoaderRoute: typeof AuthenticatedDashboardSitesRouteImport
+      parentRoute: typeof AuthenticatedDashboardRoute
+    }
+    '/_authenticated/dashboard/search': {
+      id: '/_authenticated/dashboard/search'
+      path: '/search'
+      fullPath: '/dashboard/search'
+      preLoaderRoute: typeof AuthenticatedDashboardSearchRouteImport
+      parentRoute: typeof AuthenticatedDashboardRoute
+    }
+    '/_authenticated/dashboard/revenue': {
+      id: '/_authenticated/dashboard/revenue'
+      path: '/revenue'
+      fullPath: '/dashboard/revenue'
+      preLoaderRoute: typeof AuthenticatedDashboardRevenueRouteImport
+      parentRoute: typeof AuthenticatedDashboardRoute
+    }
+    '/_authenticated/dashboard/previews': {
+      id: '/_authenticated/dashboard/previews'
+      path: '/previews'
+      fullPath: '/dashboard/previews'
+      preLoaderRoute: typeof AuthenticatedDashboardPreviewsRouteImport
+      parentRoute: typeof AuthenticatedDashboardRoute
+    }
+    '/_authenticated/dashboard/payments': {
+      id: '/_authenticated/dashboard/payments'
+      path: '/payments'
+      fullPath: '/dashboard/payments'
+      preLoaderRoute: typeof AuthenticatedDashboardPaymentsRouteImport
+      parentRoute: typeof AuthenticatedDashboardRoute
+    }
+    '/_authenticated/dashboard/outreach': {
+      id: '/_authenticated/dashboard/outreach'
+      path: '/outreach'
+      fullPath: '/dashboard/outreach'
+      preLoaderRoute: typeof AuthenticatedDashboardOutreachRouteImport
+      parentRoute: typeof AuthenticatedDashboardRoute
+    }
+    '/_authenticated/dashboard/leads': {
+      id: '/_authenticated/dashboard/leads'
+      path: '/leads'
+      fullPath: '/dashboard/leads'
+      preLoaderRoute: typeof AuthenticatedDashboardLeadsRouteImport
+      parentRoute: typeof AuthenticatedDashboardRoute
+    }
+    '/_authenticated/dashboard/crm': {
+      id: '/_authenticated/dashboard/crm'
+      path: '/crm'
+      fullPath: '/dashboard/crm'
+      preLoaderRoute: typeof AuthenticatedDashboardCrmRouteImport
+      parentRoute: typeof AuthenticatedDashboardRoute
+    }
   }
 }
 
+interface AuthenticatedDashboardRouteChildren {
+  AuthenticatedDashboardCrmRoute: typeof AuthenticatedDashboardCrmRoute
+  AuthenticatedDashboardLeadsRoute: typeof AuthenticatedDashboardLeadsRoute
+  AuthenticatedDashboardOutreachRoute: typeof AuthenticatedDashboardOutreachRoute
+  AuthenticatedDashboardPaymentsRoute: typeof AuthenticatedDashboardPaymentsRoute
+  AuthenticatedDashboardPreviewsRoute: typeof AuthenticatedDashboardPreviewsRoute
+  AuthenticatedDashboardRevenueRoute: typeof AuthenticatedDashboardRevenueRoute
+  AuthenticatedDashboardSearchRoute: typeof AuthenticatedDashboardSearchRoute
+  AuthenticatedDashboardSitesRoute: typeof AuthenticatedDashboardSitesRoute
+  AuthenticatedDashboardIndexRoute: typeof AuthenticatedDashboardIndexRoute
+}
+
+const AuthenticatedDashboardRouteChildren: AuthenticatedDashboardRouteChildren =
+  {
+    AuthenticatedDashboardCrmRoute: AuthenticatedDashboardCrmRoute,
+    AuthenticatedDashboardLeadsRoute: AuthenticatedDashboardLeadsRoute,
+    AuthenticatedDashboardOutreachRoute: AuthenticatedDashboardOutreachRoute,
+    AuthenticatedDashboardPaymentsRoute: AuthenticatedDashboardPaymentsRoute,
+    AuthenticatedDashboardPreviewsRoute: AuthenticatedDashboardPreviewsRoute,
+    AuthenticatedDashboardRevenueRoute: AuthenticatedDashboardRevenueRoute,
+    AuthenticatedDashboardSearchRoute: AuthenticatedDashboardSearchRoute,
+    AuthenticatedDashboardSitesRoute: AuthenticatedDashboardSitesRoute,
+    AuthenticatedDashboardIndexRoute: AuthenticatedDashboardIndexRoute,
+  }
+
+const AuthenticatedDashboardRouteWithChildren =
+  AuthenticatedDashboardRoute._addFileChildren(
+    AuthenticatedDashboardRouteChildren,
+  )
+
 interface AuthenticatedRouteChildren {
-  AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRouteWithChildren
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
-  AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedDashboardRoute: AuthenticatedDashboardRouteWithChildren,
 }
 
 const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
