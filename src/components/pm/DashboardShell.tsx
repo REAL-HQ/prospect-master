@@ -5,7 +5,8 @@ import { useAuth } from "@/hooks/use-auth";
 import { usePmStore } from "@/lib/pm-store";
 import * as React from "react";
 
-const NAV = [
+type NavItem = { to: string; label: string; icon: typeof LayoutDashboard; exact?: boolean };
+const NAV: NavItem[] = [
   { to: "/dashboard", label: "Overview", icon: LayoutDashboard, exact: true },
   { to: "/dashboard/search", label: "Live Search", icon: Search },
   { to: "/dashboard/leads", label: "Lead Scoring", icon: Sparkles },
@@ -15,7 +16,7 @@ const NAV = [
   { to: "/dashboard/crm", label: "CRM Pipeline", icon: Users },
   { to: "/dashboard/payments", label: "Auto-Close", icon: CreditCard },
   { to: "/dashboard/revenue", label: "Revenue", icon: TrendingUp },
-] as const;
+];
 
 export function DashboardShell() {
   const { user } = useAuth();
