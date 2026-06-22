@@ -14,7 +14,7 @@ type Plan = {
 const plans: Plan[] = [
   {
     name: "Starter",
-    monthly: 49,
+    monthly: 47,
     tagline: "Test your first market and close your first 3 to 5 deals.",
     features: [
       "50 Lead Searches / Month",
@@ -28,7 +28,7 @@ const plans: Plan[] = [
   },
   {
     name: "Pro",
-    monthly: 149,
+    monthly: 97,
     tagline: "For serious operators closing 10 to 20 deals a month on full autopilot.",
     features: [
       "200 Lead Searches / Month",
@@ -44,7 +44,7 @@ const plans: Plan[] = [
   },
   {
     name: "Agency",
-    monthly: 399,
+    monthly: 497,
     tagline: "White-label the whole system. Run it under your brand.",
     features: [
       "Unlimited Searches",
