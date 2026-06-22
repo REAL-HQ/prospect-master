@@ -60,6 +60,7 @@ export function ComparisonTable() {
                     style={{
                       color: i === 0 ? "#CC0000" : "#666",
                       background: i === 0 ? "#FFF8F8" : "transparent",
+                      borderLeft: i > 0 ? "0.5px solid #E0E0E0" : undefined,
                     }}
                   >
                     {c}
