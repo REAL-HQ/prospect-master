@@ -84,6 +84,7 @@ export function ComparisonTable() {
                       style={{
                         background: i === 0 ? "#FFF8F8" : "transparent",
                         fontWeight: i === 0 ? 500 : 400,
+                        borderLeft: i > 0 ? "0.5px solid #E0E0E0" : undefined,
                       }}
                     >
                       <div className="inline-flex items-center justify-center">
