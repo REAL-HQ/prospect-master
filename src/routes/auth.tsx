@@ -37,7 +37,7 @@ function AuthPage() {
         });
         if (signInError) throw signInError;
         if (!data.session) throw new Error("No session returned. Please try again.");
-        window.location.href = "/dashboard";
+        await navigate({ to: "/dashboard" });
       } else {
         const { data, error: signUpError } = await supabase.auth.signUp({
           email,
@@ -48,7 +48,7 @@ function AuthPage() {
         });
         if (signUpError) throw signUpError;
         if (data.session) {
-          window.location.href = "/dashboard";
+          await navigate({ to: "/dashboard" });
         } else {
           setError("Check your email to confirm your account before signing in.");
           setLoading(false);
