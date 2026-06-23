@@ -30,7 +30,7 @@ function OutreachPage() {
 
   return (
     <div>
-      <h1 style={{ fontSize: 28, fontWeight: 500 }}>AI Outreach + Follow-Up</h1>
+      <h1 style={{ fontSize: 28, fontWeight: 500 }}>AI outreach + follow-up</h1>
       <p className="text-sm text-muted-foreground mt-1">3-step cadence: Day 1 email → Day 3 email → Day 7 SMS. Category-tuned copy.</p>
 
       <div className="mt-6 grid grid-cols-3 gap-3">

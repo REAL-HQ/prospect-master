@@ -134,7 +134,7 @@ function FilingsPage() {
 
   return (
     <div>
-      <h1 style={{ fontSize: 28, fontWeight: 500 }}>Fresh Filings</h1>
+      <h1 style={{ fontSize: 28, fontWeight: 500 }}>Fresh filings</h1>
       <p className="text-sm text-muted-foreground mt-1">Newly registered businesses are leads before they exist anywhere else.</p>
 
       <div className="mt-6 grid grid-cols-4 gap-3">
@@ -287,10 +287,10 @@ function FilingsPage() {
 
 function PresenceBadge({ p }: { p: WebPresence }) {
   const map: Record<WebPresence, { bg: string; fg: string; label: string }> = {
-    unknown: { bg: "#F0F0F0", fg: "#888", label: "unknown" },
-    no_website: { bg: "#CC0000", fg: "#fff", label: "no website" },
-    social_only: { bg: "#FFF4D6", fg: "#B36B00", label: "social only" },
-    has_website: { bg: "#EEF0F2", fg: "#666", label: "has website" },
+    unknown: { bg: "#F0F0F0", fg: "#888", label: "Unknown" },
+    no_website: { bg: "#CC0000", fg: "#fff", label: "No website" },
+    social_only: { bg: "#FFF4D6", fg: "#B36B00", label: "Social only" },
+    has_website: { bg: "#EEF0F2", fg: "#666", label: "Has website" },
   };
   const c = map[p];
   return <span style={{ fontSize: 10, fontWeight: 600, padding: "3px 7px", borderRadius: 10, background: c.bg, color: c.fg }}>{c.label}</span>;

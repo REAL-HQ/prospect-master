@@ -18,7 +18,7 @@ function CrmPage() {
 
   return (
     <div>
-      <h1 style={{ fontSize: 28, fontWeight: 500 }}>CRM Pipeline</h1>
+      <h1 style={{ fontSize: 28, fontWeight: 500 }}>CRM pipeline</h1>
       <p className="text-sm text-muted-foreground mt-1">Every lead lands here automatically. Move them through to close.</p>
 
       <div className="mt-6 grid gap-3" style={{ gridTemplateColumns: `repeat(${COLUMNS.length}, minmax(180px, 1fr))`, overflowX: "auto" }}>

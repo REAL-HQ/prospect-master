@@ -34,7 +34,7 @@ function RevenuePage() {
 
   return (
     <div>
-      <h1 style={{ fontSize: 28, fontWeight: 500 }}>Revenue Dashboard</h1>
+      <h1 style={{ fontSize: 28, fontWeight: 500 }}>Revenue dashboard</h1>
       <p className="text-sm text-muted-foreground mt-1">Every dollar tracked. Compounding MRR over time.</p>
 
       <div className="mt-6 grid sm:grid-cols-2 lg:grid-cols-4 gap-3">

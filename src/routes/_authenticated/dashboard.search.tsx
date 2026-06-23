@@ -35,7 +35,7 @@ function SearchPage() {
 
   return (
     <div>
-      <h1 style={{ fontSize: 28, fontWeight: 500 }}>Live Prospect Search</h1>
+      <h1 style={{ fontSize: 28, fontWeight: 500 }}>Live prospect search</h1>
       <p className="text-sm text-muted-foreground mt-1">Real-time scan for no-website businesses. Mock data simulates Google Maps API.</p>
 
       <form onSubmit={handleSearch} className="pm-card p-5 mt-6">
