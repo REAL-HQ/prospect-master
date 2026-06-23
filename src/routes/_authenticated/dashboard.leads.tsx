@@ -82,7 +82,7 @@ function LeadsPage() {
       <div className="mt-6 flex items-center justify-between flex-wrap gap-3">
         <div className="flex gap-2 flex-wrap">
           {(["ALL", "HOT", "WARM", "COLD"] as const).map((t) => (
-            <button key={t} onClick={() => setTier(t)} className="text-xs px-3 py-1.5" style={{ border: "0.5px solid #E0E0E0", borderRadius: 20, background: tier === t ? "#FFF0F0" : "#fff", color: tier === t ? "#CC0000" : "#444" }}>{t}</button>
+            <button key={t} onClick={() => setTier(t)} className="text-xs px-3 py-1.5" style={{ border: "0.5px solid #E0E0E0", borderRadius: 20, background: tier === t ? "#FFF0F0" : "#fff", color: tier === t ? "#CC0000" : "#444" }}>{t.charAt(0) + t.slice(1).toLowerCase()}</button>
           ))}
           <span style={{ width: 1, background: "#E0E0E0", margin: "0 4px" }} />
           <select value={vfilter} onChange={(e) => setVfilter(e.target.value as typeof vfilter)} className="text-xs" style={{ padding: "6px 10px", border: "0.5px solid #E0E0E0", borderRadius: 20, background: "#fff" }}>
