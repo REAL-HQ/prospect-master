@@ -19,7 +19,7 @@ function PreviewsPage() {
 
   return (
     <div>
-      <h1 style={{ fontSize: 28, fontWeight: 500 }}>Trackable Preview Links</h1>
+      <h1 style={{ fontSize: 28, fontWeight: 500 }}>Trackable preview links</h1>
       <p className="text-sm text-muted-foreground mt-1">Every preview URL is tracked. See the moment a prospect opens it.</p>
 
       <div className="mt-6 grid grid-cols-3 gap-3">
