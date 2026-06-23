@@ -8,14 +8,14 @@ import * as React from "react";
 type NavItem = { to: string; label: string; icon: typeof LayoutDashboard; exact?: boolean };
 const NAV: NavItem[] = [
   { to: "/dashboard", label: "Overview", icon: LayoutDashboard, exact: true },
-  { to: "/dashboard/search", label: "Live Search", icon: Search },
-  { to: "/dashboard/leads", label: "Lead Scoring", icon: Sparkles },
-  { to: "/dashboard/filings", label: "Fresh Filings", icon: Sprout },
-  { to: "/dashboard/sites", label: "AI Sites", icon: Globe },
-  { to: "/dashboard/previews", label: "Preview Links", icon: Eye },
+  { to: "/dashboard/search", label: "Search", icon: Search },
+  { to: "/dashboard/leads", label: "Leads", icon: Sparkles },
+  { to: "/dashboard/filings", label: "Filings", icon: Sprout },
+  { to: "/dashboard/sites", label: "Sites", icon: Globe },
+  { to: "/dashboard/previews", label: "Previews", icon: Eye },
   { to: "/dashboard/outreach", label: "Outreach", icon: Send },
-  { to: "/dashboard/crm", label: "CRM Pipeline", icon: Users },
-  { to: "/dashboard/payments", label: "Auto-Close", icon: CreditCard },
+  { to: "/dashboard/crm", label: "CRM", icon: Users },
+  { to: "/dashboard/payments", label: "Payments", icon: CreditCard },
   { to: "/dashboard/revenue", label: "Revenue", icon: TrendingUp },
   { to: "/dashboard/settings", label: "Settings", icon: Settings },
 ];
