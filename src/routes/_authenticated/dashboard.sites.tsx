@@ -39,7 +39,7 @@ function SitesPage() {
 
   return (
     <div>
-      <h1 style={{ fontSize: 28, fontWeight: 500 }}>AI Website Builder</h1>
+      <h1 style={{ fontSize: 28, fontWeight: 500 }}>AI website builder</h1>
       <p className="text-sm text-muted-foreground mt-1">AI writes on-brand copy tuned to the business category. ~10 seconds per site.</p>
 
       <div className="pm-card p-5 mt-6">
