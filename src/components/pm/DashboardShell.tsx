@@ -19,10 +19,7 @@ const NAV: NavItem[] = [
 ];
 
 export function DashboardShell() {
-  const { user } = useAuth();
-  const navigate = useNavigate();
   const path = useRouterState({ select: (s) => s.location.pathname });
-  const resetAll = usePmStore((s) => s.resetAll);
   const seedDemo = usePmStore((s) => s.seedDemo);
   const prospectsLen = usePmStore((s) => s.prospects.length);
 
@@ -31,11 +28,6 @@ export function DashboardShell() {
     if (prospectsLen === 0) seedDemo();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  const handleSignOut = async () => {
-    await supabase.auth.signOut();
-    navigate({ to: "/" });
-  };
 
   return (
     <div className="flex" style={{ minHeight: "calc(100vh - 56px)" }}>
