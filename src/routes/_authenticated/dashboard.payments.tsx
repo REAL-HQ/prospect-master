@@ -33,7 +33,7 @@ function PaymentsPage() {
 
   return (
     <div>
-      <h1 style={{ fontSize: 28, fontWeight: 500 }}>Auto-Close + Stripe</h1>
+      <h1 style={{ fontSize: 28, fontWeight: 500 }}>Auto-close + Stripe</h1>
       <p className="text-sm text-muted-foreground mt-1">When they pay, the site auto-deploys to their custom domain. (Demo: simulate the Stripe webhook.)</p>
 
       <div className="grid md:grid-cols-[1fr_360px] gap-6 mt-6">
