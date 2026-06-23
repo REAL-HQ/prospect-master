@@ -3,6 +3,9 @@ import { persist } from "zustand/middleware";
 
 export type LeadTier = "HOT" | "WARM" | "COLD";
 export type DealStatus = "New" | "Contacted" | "Interested" | "Closed" | "Lost";
+export type VerificationStatus = "unverified" | "verified_no_site" | "unlinked_site";
+export type WebPresence = "unknown" | "no_website" | "social_only" | "has_website";
+export type FilingStatus = "new" | "checked" | "converted" | "skipped";
 
 export type Prospect = {
   id: string;
@@ -24,6 +27,13 @@ export type Prospect = {
   lastActivityAt: number;
   siteId?: string;
   outreachId?: string;
+  // Phase 2: verification
+  verificationStatus: VerificationStatus;
+  foundUrl?: string;
+  verifiedAt?: number;
+  // Phase 2: GHL push
+  ghlContactId?: string;
+  ghlPushedAt?: number;
 };
 
 export type Site = {
@@ -74,6 +84,28 @@ export type Payment = {
   paidAt: number;
 };
 
+export type FreshFiling = {
+  id: string;
+  businessName: string;
+  entityNumber?: string;
+  filingDate: string; // ISO date
+  city: string;
+  zip?: string;
+  registeredAgent?: string;
+  webPresence: WebPresence;
+  status: FilingStatus;
+  leadId?: string;
+  raw?: Record<string, string>;
+  createdAt: number;
+};
+
+export type GhlSettings = {
+  enabled: boolean;
+  pit?: string;
+  locationId?: string;
+  defaultTags: string[];
+};
+
 type State = {
   prospects: Prospect[];
   sites: Site[];
@@ -82,6 +114,9 @@ type State = {
   payments: Payment[];
   savedSearches: { id: string; query: string; category: string; location: string; createdAt: number }[];
   notifications: { id: string; text: string; at: number; read: boolean }[];
+  filings: FreshFiling[];
+  ghl: GhlSettings;
+  firecrawlConfigured: boolean;
 };
 
 type Actions = {
@@ -98,6 +133,17 @@ type Actions = {
   markAllRead: () => void;
   resetAll: () => void;
   seedDemo: () => void;
+  // Phase 2
+  verifyLeads: (ids: string[]) => Promise<{ verified_no_site: number; unlinked_site: number; errors: number }>;
+  verifyNext: (limit?: number) => Promise<{ verified_no_site: number; unlinked_site: number; errors: number }>;
+  importFilings: (rows: Array<Omit<FreshFiling, "id" | "webPresence" | "status" | "createdAt">>) => number;
+  checkFilingPresence: (ids: string[]) => Promise<{ no_website: number; social_only: number; has_website: number }>;
+  checkFilingNext: (limit?: number) => Promise<{ no_website: number; social_only: number; has_website: number }>;
+  convertFilingsToLeads: (ids: string[]) => number;
+  deleteFilings: (ids: string[]) => void;
+  setGhl: (patch: Partial<GhlSettings>) => void;
+  pushToGhl: (ids: string[]) => Promise<{ pushed: number; skipped: number; failed: number }>;
+  setFirecrawlConfigured: (v: boolean) => void;
 };
 
 const uid = () => Math.random().toString(36).slice(2, 10);
@@ -134,7 +180,7 @@ function generateProspect(category: string, location: string): Prospect {
   const first = pick(FIRST_NAMES);
   const rating = +(3.5 + Math.random() * 1.5).toFixed(1);
   const reviews = Math.floor(20 + Math.random() * 400);
-  const hasWebsite = Math.random() < 0.25; // 75% no-website (filtered later)
+  const hasWebsite = Math.random() < 0.25;
   const [city, state] = location.includes(",") ? location.split(",").map((s) => s.trim()) : [location, "TX"];
   const s = score(rating, reviews, hasWebsite);
   const now = Date.now();
@@ -156,6 +202,7 @@ function generateProspect(category: string, location: string): Prospect {
     notes: "",
     createdAt: now,
     lastActivityAt: now,
+    verificationStatus: "unverified",
   };
 }
 
@@ -166,13 +213,36 @@ function seedProspects(): Prospect[] {
   const list: Prospect[] = [];
   for (let i = 0; i < 12; i++) {
     const p = generateProspect(DEMO_CATEGORIES[i % 3], DEMO_LOCATIONS[i % 3]);
-    if (p.hasWebsite) p.hasWebsite = false; // demo: ensure no-website
+    if (p.hasWebsite) p.hasWebsite = false;
     p.score = score(p.rating, p.reviews, false);
     p.tier = tierOf(p.score);
     list.push(p);
   }
   return list;
 }
+
+function seedFilings(): FreshFiling[] {
+  const cities = ["Austin","Denver","Miami","Dallas","Tampa"];
+  const agents = ["John Carter","Emily Chen","Marcus Reed","Priya Patel","David Kim"];
+  const names = [
+    "Bright Path Wellness LLC","Stonebridge Coffee Co","Aurora Roofing Solutions","Nine Pines Pediatrics PLLC",
+    "Cobble & Co Bakery","Westwind HVAC Services","Magnolia Pet Grooming","Velocity Auto Detail","Harborlight Counseling Group",
+  ];
+  return names.map((n, i) => ({
+    id: uid(),
+    businessName: n,
+    entityNumber: `TX-${20260000 + i}`,
+    filingDate: new Date(Date.now() - (i + 1) * 86400000).toISOString().slice(0, 10),
+    city: cities[i % cities.length],
+    zip: `${78700 + i}`,
+    registeredAgent: agents[i % agents.length],
+    webPresence: "unknown" as WebPresence,
+    status: "new" as FilingStatus,
+    createdAt: Date.now() - i * 3600000,
+  }));
+}
+
+const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 export const usePmStore = create<State & Actions>()(
   persist(
@@ -184,12 +254,15 @@ export const usePmStore = create<State & Actions>()(
       payments: [],
       savedSearches: [],
       notifications: [],
+      filings: [],
+      ghl: { enabled: false, defaultTags: ["prospectmaster", "no-website"] },
+      firecrawlConfigured: false,
 
       runSearch: ({ category, location, count = 8 }) => {
         const created: Prospect[] = [];
         for (let i = 0; i < count; i++) {
           const p = generateProspect(category, location);
-          if (p.hasWebsite) continue; // we only surface no-website
+          if (p.hasWebsite) continue;
           created.push(p);
         }
         set((s) => ({ prospects: [...created, ...s.prospects] }));
@@ -247,25 +320,13 @@ export const usePmStore = create<State & Actions>()(
         const cat = prospect.category.toLowerCase();
         const steps: OutreachStep[] = [
           {
-            channel: "email",
-            day: 1,
+            channel: "email", day: 1,
             subject: `Quick site I built for ${prospect.name}`,
             body: `Hi ${prospect.name} team,\n\nI noticed ${prospect.name} doesn't have a website yet — so I built you a free preview. Most ${cat} miss 60–80% of online leads without one.\n\nTake a look (30 seconds): preview.prospectmaster.com/${prospect.name.toLowerCase().replace(/\s+/g, "-")}\n\nIf you like it, I can deploy it to your domain today. No design fees.\n\n— Sent via ProspectMaster`,
             sent: false,
           },
-          {
-            channel: "email",
-            day: 3,
-            subject: `Re: site for ${prospect.name}`,
-            body: `Just checking in — did you get a chance to look at the preview? Happy to tweak anything. Most of my ${cat} clients see new bookings within 2 weeks of going live.`,
-            sent: false,
-          },
-          {
-            channel: "sms",
-            day: 7,
-            body: `Hi — sent over a free website preview for ${prospect.name} last week. Want me to take it down or push it live? Reply STOP to opt out.`,
-            sent: false,
-          },
+          { channel: "email", day: 3, subject: `Re: site for ${prospect.name}`, body: `Just checking in — did you get a chance to look at the preview? Happy to tweak anything. Most of my ${cat} clients see new bookings within 2 weeks of going live.`, sent: false },
+          { channel: "sms", day: 7, body: `Hi — sent over a free website preview for ${prospect.name} last week. Want me to take it down or push it live? Reply STOP to opt out.`, sent: false },
         ];
         const o: Outreach = { id: uid(), prospectId, siteId, steps, createdAt: Date.now() };
         set((s) => ({ outreach: [o, ...s.outreach] }));
@@ -307,25 +368,175 @@ export const usePmStore = create<State & Actions>()(
 
       markAllRead: () => set((s) => ({ notifications: s.notifications.map((n) => ({ ...n, read: true })) })),
 
-      resetAll: () => set({ prospects: [], sites: [], previewEvents: [], outreach: [], payments: [], savedSearches: [], notifications: [] }),
+      resetAll: () => set({ prospects: [], sites: [], previewEvents: [], outreach: [], payments: [], savedSearches: [], notifications: [], filings: [], ghl: { enabled: false, defaultTags: ["prospectmaster", "no-website"] } }),
 
       seedDemo: () => {
         const prospects = seedProspects();
         set({
           prospects,
-          sites: [],
-          previewEvents: [],
-          outreach: [],
-          payments: [],
+          sites: [], previewEvents: [], outreach: [], payments: [],
           savedSearches: [
             { id: uid(), query: "dentists austin", category: "Dentists", location: "Austin, TX", createdAt: Date.now() - 86400000 },
           ],
-          notifications: [
-            { id: uid(), text: "Welcome! Demo data loaded. Try a search.", at: Date.now(), read: false },
-          ],
+          notifications: [{ id: uid(), text: "Welcome! Demo data loaded. Try a search.", at: Date.now(), read: false }],
+          filings: seedFilings(),
+          ghl: { enabled: false, defaultTags: ["prospectmaster", "no-website"] },
         });
       },
+
+      // ============ Phase 2: Verification ============
+
+      verifyLeads: async (ids) => {
+        const capped = ids.slice(0, 50);
+        let verified_no_site = 0, unlinked_site = 0, errors = 0;
+        for (const id of capped) {
+          await sleep(120);
+          // Mock Firecrawl Search: 70% verified_no_site, 25% unlinked_site, 5% error
+          const r = Math.random();
+          if (r < 0.05) { errors++; continue; }
+          const found = r >= 0.75;
+          set((s) => ({
+            prospects: s.prospects.map((p) => {
+              if (p.id !== id) return p;
+              if (found) {
+                const newScore = Math.max(p.score - 2, 1);
+                return { ...p, verificationStatus: "unlinked_site", foundUrl: `https://${p.name.toLowerCase().replace(/[^a-z0-9]+/g, "")}.com`, verifiedAt: Date.now(), score: +newScore.toFixed(1), tier: tierOf(newScore) };
+              }
+              const newScore = Math.min(p.score + 1, 10);
+              return { ...p, verificationStatus: "verified_no_site", foundUrl: undefined, verifiedAt: Date.now(), score: +newScore.toFixed(1), tier: tierOf(newScore) };
+            }),
+          }));
+          if (found) unlinked_site++; else verified_no_site++;
+        }
+        get().pushNotification(`Verification: ${verified_no_site} confirmed no-site · ${unlinked_site} unlinked site · ${errors} errors`);
+        return { verified_no_site, unlinked_site, errors };
+      },
+
+      verifyNext: async (limit = 25) => {
+        const ids = get().prospects
+          .filter((p) => p.verificationStatus === "unverified")
+          .sort((a, b) => b.score - a.score)
+          .slice(0, Math.min(limit, 50))
+          .map((p) => p.id);
+        return get().verifyLeads(ids);
+      },
+
+      // ============ Phase 2: Fresh Filings ============
+
+      importFilings: (rows) => {
+        const created: FreshFiling[] = rows.map((r) => ({
+          id: uid(),
+          businessName: r.businessName,
+          entityNumber: r.entityNumber,
+          filingDate: r.filingDate,
+          city: r.city,
+          zip: r.zip,
+          registeredAgent: r.registeredAgent,
+          raw: r.raw,
+          webPresence: "unknown",
+          status: "new",
+          createdAt: Date.now(),
+        }));
+        set((s) => ({ filings: [...created, ...s.filings] }));
+        get().pushNotification(`Imported ${created.length} fresh filings`);
+        return created.length;
+      },
+
+      checkFilingPresence: async (ids) => {
+        const capped = ids.slice(0, 50);
+        let no_website = 0, social_only = 0, has_website = 0;
+        for (const id of capped) {
+          await sleep(100);
+          const r = Math.random();
+          const wp: WebPresence = r < 0.55 ? "no_website" : r < 0.8 ? "social_only" : "has_website";
+          set((s) => ({
+            filings: s.filings.map((f) => f.id === id ? { ...f, webPresence: wp, status: "checked" } : f),
+          }));
+          if (wp === "no_website") no_website++; else if (wp === "social_only") social_only++; else has_website++;
+        }
+        get().pushNotification(`Checked ${capped.length} filings: ${no_website} no-site · ${social_only} social-only · ${has_website} has site`);
+        return { no_website, social_only, has_website };
+      },
+
+      checkFilingNext: async (limit = 25) => {
+        const ids = get().filings
+          .filter((f) => f.webPresence === "unknown")
+          .slice(0, Math.min(limit, 50))
+          .map((f) => f.id);
+        return get().checkFilingPresence(ids);
+      },
+
+      convertFilingsToLeads: (ids) => {
+        let count = 0;
+        const filings = get().filings;
+        const targets = filings.filter((f) => ids.includes(f.id) && f.status !== "converted");
+        const newProspects: Prospect[] = [];
+        targets.forEach((f) => {
+          const hasWebsite = f.webPresence === "has_website";
+          const rating = 0;
+          const reviews = 0;
+          let s = score(rating, reviews, hasWebsite);
+          // Boost confirmed no_website by 1
+          if (f.webPresence === "no_website") s = Math.min(s + 1, 10);
+          const now = Date.now();
+          const p: Prospect = {
+            id: uid(),
+            name: f.businessName,
+            category: "Fresh Filing",
+            city: f.city,
+            state: "TX",
+            country: "USA",
+            phone: "",
+            address: f.zip ? `ZIP ${f.zip}` : "",
+            rating,
+            reviews,
+            hasWebsite,
+            score: +s.toFixed(1),
+            tier: tierOf(s),
+            status: "New",
+            notes: `Imported from Fresh Filing · Agent: ${f.registeredAgent || "—"} · Filed ${f.filingDate}`,
+            createdAt: now,
+            lastActivityAt: now,
+            verificationStatus: f.webPresence === "no_website" ? "verified_no_site" : f.webPresence === "has_website" ? "unlinked_site" : "unverified",
+          };
+          newProspects.push(p);
+          count++;
+          set((st) => ({
+            filings: st.filings.map((x) => x.id === f.id ? { ...x, status: "converted", leadId: p.id } : x),
+          }));
+        });
+        if (newProspects.length) set((st) => ({ prospects: [...newProspects, ...st.prospects] }));
+        get().pushNotification(`Converted ${count} filings into leads`);
+        return count;
+      },
+
+      deleteFilings: (ids) => set((s) => ({ filings: s.filings.filter((f) => !ids.includes(f.id)) })),
+
+      // ============ Phase 2: GHL ============
+
+      setGhl: (patch) => set((s) => ({ ghl: { ...s.ghl, ...patch } })),
+
+      pushToGhl: async (ids) => {
+        const { ghl } = get();
+        if (!ghl.enabled) return { pushed: 0, skipped: 0, failed: 0 };
+        let pushed = 0, skipped = 0, failed = 0;
+        for (const id of ids) {
+          await sleep(80);
+          const p = get().prospects.find((x) => x.id === id);
+          if (!p) { failed++; continue; }
+          if (!p.phone) { skipped++; continue; }
+          const contactId = `ghl_${uid()}`;
+          set((s) => ({
+            prospects: s.prospects.map((x) => x.id === id ? { ...x, ghlContactId: contactId, ghlPushedAt: Date.now() } : x),
+          }));
+          pushed++;
+        }
+        get().pushNotification(`GHL: ${pushed} pushed · ${skipped} skipped (no phone) · ${failed} failed`);
+        return { pushed, skipped, failed };
+      },
+
+      setFirecrawlConfigured: (v) => set({ firecrawlConfigured: v }),
     }),
-    { name: "pm-store-v1" },
+    { name: "pm-store-v2" },
   ),
 );
