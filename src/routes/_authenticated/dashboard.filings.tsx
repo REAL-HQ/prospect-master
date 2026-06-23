@@ -5,7 +5,7 @@ import Papa from "papaparse";
 import { Upload, Loader2, Trash2, ShieldCheck, ArrowRight, FilePlus, Globe } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/dashboard/filings")({
-  head: () => ({ meta: [{ title: "Fresh Filings — ProspectMaster" }] }),
+  head: () => ({ meta: [{ title: "Fresh filings — ProspectMaster" }] }),
   component: FilingsPage,
 });
 
