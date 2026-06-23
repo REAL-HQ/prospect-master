@@ -73,7 +73,7 @@ function LeadsPage() {
       <div className="mt-6 grid grid-cols-3 gap-3">
         {(["HOT", "WARM", "COLD"] as const).map((t) => (
           <button key={t} onClick={() => setTier(t === tier ? "ALL" : t)} className="pm-card p-4 text-left" style={{ outline: tier === t ? "1px solid #CC0000" : "none" }}>
-            <div className="text-xs text-muted-foreground">{t}</div>
+            <div className="text-xs text-muted-foreground">{t.charAt(0) + t.slice(1).toLowerCase()}</div>
             <div style={{ fontSize: 22, fontWeight: 500 }}>{counts[t]}</div>
           </button>
         ))}
@@ -82,7 +82,7 @@ function LeadsPage() {
       <div className="mt-6 flex items-center justify-between flex-wrap gap-3">
         <div className="flex gap-2 flex-wrap">
           {(["ALL", "HOT", "WARM", "COLD"] as const).map((t) => (
-            <button key={t} onClick={() => setTier(t)} className="text-xs px-3 py-1.5" style={{ border: "0.5px solid #E0E0E0", borderRadius: 20, background: tier === t ? "#FFF0F0" : "#fff", color: tier === t ? "#CC0000" : "#444" }}>{t}</button>
+            <button key={t} onClick={() => setTier(t)} className="text-xs px-3 py-1.5" style={{ border: "0.5px solid #E0E0E0", borderRadius: 20, background: tier === t ? "#FFF0F0" : "#fff", color: tier === t ? "#CC0000" : "#444" }}>{t.charAt(0) + t.slice(1).toLowerCase()}</button>
           ))}
           <span style={{ width: 1, background: "#E0E0E0", margin: "0 4px" }} />
           <select value={vfilter} onChange={(e) => setVfilter(e.target.value as typeof vfilter)} className="text-xs" style={{ padding: "6px 10px", border: "0.5px solid #E0E0E0", borderRadius: 20, background: "#fff" }}>
@@ -107,10 +107,10 @@ function LeadsPage() {
         {selected.size > 0 && <button onClick={clearSel} className="text-xs underline text-muted-foreground">Clear</button>}
         <div className="flex-1" />
         <button onClick={handleVerifySelected} disabled={selected.size === 0 || verifying} className="text-xs flex items-center gap-1.5 px-3 py-1.5" style={{ border: "0.5px solid #E0E0E0", borderRadius: 6, background: "#fff", opacity: selected.size === 0 ? 0.5 : 1 }}>
-          {verifying ? <Loader2 size={12} className="animate-spin" /> : <ShieldCheck size={12} />} Verify Selected
+          {verifying ? <Loader2 size={12} className="animate-spin" /> : <ShieldCheck size={12} />} Verify selected
         </button>
         <button onClick={handleVerifyNext} disabled={verifying || unverifiedCount === 0} className="text-xs flex items-center gap-1.5 px-3 py-1.5" style={{ border: "0.5px solid #E0E0E0", borderRadius: 6, background: "#fff", opacity: unverifiedCount === 0 ? 0.5 : 1 }}>
-          {verifying ? <Loader2 size={12} className="animate-spin" /> : <ShieldCheck size={12} />} Verify Next 25
+          {verifying ? <Loader2 size={12} className="animate-spin" /> : <ShieldCheck size={12} />} Verify next 25
         </button>
         {ghlEnabled && (
           <button onClick={handlePushGhl} disabled={selected.size === 0 || pushing} className="text-xs flex items-center gap-1.5 px-3 py-1.5" style={{ border: "0.5px solid #CC0000", color: "#CC0000", borderRadius: 6, background: "#fff", opacity: selected.size === 0 ? 0.5 : 1 }}>
