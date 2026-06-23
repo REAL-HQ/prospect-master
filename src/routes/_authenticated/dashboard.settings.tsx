@@ -142,3 +142,114 @@ function Field({ label, value, onChange, placeholder, type = "text" }: { label: 
     </div>
   );
 }
+
+function ProfileSection() {
+  const [loading, setLoading] = React.useState(true);
+  const [saving, setSaving] = React.useState(false);
+  const [name, setName] = React.useState("");
+  const [email, setEmail] = React.useState("");
+  const [originalEmail, setOriginalEmail] = React.useState("");
+
+  React.useEffect(() => {
+    supabase.auth.getUser().then(({ data }) => {
+      const u = data.user;
+      if (u) {
+        setName((u.user_metadata as any)?.full_name || (u.user_metadata as any)?.name || "");
+        setEmail(u.email || "");
+        setOriginalEmail(u.email || "");
+      }
+      setLoading(false);
+    });
+  }, []);
+
+  async function save() {
+    setSaving(true);
+    try {
+      const updates: any = { data: { full_name: name } };
+      if (email && email !== originalEmail) updates.email = email;
+      const { error } = await supabase.auth.updateUser(updates);
+      if (error) throw error;
+      if (email !== originalEmail) {
+        toast.success("Confirmation email sent to update your address.");
+      } else {
+        toast.success("Profile updated.");
+      }
+    } catch (e: any) {
+      toast.error(e.message || "Failed to update profile");
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  return (
+    <div className="pm-card p-5 mt-6">
+      <div className="flex items-center gap-2 mb-3">
+        <UserIcon size={14} />
+        <div className="text-sm font-medium">Profile</div>
+      </div>
+      {loading ? (
+        <div className="text-xs text-muted-foreground">Loading…</div>
+      ) : (
+        <div className="grid gap-3">
+          <Field label="Full name" value={name} onChange={setName} placeholder="Your name" />
+          <Field label="Email" value={email} onChange={setEmail} placeholder="you@example.com" type="email" />
+          <div>
+            <button
+              onClick={save}
+              disabled={saving}
+              className="text-xs px-3 py-2"
+              style={{ background: "#CC0000", color: "#fff", borderRadius: 6, opacity: saving ? 0.6 : 1 }}
+            >
+              {saving ? "Saving…" : "Save changes"}
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function SecuritySection() {
+  const [pw, setPw] = React.useState("");
+  const [confirm, setConfirm] = React.useState("");
+  const [saving, setSaving] = React.useState(false);
+
+  async function updatePassword() {
+    if (pw.length < 8) return toast.error("Password must be at least 8 characters.");
+    if (pw !== confirm) return toast.error("Passwords do not match.");
+    setSaving(true);
+    try {
+      const { error } = await supabase.auth.updateUser({ password: pw });
+      if (error) throw error;
+      toast.success("Password updated.");
+      setPw(""); setConfirm("");
+    } catch (e: any) {
+      toast.error(e.message || "Failed to update password");
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  return (
+    <div className="pm-card p-5 mt-4">
+      <div className="flex items-center gap-2 mb-3">
+        <Lock size={14} />
+        <div className="text-sm font-medium">Security</div>
+      </div>
+      <div className="grid gap-3">
+        <Field label="New password" value={pw} onChange={setPw} placeholder="At least 8 characters" type="password" />
+        <Field label="Confirm new password" value={confirm} onChange={setConfirm} placeholder="Re-enter password" type="password" />
+        <div>
+          <button
+            onClick={updatePassword}
+            disabled={saving}
+            className="text-xs px-3 py-2"
+            style={{ background: "#CC0000", color: "#fff", borderRadius: 6, opacity: saving ? 0.6 : 1 }}
+          >
+            {saving ? "Updating…" : "Update password"}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
