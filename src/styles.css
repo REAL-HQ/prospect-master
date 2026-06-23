@@ -152,4 +152,9 @@
   input[type="range"] {
     accent-color: var(--primary);
   }
+
+  select {
+    padding-right: 1.75rem !important;
+    background-position: right 0.65rem center;
+  }
 }
