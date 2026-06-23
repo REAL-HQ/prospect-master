@@ -1,7 +1,5 @@
-import { Link, Outlet, useNavigate, useRouterState } from "@tanstack/react-router";
-import { LayoutDashboard, Search, Sparkles, Globe, Eye, Send, Users, CreditCard, TrendingUp, LogOut, RotateCcw, Sprout, Settings } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
-import { useAuth } from "@/hooks/use-auth";
+import { Link, Outlet, useRouterState } from "@tanstack/react-router";
+import { LayoutDashboard, Search, Sparkles, Globe, Eye, Send, Users, CreditCard, TrendingUp, Sprout, Settings } from "lucide-react";
 import { usePmStore } from "@/lib/pm-store";
 import * as React from "react";
 
@@ -21,10 +19,7 @@ const NAV: NavItem[] = [
 ];
 
 export function DashboardShell() {
-  const { user } = useAuth();
-  const navigate = useNavigate();
   const path = useRouterState({ select: (s) => s.location.pathname });
-  const resetAll = usePmStore((s) => s.resetAll);
   const seedDemo = usePmStore((s) => s.seedDemo);
   const prospectsLen = usePmStore((s) => s.prospects.length);
 
@@ -33,11 +28,6 @@ export function DashboardShell() {
     if (prospectsLen === 0) seedDemo();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  const handleSignOut = async () => {
-    await supabase.auth.signOut();
-    navigate({ to: "/" });
-  };
 
   return (
     <div className="flex" style={{ minHeight: "calc(100vh - 56px)" }}>
@@ -73,19 +63,6 @@ export function DashboardShell() {
             );
           })}
         </nav>
-        <div className="mt-auto pt-4" style={{ borderTop: "0.5px solid #E8E8E8" }}>
-          <button
-            onClick={() => { if (confirm("Reset all demo data?")) resetAll(); }}
-            className="w-full flex items-center gap-2 text-xs text-muted-foreground hover:text-foreground"
-            style={{ padding: "6px 10px" }}
-          >
-            <RotateCcw size={12} /> Reset demo
-          </button>
-          <button onClick={handleSignOut} className="w-full flex items-center gap-2 text-xs text-muted-foreground hover:text-foreground" style={{ padding: "6px 10px" }}>
-            <LogOut size={12} /> Sign out
-          </button>
-          <div className="text-[11px] text-muted-foreground mt-2 px-2.5 truncate">{user?.email}</div>
-        </div>
       </aside>
 
       {/* Main */}
