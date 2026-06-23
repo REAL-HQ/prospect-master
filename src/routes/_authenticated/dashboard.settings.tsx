@@ -19,10 +19,13 @@ function SettingsPage() {
   return (
     <div>
       <h1 style={{ fontSize: 28, fontWeight: 500 }}>Account</h1>
-      <p className="text-sm text-muted-foreground mt-1">Settings, connectors, and integrations.</p>
+      <p className="text-sm text-muted-foreground mt-1">Profile, security, connectors, and integrations.</p>
+
+      <ProfileSection />
+      <SecuritySection />
 
       {/* Secrets checklist */}
-      <div className="pm-card p-5 mt-6">
+      <div className="pm-card p-5 mt-4">
         <div className="flex items-center gap-2 mb-3">
           <Key size={14} />
           <div className="text-sm font-medium">Secrets checklist</div>
