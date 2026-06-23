@@ -67,7 +67,7 @@ function LeadsPage() {
 
   return (
     <div>
-      <h1 style={{ fontSize: 28, fontWeight: 500 }}>Lead Scoring</h1>
+      <h1 style={{ fontSize: 28, fontWeight: 500 }}>Lead scoring</h1>
       <p className="text-sm text-muted-foreground mt-1">Every lead scored 1–10 and verified against the open web before outreach.</p>
 
       <div className="mt-6 grid grid-cols-3 gap-3">
