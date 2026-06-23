@@ -165,7 +165,7 @@ function VerifiedBadge({ status, foundUrl }: { status: VerificationStatus; found
   }
   return (
     <a href={foundUrl} target="_blank" rel="noreferrer" title={`Site found: ${foundUrl}`} style={{ display: "inline-flex", alignItems: "center", gap: 4, fontSize: 10, fontWeight: 500, padding: "2px 7px", borderRadius: 10, background: "#FFF4D6", color: "#B36B00" }}>
-      <ShieldAlert size={10} /> unlinked site <ExternalLink size={9} />
+      <ShieldAlert size={10} /> Unlinked site <ExternalLink size={9} />
     </a>
   );
 }
