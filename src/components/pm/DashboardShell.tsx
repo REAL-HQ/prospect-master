@@ -15,7 +15,6 @@ const NAV: NavItem[] = [
   { to: "/dashboard/crm", label: "CRM", icon: Users },
   { to: "/dashboard/payments", label: "Payments", icon: CreditCard },
   { to: "/dashboard/revenue", label: "Revenue", icon: TrendingUp },
-  { to: "/dashboard/settings", label: "Settings", icon: Settings },
 ];
 
 export function DashboardShell() {
