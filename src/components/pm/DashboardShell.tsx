@@ -1,5 +1,5 @@
 import { Link, Outlet, useRouterState } from "@tanstack/react-router";
-import { LayoutDashboard, Search, Sparkles, Globe, Eye, Send, Users, CreditCard, TrendingUp, Sprout, Settings } from "lucide-react";
+import { LayoutDashboard, Search, Sparkles, Globe, Eye, Send, Users, CreditCard, TrendingUp, Sprout } from "lucide-react";
 import { usePmStore } from "@/lib/pm-store";
 import * as React from "react";
 
