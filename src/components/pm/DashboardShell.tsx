@@ -1,5 +1,5 @@
 import { Link, Outlet, useNavigate, useRouterState } from "@tanstack/react-router";
-import { LayoutDashboard, Search, Sparkles, Globe, Eye, Send, Users, CreditCard, TrendingUp, Bell, LogOut, RotateCcw, Sprout, Settings } from "lucide-react";
+import { LayoutDashboard, Search, Sparkles, Globe, Eye, Send, Users, CreditCard, TrendingUp, LogOut, RotateCcw, Sprout, Settings } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import { usePmStore } from "@/lib/pm-store";
