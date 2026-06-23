@@ -1,9 +1,10 @@
 import { createFileRoute, Link, Outlet, redirect, useNavigate } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
-import { Bell, User } from "lucide-react";
+import { Bell, LogOut, Settings } from "lucide-react";
 import * as React from "react";
 import { usePmStore } from "@/lib/pm-store";
 import { useAuth } from "@/hooks/use-auth";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export const Route = createFileRoute("/_authenticated")({
   ssr: false,
