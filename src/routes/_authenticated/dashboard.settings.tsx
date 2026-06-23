@@ -4,7 +4,7 @@ import * as React from "react";
 import { Key, Check, ExternalLink } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/dashboard/settings")({
-  head: () => ({ meta: [{ title: "Settings — ProspectMaster" }] }),
+  head: () => ({ meta: [{ title: "Account — ProspectMaster" }] }),
   component: SettingsPage,
 });
 
@@ -16,8 +16,8 @@ function SettingsPage() {
 
   return (
     <div>
-      <h1 style={{ fontSize: 28, fontWeight: 500 }}>Settings</h1>
-      <p className="text-sm text-muted-foreground mt-1">Connectors, API keys, and integrations.</p>
+      <h1 style={{ fontSize: 28, fontWeight: 500 }}>Account</h1>
+      <p className="text-sm text-muted-foreground mt-1">Settings, connectors, and integrations.</p>
 
       {/* Secrets checklist */}
       <div className="pm-card p-5 mt-6">
