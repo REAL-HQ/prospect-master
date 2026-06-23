@@ -44,8 +44,8 @@ function AuthenticatedLayout() {
             <div className="relative">
               <button
                 onClick={() => { setBellOpen((o) => !o); if (!bellOpen) markAllRead(); }}
-                className="relative flex items-center justify-center"
-                style={{ width: 32, height: 32, borderRadius: 8, border: "0.5px solid #E0E0E0", background: "#fff" }}
+                className="relative flex items-center justify-center rounded-full border border-border bg-background"
+                style={{ width: 32, height: 32 }}
               >
                 <Bell size={14} />
                 {unread > 0 && (
@@ -73,31 +73,47 @@ function AuthenticatedLayout() {
             <div className="relative">
               <button
                 onClick={() => setProfileOpen((o) => !o)}
-                className="flex items-center justify-center"
-                style={{ width: 32, height: 32, borderRadius: 8, border: "0.5px solid #E0E0E0", background: "#fff" }}
+                className="flex items-center justify-center rounded-full border border-border bg-background overflow-hidden"
+                style={{ width: 32, height: 32 }}
               >
-                <User size={14} />
+                <Avatar className="h-full w-full">
+                  <AvatarImage src={user?.user_metadata?.avatar_url} alt={userDisplayName(user)} />
+                  <AvatarFallback className="bg-primary-tint text-primary text-xs font-medium">
+                    {userInitials(user)}
+                  </AvatarFallback>
+                </Avatar>
               </button>
               {profileOpen && (
-                <div style={{ position: "absolute", right: 0, top: 40, width: 180, background: "#fff", border: "0.5px solid #E0E0E0", borderRadius: 10, boxShadow: "0 12px 32px rgba(0,0,0,0.08)", zIndex: 50, overflow: "auto" }}>
-                  <div style={{ padding: "10px 12px", borderBottom: "0.5px solid #F0F0F0" }}>
-                    <div className="text-xs font-medium truncate" style={{ maxWidth: 150 }}>{user?.email}</div>
+                <div className="absolute right-0 top-10 w-[260px] rounded-2xl border border-border bg-background shadow-xl z-50 overflow-hidden">
+                  <div className="p-4 flex items-center gap-3 border-b border-border">
+                    <Avatar className="h-12 w-12">
+                      <AvatarImage src={user?.user_metadata?.avatar_url} alt={userDisplayName(user)} />
+                      <AvatarFallback className="bg-primary-tint text-primary text-sm font-medium">
+                        {userInitials(user)}
+                      </AvatarFallback>
+                    </Avatar>
+                    <div className="min-w-0">
+                      <div className="text-sm font-medium truncate">{userDisplayName(user)}</div>
+                      <div className="text-xs text-muted-foreground truncate">{user?.email}</div>
+                    </div>
                   </div>
-                  <Link
-                    to="/dashboard/settings"
-                    onClick={() => setProfileOpen(false)}
-                    className="block text-[13px] text-foreground hover:bg-muted transition-colors"
-                    style={{ padding: "8px 12px" }}
-                  >
-                    Account
-                  </Link>
-                  <button
-                    onClick={() => { setProfileOpen(false); handleSignOut(); }}
-                    className="w-full text-left text-[13px] text-foreground hover:bg-muted transition-colors"
-                    style={{ padding: "8px 12px" }}
-                  >
-                    Sign Out
-                  </button>
+                  <div className="py-1">
+                    <Link
+                      to="/dashboard/settings"
+                      onClick={() => setProfileOpen(false)}
+                      className="flex items-center gap-3 px-4 py-2.5 text-[13px] text-foreground hover:bg-muted transition-colors"
+                    >
+                      <Settings size={14} />
+                      Account
+                    </Link>
+                    <button
+                      onClick={() => { setProfileOpen(false); handleSignOut(); }}
+                      className="w-full flex items-center gap-3 px-4 py-2.5 text-left text-[13px] text-foreground hover:bg-muted transition-colors"
+                    >
+                      <LogOut size={14} />
+                      Sign Out
+                    </button>
+                  </div>
                 </div>
               )}
             </div>
