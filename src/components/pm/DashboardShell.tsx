@@ -1,5 +1,5 @@
 import { Link, Outlet, useNavigate, useRouterState } from "@tanstack/react-router";
-import { LayoutDashboard, Search, Sparkles, Globe, Eye, Send, Users, CreditCard, TrendingUp, Bell, LogOut, RotateCcw } from "lucide-react";
+import { LayoutDashboard, Search, Sparkles, Globe, Eye, Send, Users, CreditCard, TrendingUp, Bell, LogOut, RotateCcw, Sprout, Settings } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import { usePmStore } from "@/lib/pm-store";
@@ -10,12 +10,14 @@ const NAV: NavItem[] = [
   { to: "/dashboard", label: "Overview", icon: LayoutDashboard, exact: true },
   { to: "/dashboard/search", label: "Live Search", icon: Search },
   { to: "/dashboard/leads", label: "Lead Scoring", icon: Sparkles },
+  { to: "/dashboard/filings", label: "Fresh Filings", icon: Sprout },
   { to: "/dashboard/sites", label: "AI Sites", icon: Globe },
   { to: "/dashboard/previews", label: "Preview Links", icon: Eye },
   { to: "/dashboard/outreach", label: "Outreach", icon: Send },
   { to: "/dashboard/crm", label: "CRM Pipeline", icon: Users },
   { to: "/dashboard/payments", label: "Auto-Close", icon: CreditCard },
   { to: "/dashboard/revenue", label: "Revenue", icon: TrendingUp },
+  { to: "/dashboard/settings", label: "Settings", icon: Settings },
 ];
 
 export function DashboardShell() {
