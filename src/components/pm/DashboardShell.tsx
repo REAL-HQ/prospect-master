@@ -90,35 +90,6 @@ export function DashboardShell() {
 
       {/* Main */}
       <main className="flex-1 min-w-0">
-        <div className="flex items-center justify-end gap-3 px-6 md:px-10 py-3" style={{ borderBottom: "0.5px solid #F0F0F0" }}>
-          <div className="relative">
-            <button
-              onClick={() => { setBellOpen((o) => !o); if (!bellOpen) markAllRead(); }}
-              className="relative flex items-center justify-center"
-              style={{ width: 32, height: 32, borderRadius: 8, border: "0.5px solid #E0E0E0", background: "#fff" }}
-            >
-              <Bell size={14} />
-              {unread > 0 && (
-                <span style={{ position: "absolute", top: -3, right: -3, background: "#CC0000", color: "#fff", fontSize: 9, fontWeight: 600, borderRadius: 10, padding: "1px 5px", minWidth: 16, textAlign: "center" }}>
-                  {unread}
-                </span>
-              )}
-            </button>
-            {bellOpen && (
-              <div style={{ position: "absolute", right: 0, top: 40, width: 320, background: "#fff", border: "0.5px solid #E0E0E0", borderRadius: 10, boxShadow: "0 12px 32px rgba(0,0,0,0.08)", zIndex: 50, maxHeight: 400, overflow: "auto" }}>
-                <div style={{ padding: "10px 12px", borderBottom: "0.5px solid #F0F0F0", fontSize: 12, fontWeight: 500 }}>Notifications</div>
-                {notifications.length === 0 ? (
-                  <div className="text-xs text-muted-foreground p-4">No notifications yet.</div>
-                ) : notifications.map((n) => (
-                  <div key={n.id} style={{ padding: "10px 12px", borderBottom: "0.5px solid #F5F5F5", fontSize: 12 }}>
-                    <div>{n.text}</div>
-                    <div className="text-[10px] text-muted-foreground mt-0.5">{new Date(n.at).toLocaleTimeString()}</div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        </div>
         <div className="px-6 md:px-10 py-8 max-w-[1280px]">
           <Outlet />
         </div>
