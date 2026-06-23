@@ -1,7 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { usePmStore } from "@/lib/pm-store";
 import * as React from "react";
-import { Key, Check, ExternalLink } from "lucide-react";
+import { Key, Check, ExternalLink, User as UserIcon, Lock, Mail } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/dashboard/settings")({
   head: () => ({ meta: [{ title: "Account — ProspectMaster" }] }),
