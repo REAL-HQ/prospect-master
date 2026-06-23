@@ -33,7 +33,7 @@ function AuthenticatedLayout() {
   return (
     <div className="bg-white min-h-screen">
       <div className="sticky top-0 z-[100] bg-white" style={{ borderBottom: "0.5px solid #E0E0E0" }}>
-        <nav className="mx-auto flex h-[56px] items-center justify-between px-6 md:px-10 max-w-[1280px]">
+        <nav className="flex h-[56px] items-center justify-between px-6 md:px-10">
           <Link to="/" className="font-medium tracking-[0.09em] uppercase text-[16px] select-none">
             <span style={{ color: "#111" }}>PROSPECT</span>
             <span style={{ color: "#CC0000" }}>MASTER</span>
