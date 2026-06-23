@@ -134,7 +134,7 @@ function FilingsPage() {
 
   return (
     <div>
-      <h1 style={{ fontSize: 28, fontWeight: 500 }}>Fresh Filings</h1>
+      <h1 style={{ fontSize: 28, fontWeight: 500 }}>Fresh filings</h1>
       <p className="text-sm text-muted-foreground mt-1">Newly registered businesses are leads before they exist anywhere else.</p>
 
       <div className="mt-6 grid grid-cols-4 gap-3">
