@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { usePmStore, type LeadTier } from "@/lib/pm-store";
+import { usePmStore, type LeadTier, type VerificationStatus } from "@/lib/pm-store";
 import * as React from "react";
-import { Star, Info } from "lucide-react";
+import { Star, Info, ShieldCheck, ShieldAlert, ShieldQuestion, ExternalLink, Loader2, Send } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/dashboard/leads")({
   component: LeadsPage,
@@ -9,26 +9,66 @@ export const Route = createFileRoute("/_authenticated/dashboard/leads")({
 
 function LeadsPage() {
   const prospects = usePmStore((s) => s.prospects);
+  const verifyLeads = usePmStore((s) => s.verifyLeads);
+  const verifyNext = usePmStore((s) => s.verifyNext);
+  const ghlEnabled = usePmStore((s) => s.ghl.enabled);
+  const pushToGhl = usePmStore((s) => s.pushToGhl);
+
   const [tier, setTier] = React.useState<"ALL" | LeadTier>("ALL");
+  const [vfilter, setVfilter] = React.useState<"ALL" | VerificationStatus>("ALL");
   const [sort, setSort] = React.useState<"score" | "rating" | "recent">("score");
+  const [selected, setSelected] = React.useState<Set<string>>(new Set());
+  const [verifying, setVerifying] = React.useState(false);
+  const [pushing, setPushing] = React.useState(false);
 
   const list = React.useMemo(() => {
     let l = [...prospects];
     if (tier !== "ALL") l = l.filter((p) => p.tier === tier);
+    if (vfilter !== "ALL") l = l.filter((p) => p.verificationStatus === vfilter);
     l.sort((a, b) => sort === "score" ? b.score - a.score : sort === "rating" ? b.rating - a.rating : b.createdAt - a.createdAt);
     return l;
-  }, [prospects, tier, sort]);
+  }, [prospects, tier, vfilter, sort]);
 
   const counts = {
     HOT: prospects.filter((p) => p.tier === "HOT").length,
     WARM: prospects.filter((p) => p.tier === "WARM").length,
     COLD: prospects.filter((p) => p.tier === "COLD").length,
   };
+  const unverifiedCount = prospects.filter((p) => p.verificationStatus === "unverified").length;
+
+  const toggle = (id: string) => setSelected((s) => { const n = new Set(s); n.has(id) ? n.delete(id) : n.add(id); return n; });
+  const selectVisible = () => setSelected(new Set(list.map((p) => p.id)));
+  const clearSel = () => setSelected(new Set());
+
+  const handleVerifySelected = async () => {
+    if (selected.size === 0) return;
+    setVerifying(true);
+    await verifyLeads(Array.from(selected));
+    setVerifying(false);
+    clearSel();
+  };
+  const handleVerifyNext = async () => {
+    setVerifying(true);
+    await verifyNext(25);
+    setVerifying(false);
+  };
+
+  const handlePushGhl = async () => {
+    if (selected.size === 0) return;
+    const sel = Array.from(selected);
+    const noPhone = sel.filter((id) => !prospects.find((p) => p.id === id)?.phone).length;
+    const ok = confirm(`Push ${sel.length} leads to GoHighLevel?\nTags: prospectmaster, no-website\n${noPhone > 0 ? `Note: ${noPhone} will be skipped (no phone).` : ""}`);
+    if (!ok) return;
+    setPushing(true);
+    await pushToGhl(sel);
+    setPushing(false);
+    clearSel();
+  };
 
   return (
     <div>
       <h1 style={{ fontSize: 28, fontWeight: 500 }}>Lead Scoring</h1>
-      <p className="text-sm text-muted-foreground mt-1">Every lead scored 1–10 on rating, reviews, category demand, and no-website signal.</p>
+      <p className="text-sm text-muted-foreground mt-1">Every lead scored 1–10 and verified against the open web before outreach.</p>
 
       <div className="mt-6 grid grid-cols-3 gap-3">
         {(["HOT", "WARM", "COLD"] as const).map((t) => (
@@ -39,28 +79,60 @@ function LeadsPage() {
         ))}
       </div>
 
-      <div className="mt-6 flex items-center justify-between">
-        <div className="flex gap-2">
+      <div className="mt-6 flex items-center justify-between flex-wrap gap-3">
+        <div className="flex gap-2 flex-wrap">
           {(["ALL", "HOT", "WARM", "COLD"] as const).map((t) => (
-            <button key={t} onClick={() => setTier(t)} className="text-xs px-3 py-1.5" style={{ border: "0.5px solid #E0E0E0", borderRadius: 20, background: tier === t ? "#FFF0F0" : "#fff", color: tier === t ? "#CC0000" : "#444" }}>
-              {t}
-            </button>
+            <button key={t} onClick={() => setTier(t)} className="text-xs px-3 py-1.5" style={{ border: "0.5px solid #E0E0E0", borderRadius: 20, background: tier === t ? "#FFF0F0" : "#fff", color: tier === t ? "#CC0000" : "#444" }}>{t}</button>
           ))}
+          <span style={{ width: 1, background: "#E0E0E0", margin: "0 4px" }} />
+          <select value={vfilter} onChange={(e) => setVfilter(e.target.value as typeof vfilter)} className="text-xs" style={{ padding: "6px 10px", border: "0.5px solid #E0E0E0", borderRadius: 20, background: "#fff" }}>
+            <option value="ALL">All verification</option>
+            <option value="unverified">Unverified ({unverifiedCount})</option>
+            <option value="verified_no_site">Verified no site</option>
+            <option value="unlinked_site">Unlinked site</option>
+          </select>
         </div>
-        <select value={sort} onChange={(e) => setSort(e.target.value as typeof sort)} className="text-xs" style={{ padding: "6px 10px", border: "0.5px solid #E0E0E0", borderRadius: 6, background: "#fff" }}>
-          <option value="score">Sort by score</option>
-          <option value="rating">Sort by rating</option>
-          <option value="recent">Sort by recent</option>
-        </select>
+        <div className="flex gap-2 flex-wrap">
+          <select value={sort} onChange={(e) => setSort(e.target.value as typeof sort)} className="text-xs" style={{ padding: "6px 10px", border: "0.5px solid #E0E0E0", borderRadius: 6, background: "#fff" }}>
+            <option value="score">Sort by score</option>
+            <option value="rating">Sort by rating</option>
+            <option value="recent">Sort by recent</option>
+          </select>
+        </div>
+      </div>
+
+      <div className="mt-3 flex items-center gap-2 flex-wrap" style={{ padding: 10, background: "#FAFAFA", border: "0.5px solid #E8E8E8", borderRadius: 8 }}>
+        <span className="text-xs text-muted-foreground">{selected.size} selected</span>
+        <button onClick={selectVisible} className="text-xs underline text-muted-foreground">Select all visible</button>
+        {selected.size > 0 && <button onClick={clearSel} className="text-xs underline text-muted-foreground">Clear</button>}
+        <div className="flex-1" />
+        <button onClick={handleVerifySelected} disabled={selected.size === 0 || verifying} className="text-xs flex items-center gap-1.5 px-3 py-1.5" style={{ border: "0.5px solid #E0E0E0", borderRadius: 6, background: "#fff", opacity: selected.size === 0 ? 0.5 : 1 }}>
+          {verifying ? <Loader2 size={12} className="animate-spin" /> : <ShieldCheck size={12} />} Verify Selected
+        </button>
+        <button onClick={handleVerifyNext} disabled={verifying || unverifiedCount === 0} className="text-xs flex items-center gap-1.5 px-3 py-1.5" style={{ border: "0.5px solid #E0E0E0", borderRadius: 6, background: "#fff", opacity: unverifiedCount === 0 ? 0.5 : 1 }}>
+          {verifying ? <Loader2 size={12} className="animate-spin" /> : <ShieldCheck size={12} />} Verify Next 25
+        </button>
+        {ghlEnabled && (
+          <button onClick={handlePushGhl} disabled={selected.size === 0 || pushing} className="text-xs flex items-center gap-1.5 px-3 py-1.5" style={{ border: "0.5px solid #CC0000", color: "#CC0000", borderRadius: 6, background: "#fff", opacity: selected.size === 0 ? 0.5 : 1 }}>
+            {pushing ? <Loader2 size={12} className="animate-spin" /> : <Send size={12} />} Push to GHL
+          </button>
+        )}
       </div>
 
       <div className="mt-3 grid gap-2">
         {list.map((p) => (
           <div key={p.id} className="pm-card p-4 flex items-center gap-4">
+            <input type="checkbox" checked={selected.has(p.id)} onChange={() => toggle(p.id)} />
             <ScoreDial score={p.score} />
             <div className="flex-1 min-w-0">
-              <div className="font-medium text-sm">{p.name}</div>
-              <div className="text-xs text-muted-foreground flex items-center gap-2 mt-0.5">
+              <div className="font-medium text-sm flex items-center gap-2">
+                {p.name}
+                <VerifiedBadge status={p.verificationStatus} foundUrl={p.foundUrl} />
+                {p.ghlContactId && (
+                  <span style={{ fontSize: 9, fontWeight: 600, padding: "2px 6px", borderRadius: 3, background: "#E8F0FE", color: "#1A56DB", letterSpacing: 0.5 }}>GHL</span>
+                )}
+              </div>
+              <div className="text-xs text-muted-foreground flex items-center gap-2 mt-0.5 flex-wrap">
                 <span>{p.category}</span>·
                 <span className="flex items-center gap-1"><Star size={10} style={{ color: "#F5A623", fill: "#F5A623" }} /> {p.rating} ({p.reviews})</span>·
                 <span>{p.city}, {p.state}</span>·
@@ -76,6 +148,28 @@ function LeadsPage() {
   );
 }
 
+function VerifiedBadge({ status, foundUrl }: { status: VerificationStatus; foundUrl?: string }) {
+  if (status === "unverified") {
+    return (
+      <span title="Not yet verified" style={{ display: "inline-flex", alignItems: "center", gap: 4, fontSize: 10, fontWeight: 500, padding: "2px 7px", borderRadius: 10, background: "#F0F0F0", color: "#888" }}>
+        <ShieldQuestion size={10} /> unverified
+      </span>
+    );
+  }
+  if (status === "verified_no_site") {
+    return (
+      <span title="Confirmed no website" style={{ display: "inline-flex", alignItems: "center", gap: 4, fontSize: 10, fontWeight: 600, padding: "2px 7px", borderRadius: 10, background: "#CC0000", color: "#fff" }}>
+        <ShieldCheck size={10} /> verified
+      </span>
+    );
+  }
+  return (
+    <a href={foundUrl} target="_blank" rel="noreferrer" title={`Site found: ${foundUrl}`} style={{ display: "inline-flex", alignItems: "center", gap: 4, fontSize: 10, fontWeight: 500, padding: "2px 7px", borderRadius: 10, background: "#FFF4D6", color: "#B36B00" }}>
+      <ShieldAlert size={10} /> unlinked site <ExternalLink size={9} />
+    </a>
+  );
+}
+
 function ScoreDial({ score }: { score: number }) {
   const pct = (score / 10) * 100;
   const color = score >= 7.5 ? "#CC0000" : score >= 5 ? "#F5A623" : "#9AA4B2";
@@ -86,7 +180,7 @@ function ScoreDial({ score }: { score: number }) {
   );
 }
 
-function ScoreBreakdown({ p }: { p: { rating: number; reviews: number; hasWebsite: boolean; score: number; tier: string } }) {
+function ScoreBreakdown({ p }: { p: { rating: number; reviews: number; hasWebsite: boolean; score: number; tier: string; verificationStatus: VerificationStatus } }) {
   const [open, setOpen] = React.useState(false);
   return (
     <div className="relative">
@@ -94,11 +188,12 @@ function ScoreBreakdown({ p }: { p: { rating: number; reviews: number; hasWebsit
         <Info size={12} /> Breakdown
       </button>
       {open && (
-        <div className="absolute right-0 top-7 z-10 p-3" style={{ width: 220, background: "#fff", border: "0.5px solid #E0E0E0", borderRadius: 8, boxShadow: "0 8px 24px rgba(0,0,0,0.06)" }}>
+        <div className="absolute right-0 top-7 z-10 p-3" style={{ width: 240, background: "#fff", border: "0.5px solid #E0E0E0", borderRadius: 8, boxShadow: "0 8px 24px rgba(0,0,0,0.06)" }}>
           <div className="text-xs space-y-1.5">
             <Row k="Rating boost" v={`+${(p.rating * 1.2).toFixed(1)}`} />
             <Row k="Reviews boost" v={`+${Math.min(p.reviews / 30, 4).toFixed(1)}`} />
             <Row k="No-website" v={p.hasWebsite ? "—" : "+2.5"} />
+            <Row k="Verification" v={p.verificationStatus === "verified_no_site" ? "+1.0" : p.verificationStatus === "unlinked_site" ? "−2.0" : "pending"} />
             <div style={{ borderTop: "0.5px solid #F0F0F0", paddingTop: 6 }} className="flex justify-between font-medium">
               <span>Total</span><span style={{ color: "#CC0000" }}>{p.score} ({p.tier})</span>
             </div>

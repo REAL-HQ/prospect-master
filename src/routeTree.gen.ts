@@ -15,12 +15,14 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedDashboardIndexRouteImport } from './routes/_authenticated/dashboard.index'
 import { Route as AuthenticatedDashboardSitesRouteImport } from './routes/_authenticated/dashboard.sites'
+import { Route as AuthenticatedDashboardSettingsRouteImport } from './routes/_authenticated/dashboard.settings'
 import { Route as AuthenticatedDashboardSearchRouteImport } from './routes/_authenticated/dashboard.search'
 import { Route as AuthenticatedDashboardRevenueRouteImport } from './routes/_authenticated/dashboard.revenue'
 import { Route as AuthenticatedDashboardPreviewsRouteImport } from './routes/_authenticated/dashboard.previews'
 import { Route as AuthenticatedDashboardPaymentsRouteImport } from './routes/_authenticated/dashboard.payments'
 import { Route as AuthenticatedDashboardOutreachRouteImport } from './routes/_authenticated/dashboard.outreach'
 import { Route as AuthenticatedDashboardLeadsRouteImport } from './routes/_authenticated/dashboard.leads'
+import { Route as AuthenticatedDashboardFilingsRouteImport } from './routes/_authenticated/dashboard.filings'
 import { Route as AuthenticatedDashboardCrmRouteImport } from './routes/_authenticated/dashboard.crm'
 
 const AuthRoute = AuthRouteImport.update({
@@ -52,6 +54,12 @@ const AuthenticatedDashboardSitesRoute =
   AuthenticatedDashboardSitesRouteImport.update({
     id: '/sites',
     path: '/sites',
+    getParentRoute: () => AuthenticatedDashboardRoute,
+  } as any)
+const AuthenticatedDashboardSettingsRoute =
+  AuthenticatedDashboardSettingsRouteImport.update({
+    id: '/settings',
+    path: '/settings',
     getParentRoute: () => AuthenticatedDashboardRoute,
   } as any)
 const AuthenticatedDashboardSearchRoute =
@@ -90,6 +98,12 @@ const AuthenticatedDashboardLeadsRoute =
     path: '/leads',
     getParentRoute: () => AuthenticatedDashboardRoute,
   } as any)
+const AuthenticatedDashboardFilingsRoute =
+  AuthenticatedDashboardFilingsRouteImport.update({
+    id: '/filings',
+    path: '/filings',
+    getParentRoute: () => AuthenticatedDashboardRoute,
+  } as any)
 const AuthenticatedDashboardCrmRoute =
   AuthenticatedDashboardCrmRouteImport.update({
     id: '/crm',
@@ -102,12 +116,14 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/dashboard': typeof AuthenticatedDashboardRouteWithChildren
   '/dashboard/crm': typeof AuthenticatedDashboardCrmRoute
+  '/dashboard/filings': typeof AuthenticatedDashboardFilingsRoute
   '/dashboard/leads': typeof AuthenticatedDashboardLeadsRoute
   '/dashboard/outreach': typeof AuthenticatedDashboardOutreachRoute
   '/dashboard/payments': typeof AuthenticatedDashboardPaymentsRoute
   '/dashboard/previews': typeof AuthenticatedDashboardPreviewsRoute
   '/dashboard/revenue': typeof AuthenticatedDashboardRevenueRoute
   '/dashboard/search': typeof AuthenticatedDashboardSearchRoute
+  '/dashboard/settings': typeof AuthenticatedDashboardSettingsRoute
   '/dashboard/sites': typeof AuthenticatedDashboardSitesRoute
   '/dashboard/': typeof AuthenticatedDashboardIndexRoute
 }
@@ -115,12 +131,14 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/dashboard/crm': typeof AuthenticatedDashboardCrmRoute
+  '/dashboard/filings': typeof AuthenticatedDashboardFilingsRoute
   '/dashboard/leads': typeof AuthenticatedDashboardLeadsRoute
   '/dashboard/outreach': typeof AuthenticatedDashboardOutreachRoute
   '/dashboard/payments': typeof AuthenticatedDashboardPaymentsRoute
   '/dashboard/previews': typeof AuthenticatedDashboardPreviewsRoute
   '/dashboard/revenue': typeof AuthenticatedDashboardRevenueRoute
   '/dashboard/search': typeof AuthenticatedDashboardSearchRoute
+  '/dashboard/settings': typeof AuthenticatedDashboardSettingsRoute
   '/dashboard/sites': typeof AuthenticatedDashboardSitesRoute
   '/dashboard': typeof AuthenticatedDashboardIndexRoute
 }
@@ -131,12 +149,14 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRouteWithChildren
   '/_authenticated/dashboard/crm': typeof AuthenticatedDashboardCrmRoute
+  '/_authenticated/dashboard/filings': typeof AuthenticatedDashboardFilingsRoute
   '/_authenticated/dashboard/leads': typeof AuthenticatedDashboardLeadsRoute
   '/_authenticated/dashboard/outreach': typeof AuthenticatedDashboardOutreachRoute
   '/_authenticated/dashboard/payments': typeof AuthenticatedDashboardPaymentsRoute
   '/_authenticated/dashboard/previews': typeof AuthenticatedDashboardPreviewsRoute
   '/_authenticated/dashboard/revenue': typeof AuthenticatedDashboardRevenueRoute
   '/_authenticated/dashboard/search': typeof AuthenticatedDashboardSearchRoute
+  '/_authenticated/dashboard/settings': typeof AuthenticatedDashboardSettingsRoute
   '/_authenticated/dashboard/sites': typeof AuthenticatedDashboardSitesRoute
   '/_authenticated/dashboard/': typeof AuthenticatedDashboardIndexRoute
 }
@@ -147,12 +167,14 @@ export interface FileRouteTypes {
     | '/auth'
     | '/dashboard'
     | '/dashboard/crm'
+    | '/dashboard/filings'
     | '/dashboard/leads'
     | '/dashboard/outreach'
     | '/dashboard/payments'
     | '/dashboard/previews'
     | '/dashboard/revenue'
     | '/dashboard/search'
+    | '/dashboard/settings'
     | '/dashboard/sites'
     | '/dashboard/'
   fileRoutesByTo: FileRoutesByTo
@@ -160,12 +182,14 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/dashboard/crm'
+    | '/dashboard/filings'
     | '/dashboard/leads'
     | '/dashboard/outreach'
     | '/dashboard/payments'
     | '/dashboard/previews'
     | '/dashboard/revenue'
     | '/dashboard/search'
+    | '/dashboard/settings'
     | '/dashboard/sites'
     | '/dashboard'
   id:
@@ -175,12 +199,14 @@ export interface FileRouteTypes {
     | '/auth'
     | '/_authenticated/dashboard'
     | '/_authenticated/dashboard/crm'
+    | '/_authenticated/dashboard/filings'
     | '/_authenticated/dashboard/leads'
     | '/_authenticated/dashboard/outreach'
     | '/_authenticated/dashboard/payments'
     | '/_authenticated/dashboard/previews'
     | '/_authenticated/dashboard/revenue'
     | '/_authenticated/dashboard/search'
+    | '/_authenticated/dashboard/settings'
     | '/_authenticated/dashboard/sites'
     | '/_authenticated/dashboard/'
   fileRoutesById: FileRoutesById
@@ -235,6 +261,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardSitesRouteImport
       parentRoute: typeof AuthenticatedDashboardRoute
     }
+    '/_authenticated/dashboard/settings': {
+      id: '/_authenticated/dashboard/settings'
+      path: '/settings'
+      fullPath: '/dashboard/settings'
+      preLoaderRoute: typeof AuthenticatedDashboardSettingsRouteImport
+      parentRoute: typeof AuthenticatedDashboardRoute
+    }
     '/_authenticated/dashboard/search': {
       id: '/_authenticated/dashboard/search'
       path: '/search'
@@ -277,6 +310,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardLeadsRouteImport
       parentRoute: typeof AuthenticatedDashboardRoute
     }
+    '/_authenticated/dashboard/filings': {
+      id: '/_authenticated/dashboard/filings'
+      path: '/filings'
+      fullPath: '/dashboard/filings'
+      preLoaderRoute: typeof AuthenticatedDashboardFilingsRouteImport
+      parentRoute: typeof AuthenticatedDashboardRoute
+    }
     '/_authenticated/dashboard/crm': {
       id: '/_authenticated/dashboard/crm'
       path: '/crm'
@@ -289,12 +329,14 @@ declare module '@tanstack/react-router' {
 
 interface AuthenticatedDashboardRouteChildren {
   AuthenticatedDashboardCrmRoute: typeof AuthenticatedDashboardCrmRoute
+  AuthenticatedDashboardFilingsRoute: typeof AuthenticatedDashboardFilingsRoute
   AuthenticatedDashboardLeadsRoute: typeof AuthenticatedDashboardLeadsRoute
   AuthenticatedDashboardOutreachRoute: typeof AuthenticatedDashboardOutreachRoute
   AuthenticatedDashboardPaymentsRoute: typeof AuthenticatedDashboardPaymentsRoute
   AuthenticatedDashboardPreviewsRoute: typeof AuthenticatedDashboardPreviewsRoute
   AuthenticatedDashboardRevenueRoute: typeof AuthenticatedDashboardRevenueRoute
   AuthenticatedDashboardSearchRoute: typeof AuthenticatedDashboardSearchRoute
+  AuthenticatedDashboardSettingsRoute: typeof AuthenticatedDashboardSettingsRoute
   AuthenticatedDashboardSitesRoute: typeof AuthenticatedDashboardSitesRoute
   AuthenticatedDashboardIndexRoute: typeof AuthenticatedDashboardIndexRoute
 }
@@ -302,12 +344,14 @@ interface AuthenticatedDashboardRouteChildren {
 const AuthenticatedDashboardRouteChildren: AuthenticatedDashboardRouteChildren =
   {
     AuthenticatedDashboardCrmRoute: AuthenticatedDashboardCrmRoute,
+    AuthenticatedDashboardFilingsRoute: AuthenticatedDashboardFilingsRoute,
     AuthenticatedDashboardLeadsRoute: AuthenticatedDashboardLeadsRoute,
     AuthenticatedDashboardOutreachRoute: AuthenticatedDashboardOutreachRoute,
     AuthenticatedDashboardPaymentsRoute: AuthenticatedDashboardPaymentsRoute,
     AuthenticatedDashboardPreviewsRoute: AuthenticatedDashboardPreviewsRoute,
     AuthenticatedDashboardRevenueRoute: AuthenticatedDashboardRevenueRoute,
     AuthenticatedDashboardSearchRoute: AuthenticatedDashboardSearchRoute,
+    AuthenticatedDashboardSettingsRoute: AuthenticatedDashboardSettingsRoute,
     AuthenticatedDashboardSitesRoute: AuthenticatedDashboardSitesRoute,
     AuthenticatedDashboardIndexRoute: AuthenticatedDashboardIndexRoute,
   }
@@ -337,13 +381,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
