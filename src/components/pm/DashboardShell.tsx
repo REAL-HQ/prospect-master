@@ -24,20 +24,15 @@ export function DashboardShell() {
   const { user } = useAuth();
   const navigate = useNavigate();
   const path = useRouterState({ select: (s) => s.location.pathname });
-  const notifications = usePmStore((s) => s.notifications);
-  const markAllRead = usePmStore((s) => s.markAllRead);
   const resetAll = usePmStore((s) => s.resetAll);
   const seedDemo = usePmStore((s) => s.seedDemo);
   const prospectsLen = usePmStore((s) => s.prospects.length);
-  const [bellOpen, setBellOpen] = React.useState(false);
 
   // Seed demo data on first visit if empty
   React.useEffect(() => {
     if (prospectsLen === 0) seedDemo();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  const unread = notifications.filter((n) => !n.read).length;
 
   const handleSignOut = async () => {
     await supabase.auth.signOut();
