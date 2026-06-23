@@ -17,6 +17,21 @@ export const Route = createFileRoute("/_authenticated")({
   component: AuthenticatedLayout,
 });
 
+function userDisplayName(user: { email?: string; user_metadata?: Record<string, unknown> } | null) {
+  if (!user) return "Account";
+  const meta = user.user_metadata ?? {};
+  const name = (meta.full_name as string | undefined) || (meta.name as string | undefined);
+  if (name) return name;
+  return user.email?.split("@")[0] ?? "Account";
+}
+
+function userInitials(user: { email?: string; user_metadata?: Record<string, unknown> } | null) {
+  if (!user) return "A";
+  const meta = user.user_metadata ?? {};
+  const name = (meta.full_name as string | undefined) || (meta.name as string | undefined) || user.email || "A";
+  return name.slice(0, 1).toUpperCase();
+}
+
 function AuthenticatedLayout() {
   const { user } = useAuth();
   const navigate = useNavigate();
