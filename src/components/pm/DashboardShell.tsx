@@ -63,19 +63,6 @@ export function DashboardShell() {
             );
           })}
         </nav>
-        <div className="mt-auto pt-4" style={{ borderTop: "0.5px solid #E8E8E8" }}>
-          <button
-            onClick={() => { if (confirm("Reset all demo data?")) resetAll(); }}
-            className="w-full flex items-center gap-2 text-xs text-muted-foreground hover:text-foreground"
-            style={{ padding: "6px 10px" }}
-          >
-            <RotateCcw size={12} /> Reset demo
-          </button>
-          <button onClick={handleSignOut} className="w-full flex items-center gap-2 text-xs text-muted-foreground hover:text-foreground" style={{ padding: "6px 10px" }}>
-            <LogOut size={12} /> Sign out
-          </button>
-          <div className="text-[11px] text-muted-foreground mt-2 px-2.5 truncate">{user?.email}</div>
-        </div>
       </aside>
 
       {/* Main */}
