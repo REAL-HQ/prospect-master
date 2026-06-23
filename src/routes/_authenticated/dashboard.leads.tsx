@@ -73,7 +73,7 @@ function LeadsPage() {
       <div className="mt-6 grid grid-cols-3 gap-3">
         {(["HOT", "WARM", "COLD"] as const).map((t) => (
           <button key={t} onClick={() => setTier(t === tier ? "ALL" : t)} className="pm-card p-4 text-left" style={{ outline: tier === t ? "1px solid #CC0000" : "none" }}>
-            <div className="text-xs text-muted-foreground">{t}</div>
+            <div className="text-xs text-muted-foreground">{t.charAt(0) + t.slice(1).toLowerCase()}</div>
             <div style={{ fontSize: 22, fontWeight: 500 }}>{counts[t]}</div>
           </button>
         ))}
