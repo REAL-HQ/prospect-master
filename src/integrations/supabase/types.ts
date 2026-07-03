@@ -14,13 +14,484 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      fresh_filings: {
+        Row: {
+          business_name: string
+          city: string | null
+          created_at: string
+          entity_number: string | null
+          filing_date: string | null
+          id: string
+          lead_id: string | null
+          raw: Json | null
+          registered_agent: string | null
+          status: string
+          user_id: string
+          web_presence: string
+          zip: string | null
+        }
+        Insert: {
+          business_name: string
+          city?: string | null
+          created_at?: string
+          entity_number?: string | null
+          filing_date?: string | null
+          id?: string
+          lead_id?: string | null
+          raw?: Json | null
+          registered_agent?: string | null
+          status?: string
+          user_id: string
+          web_presence?: string
+          zip?: string | null
+        }
+        Update: {
+          business_name?: string
+          city?: string | null
+          created_at?: string
+          entity_number?: string | null
+          filing_date?: string | null
+          id?: string
+          lead_id?: string | null
+          raw?: Json | null
+          registered_agent?: string | null
+          status?: string
+          user_id?: string
+          web_presence?: string
+          zip?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fresh_filings_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "prospects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      notifications: {
+        Row: {
+          at: string
+          id: string
+          read: boolean
+          text: string
+          user_id: string
+        }
+        Insert: {
+          at?: string
+          id?: string
+          read?: boolean
+          text: string
+          user_id: string
+        }
+        Update: {
+          at?: string
+          id?: string
+          read?: boolean
+          text?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      outreach: {
+        Row: {
+          created_at: string
+          id: string
+          prospect_id: string
+          site_id: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          prospect_id: string
+          site_id?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          prospect_id?: string
+          site_id?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "outreach_prospect_id_fkey"
+            columns: ["prospect_id"]
+            isOneToOne: false
+            referencedRelation: "prospects"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "outreach_site_id_fkey"
+            columns: ["site_id"]
+            isOneToOne: false
+            referencedRelation: "sites"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      outreach_steps: {
+        Row: {
+          body: string
+          channel: string
+          created_at: string
+          day: number
+          id: string
+          opened_at: string | null
+          outreach_id: string
+          scheduled_for: string | null
+          sent: boolean
+          sent_at: string | null
+          subject: string | null
+          user_id: string
+        }
+        Insert: {
+          body: string
+          channel: string
+          created_at?: string
+          day?: number
+          id?: string
+          opened_at?: string | null
+          outreach_id: string
+          scheduled_for?: string | null
+          sent?: boolean
+          sent_at?: string | null
+          subject?: string | null
+          user_id: string
+        }
+        Update: {
+          body?: string
+          channel?: string
+          created_at?: string
+          day?: number
+          id?: string
+          opened_at?: string | null
+          outreach_id?: string
+          scheduled_for?: string | null
+          sent?: boolean
+          sent_at?: string | null
+          subject?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "outreach_steps_outreach_id_fkey"
+            columns: ["outreach_id"]
+            isOneToOne: false
+            referencedRelation: "outreach"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      payments: {
+        Row: {
+          amount: number
+          created_at: string
+          id: string
+          paid_at: string
+          prospect_id: string
+          stripe_payment_intent_id: string | null
+          type: string
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          id?: string
+          paid_at?: string
+          prospect_id: string
+          stripe_payment_intent_id?: string | null
+          type?: string
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          id?: string
+          paid_at?: string
+          prospect_id?: string
+          stripe_payment_intent_id?: string | null
+          type?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "payments_prospect_id_fkey"
+            columns: ["prospect_id"]
+            isOneToOne: false
+            referencedRelation: "prospects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      preview_events: {
+        Row: {
+          at: string
+          device: string
+          id: string
+          site_id: string
+          type: string
+        }
+        Insert: {
+          at?: string
+          device?: string
+          id?: string
+          site_id: string
+          type: string
+        }
+        Update: {
+          at?: string
+          device?: string
+          id?: string
+          site_id?: string
+          type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "preview_events_site_id_fkey"
+            columns: ["site_id"]
+            isOneToOne: false
+            referencedRelation: "sites"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      prospects: {
+        Row: {
+          address: string | null
+          category: string | null
+          city: string | null
+          country: string
+          created_at: string
+          found_url: string | null
+          ghl_contact_id: string | null
+          ghl_pushed_at: string | null
+          has_website: boolean
+          id: string
+          last_activity_at: string
+          name: string
+          notes: string
+          outreach_id: string | null
+          phone: string | null
+          rating: number
+          reviews: number
+          score: number
+          site_id: string | null
+          state: string | null
+          status: string
+          tier: string
+          updated_at: string
+          user_id: string
+          verification_status: string
+          verified_at: string | null
+        }
+        Insert: {
+          address?: string | null
+          category?: string | null
+          city?: string | null
+          country?: string
+          created_at?: string
+          found_url?: string | null
+          ghl_contact_id?: string | null
+          ghl_pushed_at?: string | null
+          has_website?: boolean
+          id?: string
+          last_activity_at?: string
+          name: string
+          notes?: string
+          outreach_id?: string | null
+          phone?: string | null
+          rating?: number
+          reviews?: number
+          score?: number
+          site_id?: string | null
+          state?: string | null
+          status?: string
+          tier?: string
+          updated_at?: string
+          user_id: string
+          verification_status?: string
+          verified_at?: string | null
+        }
+        Update: {
+          address?: string | null
+          category?: string | null
+          city?: string | null
+          country?: string
+          created_at?: string
+          found_url?: string | null
+          ghl_contact_id?: string | null
+          ghl_pushed_at?: string | null
+          has_website?: boolean
+          id?: string
+          last_activity_at?: string
+          name?: string
+          notes?: string
+          outreach_id?: string | null
+          phone?: string | null
+          rating?: number
+          reviews?: number
+          score?: number
+          site_id?: string | null
+          state?: string | null
+          status?: string
+          tier?: string
+          updated_at?: string
+          user_id?: string
+          verification_status?: string
+          verified_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "prospects_outreach_fk"
+            columns: ["outreach_id"]
+            isOneToOne: false
+            referencedRelation: "outreach"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "prospects_site_id_fkey"
+            columns: ["site_id"]
+            isOneToOne: false
+            referencedRelation: "sites"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      saved_searches: {
+        Row: {
+          category: string | null
+          created_at: string
+          id: string
+          location: string | null
+          query: string
+          user_id: string
+        }
+        Insert: {
+          category?: string | null
+          created_at?: string
+          id?: string
+          location?: string | null
+          query: string
+          user_id: string
+        }
+        Update: {
+          category?: string | null
+          created_at?: string
+          id?: string
+          location?: string | null
+          query?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      sites: {
+        Row: {
+          about: string | null
+          created_at: string
+          cta: string | null
+          deployed_domain: string | null
+          headline: string | null
+          id: string
+          palette: Json
+          preview_path: string | null
+          prospect_id: string | null
+          services: Json
+          slug: string
+          tagline: string | null
+          user_id: string
+        }
+        Insert: {
+          about?: string | null
+          created_at?: string
+          cta?: string | null
+          deployed_domain?: string | null
+          headline?: string | null
+          id?: string
+          palette?: Json
+          preview_path?: string | null
+          prospect_id?: string | null
+          services?: Json
+          slug: string
+          tagline?: string | null
+          user_id: string
+        }
+        Update: {
+          about?: string | null
+          created_at?: string
+          cta?: string | null
+          deployed_domain?: string | null
+          headline?: string | null
+          id?: string
+          palette?: Json
+          preview_path?: string | null
+          prospect_id?: string | null
+          services?: Json
+          slug?: string
+          tagline?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sites_prospect_fk"
+            columns: ["prospect_id"]
+            isOneToOne: false
+            referencedRelation: "prospects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_settings: {
+        Row: {
+          created_at: string
+          default_hosting_fee: number
+          default_site_price: number
+          firecrawl_configured: boolean
+          ghl_default_tags: Json
+          ghl_enabled: boolean
+          ghl_location_id: string | null
+          ghl_pit: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          default_hosting_fee?: number
+          default_site_price?: number
+          firecrawl_configured?: boolean
+          ghl_default_tags?: Json
+          ghl_enabled?: boolean
+          ghl_location_id?: string | null
+          ghl_pit?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          default_hosting_fee?: number
+          default_site_price?: number
+          firecrawl_configured?: boolean
+          ghl_default_tags?: Json
+          ghl_enabled?: boolean
+          ghl_location_id?: string | null
+          ghl_pit?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      log_preview_event: {
+        Args: { _device: string; _site_id: string; _type: string }
+        Returns: undefined
+      }
     }
     Enums: {
       [_ in never]: never
