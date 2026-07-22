@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
+import { pmLoadState, pmSaveState } from "./pm.functions";
 
 export type LeadTier = "HOT" | "WARM" | "COLD";
 export type DealStatus = "New" | "Contacted" | "Interested" | "Closed" | "Lost";
@@ -146,7 +146,10 @@ type Actions = {
   setFirecrawlConfigured: (v: boolean) => void;
 };
 
-const uid = () => Math.random().toString(36).slice(2, 10);
+const uid = () =>
+  typeof crypto !== "undefined" && "randomUUID" in crypto
+    ? crypto.randomUUID()
+    : `${Date.now().toString(16)}-${Math.random().toString(16).slice(2, 10)}-${Math.random().toString(16).slice(2, 6)}-${Math.random().toString(16).slice(2, 6)}-${Math.random().toString(16).slice(2, 14)}`;
 
 const FIRST_NAMES = [
   "Sunrise","Bluebird","Maple","Iron","Cobalt","Ember","Pine","Granite","Willow","Harbor","Copper","Silver","Crown","Anchor","Lone Star","Pioneer","Atlas","Lighthouse","Ridge","Bayside","Oakwood","Cedar","Ironclad","Riverstone","Goldleaf",
