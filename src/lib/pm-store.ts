@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
+import { pmLoadState, pmSaveState } from "./pm.functions";
 
 export type LeadTier = "HOT" | "WARM" | "COLD";
 export type DealStatus = "New" | "Contacted" | "Interested" | "Closed" | "Lost";
@@ -146,7 +146,10 @@ type Actions = {
   setFirecrawlConfigured: (v: boolean) => void;
 };
 
-const uid = () => Math.random().toString(36).slice(2, 10);
+const uid = () =>
+  typeof crypto !== "undefined" && "randomUUID" in crypto
+    ? crypto.randomUUID()
+    : `${Date.now().toString(16)}-${Math.random().toString(16).slice(2, 10)}-${Math.random().toString(16).slice(2, 6)}-${Math.random().toString(16).slice(2, 6)}-${Math.random().toString(16).slice(2, 14)}`;
 
 const FIRST_NAMES = [
   "Sunrise","Bluebird","Maple","Iron","Cobalt","Ember","Pine","Granite","Willow","Harbor","Copper","Silver","Crown","Anchor","Lone Star","Pioneer","Atlas","Lighthouse","Ridge","Bayside","Oakwood","Cedar","Ironclad","Riverstone","Goldleaf",
@@ -244,9 +247,73 @@ function seedFilings(): FreshFiling[] {
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
-export const usePmStore = create<State & Actions>()(
-  persist(
+type Snapshot = Pick<
+  State,
+  | "prospects"
+  | "sites"
+  | "previewEvents"
+  | "outreach"
+  | "payments"
+  | "savedSearches"
+  | "notifications"
+  | "filings"
+  | "ghl"
+  | "firecrawlConfigured"
+>;
+
+let syncTimer: ReturnType<typeof setTimeout> | null = null;
+let syncPaused = false;
+function scheduleSync(getState: () => State & Actions) {
+  if (syncPaused) return;
+  if (typeof window === "undefined") return;
+  if (syncTimer) clearTimeout(syncTimer);
+  syncTimer = setTimeout(() => {
+    const s = getState();
+    const snap: Snapshot = {
+      prospects: s.prospects,
+      sites: s.sites,
+      previewEvents: s.previewEvents,
+      outreach: s.outreach,
+      payments: s.payments,
+      savedSearches: s.savedSearches,
+      notifications: s.notifications,
+      filings: s.filings,
+      ghl: s.ghl,
+      firecrawlConfigured: s.firecrawlConfigured,
+    };
+    pmSaveState({ data: snap as never }).catch((err) => console.error("[pm sync]", err));
+  }, 800);
+}
+
+export const usePmStore = create<State & Actions & {
+  hydrate: () => Promise<void>;
+  hydrated: boolean;
+}>()(
     (set, get) => ({
+      hydrated: false,
+      hydrate: async () => {
+        try {
+          const snap = await pmLoadState();
+          syncPaused = true;
+          set({
+            prospects: (snap as any).prospects ?? [],
+            sites: (snap as any).sites ?? [],
+            previewEvents: (snap as any).previewEvents ?? [],
+            outreach: (snap as any).outreach ?? [],
+            payments: (snap as any).payments ?? [],
+            savedSearches: (snap as any).savedSearches ?? [],
+            notifications: (snap as any).notifications ?? [],
+            filings: (snap as any).filings ?? [],
+            ghl: (snap as any).ghl ?? { enabled: false, defaultTags: ["prospectmaster", "no-website"] },
+            firecrawlConfigured: !!(snap as any).firecrawlConfigured,
+            hydrated: true,
+          });
+          syncPaused = false;
+        } catch (err) {
+          console.error("[pm hydrate]", err);
+          set({ hydrated: true });
+        }
+      },
       prospects: [],
       sites: [],
       previewEvents: [],
@@ -537,6 +604,22 @@ export const usePmStore = create<State & Actions>()(
 
       setFirecrawlConfigured: (v) => set({ firecrawlConfigured: v }),
     }),
-    { name: "pm-store-v2" },
-  ),
 );
+
+// Auto-sync to cloud on any state change (debounced).
+if (typeof window !== "undefined") {
+  usePmStore.subscribe((state, prev) => {
+    if (!state.hydrated) return;
+    // Only sync when data fields change (ignore transient hydration flag).
+    const keys: (keyof Snapshot)[] = [
+      "prospects","sites","previewEvents","outreach","payments",
+      "savedSearches","notifications","filings","ghl","firecrawlConfigured",
+    ];
+    for (const k of keys) {
+      if ((state as any)[k] !== (prev as any)[k]) {
+        scheduleSync(() => usePmStore.getState());
+        return;
+      }
+    }
+  });
+}

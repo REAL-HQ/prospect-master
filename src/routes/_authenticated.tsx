@@ -37,9 +37,16 @@ function AuthenticatedLayout() {
   const navigate = useNavigate();
   const notifications = usePmStore((s) => s.notifications);
   const markAllRead = usePmStore((s) => s.markAllRead);
+  const hydrate = usePmStore((s) => s.hydrate);
+  const hydrated = usePmStore((s) => s.hydrated);
   const [bellOpen, setBellOpen] = React.useState(false);
   const [profileOpen, setProfileOpen] = React.useState(false);
   const unread = notifications.filter((n) => !n.read).length;
+
+  React.useEffect(() => {
+    if (!hydrated) void hydrate();
+  }, [hydrate, hydrated]);
+
 
   const handleSignOut = async () => {
     await supabase.auth.signOut();
