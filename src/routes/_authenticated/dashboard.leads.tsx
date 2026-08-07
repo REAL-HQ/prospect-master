@@ -126,9 +126,9 @@ function LeadsPage() {
               <div className="font-medium text-sm flex items-center gap-2">
                 {p.name}
                 <VerifiedBadge status={p.verificationStatus} foundUrl={p.foundUrl} />
-                {p.ghlContactId && (
-                  <span style={{ fontSize: 9, fontWeight: 600, padding: "2px 6px", borderRadius: 3, background: "#E8F0FE", color: "#1A56DB", letterSpacing: 0.5 }}>GHL</span>
-                )}
+                {(p.tags ?? []).map((t) => (
+                  <span key={t} style={{ fontSize: 9, fontWeight: 600, padding: "2px 6px", borderRadius: 3, background: "#F0F0F0", color: "#666" }}>{t}</span>
+                ))}
               </div>
               <div className="text-xs text-muted-foreground flex items-center gap-2 mt-0.5 flex-wrap">
                 <span>{p.category}</span>·
