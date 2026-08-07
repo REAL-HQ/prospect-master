@@ -276,7 +276,8 @@ type Snapshot = Pick<
   | "savedSearches"
   | "notifications"
   | "filings"
-  | "ghl"
+  | "activities"
+  | "automation"
   | "firecrawlConfigured"
 >;
 
