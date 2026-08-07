@@ -13,8 +13,18 @@ function OutreachPage() {
   const sites = usePmStore((s) => s.sites);
   const createOutreach = usePmStore((s) => s.createOutreach);
   const sendNext = usePmStore((s) => s.sendNextStep);
+  const automation = usePmStore((s) => s.automation);
+  const setAutomation = usePmStore((s) => s.setAutomation);
+  const runDueSteps = usePmStore((s) => s.runDueSteps);
 
   const [selectedId, setSelectedId] = React.useState("");
+
+  // Automation scheduler: send any steps that have come due.
+  React.useEffect(() => {
+    runDueSteps();
+    const t = setInterval(() => runDueSteps(), 60000);
+    return () => clearInterval(t);
+  }, [runDueSteps]);
 
   const eligible = prospects.filter((p) => !p.outreachId);
 
@@ -27,17 +37,39 @@ function OutreachPage() {
 
   const totalSent = outreach.reduce((a, o) => a + o.steps.filter((s) => s.sent).length, 0);
   const totalOpened = outreach.reduce((a, o) => a + o.steps.filter((s) => s.openedAt).length, 0);
+  const queued = outreach.reduce((a, o) => a + o.steps.filter((s) => !s.sent).length, 0);
 
   return (
     <div>
       <h1 style={{ fontSize: 28, fontWeight: 500 }}>AI outreach + follow-up</h1>
-      <p className="text-sm text-muted-foreground mt-1">3-step cadence: Day 1 email → Day 3 email → Day 7 SMS. Category-tuned copy.</p>
+      <p className="text-sm text-muted-foreground mt-1">3-step cadence: Day 1 email → Day 3 email → Day 7 SMS. Steps send themselves when auto follow-up is on.</p>
 
-      <div className="mt-6 grid grid-cols-3 gap-3">
+      <div className="mt-6 grid grid-cols-2 lg:grid-cols-4 gap-3">
         <MiniStat label="Active sequences" value={outreach.length} />
         <MiniStat label="Messages sent" value={totalSent} />
+        <MiniStat label="Scheduled" value={queued} />
         <MiniStat label="Opens detected" value={totalOpened} />
       </div>
+
+      <div className="pm-card p-4 mt-3 flex items-center gap-3">
+        <Zap size={14} style={{ color: automation.autoFollowUp ? "#CC0000" : "#999" }} />
+        <div className="flex-1">
+          <div className="text-sm font-medium">Auto follow-up {automation.autoFollowUp ? "on" : "off"}</div>
+          <div className="text-xs text-muted-foreground">
+            {automation.autoFollowUp
+              ? "Due steps send automatically — no manual work needed."
+              : "Steps stay queued until you send them manually."}
+          </div>
+        </div>
+        <button
+          onClick={() => setAutomation({ autoFollowUp: !automation.autoFollowUp })}
+          style={{ position: "relative", width: 42, height: 24, borderRadius: 12, background: automation.autoFollowUp ? "#CC0000" : "#D0D0D0", transition: "background 0.15s", flexShrink: 0 }}
+          aria-label="Toggle auto follow-up"
+        >
+          <span style={{ position: "absolute", top: 2, left: automation.autoFollowUp ? 20 : 2, width: 20, height: 20, borderRadius: 10, background: "#fff", transition: "left 0.15s" }} />
+        </button>
+      </div>
+
 
       <div className="pm-card p-5 mt-6">
         <div className="grid md:grid-cols-[1fr_auto] gap-3 items-end">
