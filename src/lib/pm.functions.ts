@@ -199,9 +199,11 @@ export const pmSaveState = createServerFn({ method: "POST" })
       supabase.from("fresh_filings").delete().eq("user_id", userId),
     ]);
     await supabase.from("outreach").delete().eq("user_id", userId);
-    // prospects references sites via site_id and vice versa — null them before delete
+    // prospects references sites via site_id and vice versa — null both sides before delete
     await supabase.from("prospects").update({ site_id: null, outreach_id: null }).eq("user_id", userId);
+    await supabase.from("sites").update({ prospect_id: null }).eq("user_id", userId);
     await supabase.from("prospects").delete().eq("user_id", userId);
+
     if (staleSiteIds.length) {
       await supabase.from("preview_events").delete().in("site_id", staleSiteIds);
       await supabase.from("sites").delete().in("id", staleSiteIds).eq("user_id", userId);
