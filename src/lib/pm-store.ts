@@ -472,7 +472,7 @@ export const usePmStore = create<State & Actions & {
 
       markAllRead: () => set((s) => ({ notifications: s.notifications.map((n) => ({ ...n, read: true })) })),
 
-      resetAll: () => set({ prospects: [], sites: [], previewEvents: [], outreach: [], payments: [], savedSearches: [], notifications: [], filings: [], ghl: { enabled: false, defaultTags: ["prospectmaster", "no-website"] } }),
+      resetAll: () => set({ prospects: [], sites: [], previewEvents: [], outreach: [], payments: [], savedSearches: [], notifications: [], filings: [], activities: [], automation: DEFAULT_AUTOMATION }),
 
       seedDemo: () => {
         const prospects = seedProspects();
