@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { usePmStore } from "@/lib/pm-store";
 import * as React from "react";
-import { Mail, MessageSquare, Send, Check, Clock } from "lucide-react";
+import { Mail, MessageSquare, Send, Check, Clock, Zap } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/dashboard/outreach")({
   component: OutreachPage,
