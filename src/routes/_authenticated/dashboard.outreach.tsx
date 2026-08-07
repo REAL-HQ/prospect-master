@@ -117,9 +117,15 @@ function OutreachPage() {
                       <div className="flex items-center gap-2 text-xs">
                         <span className="font-medium">Day {step.day} · {step.channel.toUpperCase()}</span>
                         {step.sent ? (
-                          <span className="text-muted-foreground flex items-center gap-1"><Check size={10} /> Sent {new Date(step.sentAt!).toLocaleTimeString()}</span>
+                          <span className="text-muted-foreground flex items-center gap-1">
+                            <Check size={10} /> Sent {new Date(step.sentAt!).toLocaleString()}
+                            {step.autoSent && <span style={{ color: "#CC0000" }}>· auto</span>}
+                          </span>
                         ) : (
-                          <span className="text-muted-foreground flex items-center gap-1"><Clock size={10} /> Queued</span>
+                          <span className="text-muted-foreground flex items-center gap-1">
+                            <Clock size={10} />
+                            {step.scheduledFor ? `Scheduled ${new Date(step.scheduledFor).toLocaleDateString()}` : "Queued"}
+                          </span>
                         )}
                         {step.openedAt && <span style={{ color: "#CC0000" }}>· Opened</span>}
                       </div>
