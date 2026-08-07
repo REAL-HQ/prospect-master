@@ -323,7 +323,8 @@ export const usePmStore = create<State & Actions & {
             savedSearches: (snap as any).savedSearches ?? [],
             notifications: (snap as any).notifications ?? [],
             filings: (snap as any).filings ?? [],
-            ghl: (snap as any).ghl ?? { enabled: false, defaultTags: ["prospectmaster", "no-website"] },
+            activities: (snap as any).activities ?? [],
+            automation: { ...DEFAULT_AUTOMATION, ...((snap as any).automation ?? {}) },
             firecrawlConfigured: !!(snap as any).firecrawlConfigured,
             hydrated: true,
           });
