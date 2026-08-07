@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { usePmStore, type LeadTier, type VerificationStatus } from "@/lib/pm-store";
 import * as React from "react";
-import { Star, Info, ShieldCheck, ShieldAlert, ShieldQuestion, ExternalLink, Loader2, Send } from "lucide-react";
+import { Star, Info, ShieldCheck, ShieldAlert, ShieldQuestion, ExternalLink, Loader2, Tag } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/dashboard/leads")({
   component: LeadsPage,
