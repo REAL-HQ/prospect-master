@@ -650,7 +650,7 @@ if (typeof window !== "undefined") {
     // Only sync when data fields change (ignore transient hydration flag).
     const keys: (keyof Snapshot)[] = [
       "prospects","sites","previewEvents","outreach","payments",
-      "savedSearches","notifications","filings","ghl","firecrawlConfigured",
+      "savedSearches","notifications","filings","activities","automation","firecrawlConfigured",
     ];
     for (const k of keys) {
       if ((state as any)[k] !== (prev as any)[k]) {
