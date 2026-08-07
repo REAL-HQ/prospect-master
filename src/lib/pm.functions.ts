@@ -304,6 +304,8 @@ export const pmSaveState = createServerFn({ method: "POST" })
           sent: !!st.sent,
           sent_at: toIso(st.sentAt),
           opened_at: toIso(st.openedAt),
+          scheduled_for: toIso(st.scheduledFor),
+          auto_sent: !!st.autoSent,
         })),
       );
       if (steps.length) await supabase.from("outreach_steps").insert(steps);
