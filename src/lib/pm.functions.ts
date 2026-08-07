@@ -373,14 +373,29 @@ export const pmSaveState = createServerFn({ method: "POST" })
       );
     }
 
+    if (data.activities?.length) {
+      await supabase.from("activities").insert(
+        data.activities.map((a: any) => ({
+          id: a.id,
+          user_id: userId,
+          prospect_id: a.prospectId ?? null,
+          type: a.type ?? "note",
+          text: a.text,
+          at: toIso(a.at) ?? new Date().toISOString(),
+        })),
+      );
+    }
+
     await supabase.from("user_settings").upsert(
       {
         user_id: userId,
-        ghl_enabled: data.ghl.enabled,
-        ghl_pit: data.ghl.pit ?? null,
-        ghl_location_id: data.ghl.locationId ?? null,
-        ghl_default_tags: data.ghl.defaultTags ?? [],
+        auto_follow_up: data.automation?.autoFollowUp ?? true,
+        default_tags: data.automation?.defaultTags ?? [],
+        default_site_price: data.automation?.sitePrice ?? 1000,
+        default_hosting_fee: data.automation?.hostingFee ?? 99,
         firecrawl_configured: data.firecrawlConfigured,
+        updated_at: new Date().toISOString(),
+      },
         updated_at: new Date().toISOString(),
       },
       { onConflict: "user_id" },
