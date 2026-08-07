@@ -186,12 +186,11 @@ export const pmSaveState = createServerFn({ method: "POST" })
     const { supabase, userId } = context;
 
     // Wipe existing rows (child tables first for FK safety).
-    // preview_events has no user_id — clear by site.
+    // Sites are upserted (not wiped) so real visitor analytics in
+    // preview_events survive every sync.
+    const keepSiteIds = new Set<string>((data.sites ?? []).map((s: any) => s.id));
     const existingSites = await supabase.from("sites").select("id").eq("user_id", userId);
-    const existingSiteIds = (existingSites.data ?? []).map((s) => s.id);
-    if (existingSiteIds.length) {
-      await supabase.from("preview_events").delete().in("site_id", existingSiteIds);
-    }
+    const staleSiteIds = (existingSites.data ?? []).map((s) => s.id).filter((id) => !keepSiteIds.has(id));
     await Promise.all([
       supabase.from("outreach_steps").delete().eq("user_id", userId),
       supabase.from("payments").delete().eq("user_id", userId),
@@ -200,10 +199,16 @@ export const pmSaveState = createServerFn({ method: "POST" })
       supabase.from("fresh_filings").delete().eq("user_id", userId),
     ]);
     await supabase.from("outreach").delete().eq("user_id", userId);
-    // prospects references sites via site_id and vice versa — null them before delete
+    // prospects references sites via site_id and vice versa — null both sides before delete
     await supabase.from("prospects").update({ site_id: null, outreach_id: null }).eq("user_id", userId);
-    await supabase.from("sites").delete().eq("user_id", userId);
+    await supabase.from("sites").update({ prospect_id: null }).eq("user_id", userId);
     await supabase.from("prospects").delete().eq("user_id", userId);
+
+    if (staleSiteIds.length) {
+      await supabase.from("preview_events").delete().in("site_id", staleSiteIds);
+      await supabase.from("sites").delete().in("id", staleSiteIds).eq("user_id", userId);
+    }
+
 
     // Insert fresh
     if (data.prospects.length) {
@@ -236,7 +241,7 @@ export const pmSaveState = createServerFn({ method: "POST" })
       );
     }
     if (data.sites.length) {
-      await supabase.from("sites").insert(
+      const { error: sitesError } = await supabase.from("sites").upsert(
         data.sites.map((s: any) => ({
           id: s.id,
           user_id: userId,
@@ -255,8 +260,11 @@ export const pmSaveState = createServerFn({ method: "POST" })
 
           created_at: toIso(s.createdAt) ?? new Date().toISOString(),
         })),
+        { onConflict: "id" },
       );
+      if (sitesError) throw new Error(`Failed to save sites: ${sitesError.message}`);
     }
+
     // Backfill site_id/outreach_id on prospects
     for (const p of data.prospects) {
       if (p.siteId || p.outreachId) {

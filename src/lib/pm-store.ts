@@ -370,9 +370,10 @@ export const usePmStore = create<State & Actions & {
         const prospect = get().prospects.find((p) => p.id === prospectId);
         if (!prospect) throw new Error("Prospect not found");
         const base = prospect.name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
-        const taken = new Set(get().sites.map((s) => s.slug));
-        let slug = `${base}-${prospect.city.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`;
-        if (taken.has(slug)) slug = `${slug}-${Math.random().toString(36).slice(2, 6)}`;
+        const cityPart = prospect.city.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+        // Slugs are globally unique in the database, so always add a short suffix.
+        const slug = [base, cityPart, Math.random().toString(36).slice(2, 7)].filter(Boolean).join("-");
+
         const theme = themeFor(prospect.category);
         const site: Site = {
           id: uid(),
