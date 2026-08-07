@@ -130,6 +130,8 @@ export const pmLoadState = createServerFn({ method: "GET" })
             sent: st.sent,
             sentAt: fromIso(st.sent_at),
             openedAt: fromIso(st.opened_at),
+            scheduledFor: fromIso(st.scheduled_for),
+            autoSent: st.auto_sent ?? false,
           })),
       })),
       payments: (paymentsRes.data ?? []).map((p) => ({
