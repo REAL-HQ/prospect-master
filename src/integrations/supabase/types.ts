@@ -14,6 +14,44 @@ export type Database = {
   }
   public: {
     Tables: {
+      activities: {
+        Row: {
+          at: string
+          created_at: string
+          id: string
+          prospect_id: string | null
+          text: string
+          type: string
+          user_id: string
+        }
+        Insert: {
+          at?: string
+          created_at?: string
+          id?: string
+          prospect_id?: string | null
+          text: string
+          type?: string
+          user_id: string
+        }
+        Update: {
+          at?: string
+          created_at?: string
+          id?: string
+          prospect_id?: string | null
+          text?: string
+          type?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "activities_prospect_id_fkey"
+            columns: ["prospect_id"]
+            isOneToOne: false
+            referencedRelation: "prospects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       fresh_filings: {
         Row: {
           business_name: string
@@ -135,6 +173,7 @@ export type Database = {
       }
       outreach_steps: {
         Row: {
+          auto_sent: boolean
           body: string
           channel: string
           created_at: string
@@ -149,6 +188,7 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          auto_sent?: boolean
           body: string
           channel: string
           created_at?: string
@@ -163,6 +203,7 @@ export type Database = {
           user_id: string
         }
         Update: {
+          auto_sent?: boolean
           body?: string
           channel?: string
           created_at?: string
@@ -282,6 +323,7 @@ export type Database = {
           site_id: string | null
           state: string | null
           status: string
+          tags: Json
           tier: string
           updated_at: string
           user_id: string
@@ -310,6 +352,7 @@ export type Database = {
           site_id?: string | null
           state?: string | null
           status?: string
+          tags?: Json
           tier?: string
           updated_at?: string
           user_id: string
@@ -338,6 +381,7 @@ export type Database = {
           site_id?: string | null
           state?: string | null
           status?: string
+          tags?: Json
           tier?: string
           updated_at?: string
           user_id?: string
@@ -458,9 +502,11 @@ export type Database = {
       }
       user_settings: {
         Row: {
+          auto_follow_up: boolean
           created_at: string
           default_hosting_fee: number
           default_site_price: number
+          default_tags: Json
           firecrawl_configured: boolean
           ghl_default_tags: Json
           ghl_enabled: boolean
@@ -470,9 +516,11 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          auto_follow_up?: boolean
           created_at?: string
           default_hosting_fee?: number
           default_site_price?: number
+          default_tags?: Json
           firecrawl_configured?: boolean
           ghl_default_tags?: Json
           ghl_enabled?: boolean
@@ -482,9 +530,11 @@ export type Database = {
           user_id: string
         }
         Update: {
+          auto_follow_up?: boolean
           created_at?: string
           default_hosting_fee?: number
           default_site_price?: number
+          default_tags?: Json
           firecrawl_configured?: boolean
           ghl_default_tags?: Json
           ghl_enabled?: boolean
