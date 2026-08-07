@@ -616,28 +616,70 @@ export const usePmStore = create<State & Actions & {
 
       deleteFilings: (ids) => set((s) => ({ filings: s.filings.filter((f) => !ids.includes(f.id)) })),
 
-      // ============ Phase 2: GHL ============
+      // ============ Native CRM (replaces GHL) ============
 
-      setGhl: (patch) => set((s) => ({ ghl: { ...s.ghl, ...patch } })),
+      setAutomation: (patch) => set((s) => ({ automation: { ...s.automation, ...patch } })),
 
-      pushToGhl: async (ids) => {
-        const { ghl } = get();
-        if (!ghl.enabled) return { pushed: 0, skipped: 0, failed: 0 };
-        let pushed = 0, skipped = 0, failed = 0;
-        for (const id of ids) {
-          await sleep(80);
-          const p = get().prospects.find((x) => x.id === id);
-          if (!p) { failed++; continue; }
-          if (!p.phone) { skipped++; continue; }
-          const contactId = `ghl_${uid()}`;
+      logActivity: (prospectId, text, type = "note") => {
+        const a: Activity = { id: uid(), prospectId, type, text, at: Date.now() };
+        set((s) => ({ activities: [a, ...s.activities].slice(0, 500) }));
+        if (prospectId) {
           set((s) => ({
-            prospects: s.prospects.map((x) => x.id === id ? { ...x, ghlContactId: contactId, ghlPushedAt: Date.now() } : x),
+            prospects: s.prospects.map((p) => p.id === prospectId ? { ...p, lastActivityAt: Date.now() } : p),
           }));
-          pushed++;
         }
-        get().pushNotification(`GHL: ${pushed} pushed · ${skipped} skipped (no phone) · ${failed} failed`);
-        return { pushed, skipped, failed };
       },
+
+      addTags: (ids, tags) => {
+        const clean = tags.map((t) => t.trim().toLowerCase()).filter(Boolean);
+        if (!clean.length) return 0;
+        let n = 0;
+        set((s) => ({
+          prospects: s.prospects.map((p) => {
+            if (!ids.includes(p.id)) return p;
+            n++;
+            const merged = Array.from(new Set([...(p.tags ?? []), ...clean]));
+            return { ...p, tags: merged, lastActivityAt: Date.now() };
+          }),
+        }));
+        ids.forEach((id) => get().logActivity(id, `Tagged: ${clean.join(", ")}`, "tag"));
+        get().pushNotification(`Tagged ${n} lead${n === 1 ? "" : "s"} with ${clean.join(", ")}`);
+        return n;
+      },
+
+      removeTag: (id, tag) => set((s) => ({
+        prospects: s.prospects.map((p) => p.id === id ? { ...p, tags: (p.tags ?? []).filter((t) => t !== tag) } : p),
+      })),
+
+      runDueSteps: () => {
+        const { automation, outreach } = get();
+        if (!automation.autoFollowUp) return 0;
+        const now = Date.now();
+        let sent = 0;
+        const touched: { prospectId: string; day: number; channel: string }[] = [];
+        const next = outreach.map((o) => {
+          const idx = o.steps.findIndex((st) => !st.sent);
+          if (idx < 0) return o;
+          const step = o.steps[idx];
+          const due = step.scheduledFor ?? o.createdAt + step.day * 86400000;
+          if (due > now) return o;
+          sent++;
+          touched.push({ prospectId: o.prospectId, day: step.day, channel: step.channel });
+          const steps = o.steps.map((st, i) => i === idx
+            ? { ...st, sent: true, autoSent: true, sentAt: now, openedAt: Math.random() > 0.5 ? now + 60000 : undefined }
+            : st);
+          return { ...o, steps };
+        });
+        if (!sent) return 0;
+        set({ outreach: next });
+        touched.forEach((t) => {
+          const p = get().prospects.find((x) => x.id === t.prospectId);
+          get().logActivity(t.prospectId, `Auto-sent day ${t.day} ${t.channel}${p ? ` to ${p.name}` : ""}`, "outreach");
+        });
+        get().pushNotification(`Automation sent ${sent} scheduled message${sent === 1 ? "" : "s"}`);
+        return sent;
+      },
+
 
       setFirecrawlConfigured: (v) => set({ firecrawlConfigured: v }),
     }),
