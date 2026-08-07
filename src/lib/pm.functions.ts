@@ -396,8 +396,6 @@ export const pmSaveState = createServerFn({ method: "POST" })
         firecrawl_configured: data.firecrawlConfigured,
         updated_at: new Date().toISOString(),
       },
-        updated_at: new Date().toISOString(),
-      },
       { onConflict: "user_id" },
     );
 
