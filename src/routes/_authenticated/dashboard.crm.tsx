@@ -74,8 +74,76 @@ function CrmPage() {
             </div>
 
             <div className="mt-4">
+              <label className="text-xs text-muted-foreground">Tags</label>
+              <div className="flex items-center gap-1.5 flex-wrap mt-1.5">
+                {(open.tags ?? []).map((t) => (
+                  <span key={t} className="flex items-center gap-1" style={{ fontSize: 10, fontWeight: 600, padding: "3px 7px", borderRadius: 4, background: "#F0F0F0", color: "#555" }}>
+                    {t}
+                    <button onClick={() => removeTag(open.id, t)} aria-label={`Remove ${t}`}><X size={9} /></button>
+                  </span>
+                ))}
+                {(open.tags ?? []).length === 0 && <span className="text-xs text-muted-foreground">No tags yet</span>}
+              </div>
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  const tags = tagDraft.split(",").map((t) => t.trim()).filter(Boolean);
+                  if (tags.length) addTags([open.id], tags);
+                  setTagDraft("");
+                }}
+                className="flex gap-2 mt-2"
+              >
+                <input
+                  value={tagDraft}
+                  onChange={(e) => setTagDraft(e.target.value)}
+                  placeholder="Add tag…"
+                  className="flex-1"
+                  style={{ padding: "7px 10px", border: "0.5px solid #E0E0E0", borderRadius: 6, fontSize: 12 }}
+                />
+                <button type="submit" className="text-xs px-3" style={{ border: "0.5px solid #E0E0E0", borderRadius: 6, background: "#fff" }}>Add</button>
+              </form>
+            </div>
+
+            <div className="mt-4">
               <label className="text-xs text-muted-foreground">Notes</label>
-              <textarea value={open.notes} onChange={(e) => updateProspect(open.id, { notes: e.target.value })} placeholder="Add note…" className="w-full mt-1" style={{ padding: 10, border: "0.5px solid #E0E0E0", borderRadius: 6, fontSize: 13, minHeight: 100, fontFamily: "inherit" }} />
+              <textarea value={open.notes} onChange={(e) => updateProspect(open.id, { notes: e.target.value })} placeholder="Add note…" className="w-full mt-1" style={{ padding: 10, border: "0.5px solid #E0E0E0", borderRadius: 6, fontSize: 13, minHeight: 80, fontFamily: "inherit" }} />
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  if (!noteDraft.trim()) return;
+                  logActivity(open.id, noteDraft.trim(), "note");
+                  setNoteDraft("");
+                }}
+                className="flex gap-2 mt-2"
+              >
+                <input
+                  value={noteDraft}
+                  onChange={(e) => setNoteDraft(e.target.value)}
+                  placeholder="Log an activity…"
+                  className="flex-1"
+                  style={{ padding: "7px 10px", border: "0.5px solid #E0E0E0", borderRadius: 6, fontSize: 12 }}
+                />
+                <button type="submit" className="text-xs px-3" style={{ border: "0.5px solid #E0E0E0", borderRadius: 6, background: "#fff" }}>Log</button>
+              </form>
+            </div>
+
+            <div className="mt-5">
+              <div className="flex items-center gap-1.5 mb-2">
+                <Clock size={12} className="text-muted-foreground" />
+                <label className="text-xs text-muted-foreground">Activity timeline</label>
+              </div>
+              <div className="space-y-2">
+                {timeline.map((a) => (
+                  <div key={a.id} className="flex gap-2.5">
+                    <div style={{ width: 6, height: 6, borderRadius: 3, background: "#CC0000", marginTop: 5, flexShrink: 0 }} />
+                    <div>
+                      <div className="text-xs">{a.text}</div>
+                      <div className="text-[10px] text-muted-foreground">{a.type} · {new Date(a.at).toLocaleString()}</div>
+                    </div>
+                  </div>
+                ))}
+                {timeline.length === 0 && <div className="text-xs text-muted-foreground">No activity logged yet.</div>}
+              </div>
             </div>
           </aside>
         </div>
