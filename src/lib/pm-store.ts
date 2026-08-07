@@ -225,6 +225,7 @@ function generateProspect(category: string, location: string): Prospect {
     createdAt: now,
     lastActivityAt: now,
     verificationStatus: "unverified",
+    tags: hasWebsite ? [] : ["no-website"],
   };
 }
 
