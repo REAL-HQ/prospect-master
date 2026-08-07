@@ -11,10 +11,20 @@ const COLUMNS: DealStatus[] = ["New", "Contacted", "Interested", "Closed", "Lost
 
 function CrmPage() {
   const prospects = usePmStore((s) => s.prospects);
+  const activities = usePmStore((s) => s.activities);
   const setStatus = usePmStore((s) => s.setStatus);
   const updateProspect = usePmStore((s) => s.updateProspect);
+  const addTags = usePmStore((s) => s.addTags);
+  const removeTag = usePmStore((s) => s.removeTag);
+  const logActivity = usePmStore((s) => s.logActivity);
   const [openId, setOpenId] = React.useState<string | null>(null);
+  const [tagDraft, setTagDraft] = React.useState("");
+  const [noteDraft, setNoteDraft] = React.useState("");
   const open = prospects.find((p) => p.id === openId);
+  const timeline = React.useMemo(
+    () => activities.filter((a) => a.prospectId === openId).sort((a, b) => b.at - a.at).slice(0, 30),
+    [activities, openId],
+  );
 
   return (
     <div>
