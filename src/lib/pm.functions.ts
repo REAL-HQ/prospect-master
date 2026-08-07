@@ -239,7 +239,7 @@ export const pmSaveState = createServerFn({ method: "POST" })
       );
     }
     if (data.sites.length) {
-      await supabase.from("sites").insert(
+      const { error: sitesError } = await supabase.from("sites").upsert(
         data.sites.map((s: any) => ({
           id: s.id,
           user_id: userId,
@@ -258,8 +258,11 @@ export const pmSaveState = createServerFn({ method: "POST" })
 
           created_at: toIso(s.createdAt) ?? new Date().toISOString(),
         })),
+        { onConflict: "id" },
       );
+      if (sitesError) throw new Error(`Failed to save sites: ${sitesError.message}`);
     }
+
     // Backfill site_id/outreach_id on prospects
     for (const p of data.prospects) {
       if (p.siteId || p.outreachId) {
