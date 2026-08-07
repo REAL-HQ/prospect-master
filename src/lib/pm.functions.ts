@@ -201,6 +201,7 @@ export const pmSaveState = createServerFn({ method: "POST" })
     const staleSiteIds = (existingSites.data ?? []).map((s) => s.id).filter((id) => !keepSiteIds.has(id));
     await Promise.all([
       supabase.from("outreach_steps").delete().eq("user_id", userId),
+      supabase.from("activities").delete().eq("user_id", userId),
       supabase.from("payments").delete().eq("user_id", userId),
       supabase.from("notifications").delete().eq("user_id", userId),
       supabase.from("saved_searches").delete().eq("user_id", userId),
