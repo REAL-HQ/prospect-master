@@ -89,7 +89,7 @@ export const pmLoadState = createServerFn({ method: "GET" })
         ghlContactId: p.ghl_contact_id ?? undefined,
         ghlPushedAt: fromIso(p.ghl_pushed_at),
       })),
-      sites: sites.map((s) => ({
+      sites: sites.map((s: any) => ({
         id: s.id,
         prospectId: s.prospect_id ?? "",
         slug: s.slug,
@@ -99,9 +99,13 @@ export const pmLoadState = createServerFn({ method: "GET" })
         services: Array.isArray(s.services) ? s.services : [],
         cta: s.cta ?? "",
         palette: (s.palette as any) ?? { primary: "#CC0000", bg: "#FFF8F8" },
+        template: s.template ?? "modern",
+        business: (s.business as any) ?? {},
+        published: s.published ?? true,
         deployedDomain: s.deployed_domain ?? undefined,
         createdAt: new Date(s.created_at).getTime(),
       })),
+
       previewEvents: (previewEventsRes.data ?? []).map((e) => ({
         id: e.id,
         siteId: e.site_id,
@@ -244,7 +248,11 @@ export const pmSaveState = createServerFn({ method: "POST" })
           cta: s.cta || null,
           services: s.services ?? [],
           palette: s.palette ?? { primary: "#CC0000", bg: "#FFF8F8" },
+          template: s.template ?? "modern",
+          business: s.business ?? {},
+          published: s.published ?? true,
           deployed_domain: s.deployedDomain ?? null,
+
           created_at: toIso(s.createdAt) ?? new Date().toISOString(),
         })),
       );
