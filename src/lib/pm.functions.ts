@@ -39,6 +39,7 @@ export const pmLoadState = createServerFn({ method: "GET" })
       searchesRes,
       notificationsRes,
       filingsRes,
+      activitiesRes,
       settingsRes,
     ] = await Promise.all([
       supabase.from("prospects").select("*").eq("user_id", userId),
@@ -49,6 +50,7 @@ export const pmLoadState = createServerFn({ method: "GET" })
       supabase.from("saved_searches").select("*").eq("user_id", userId),
       supabase.from("notifications").select("*").eq("user_id", userId),
       supabase.from("fresh_filings").select("*").eq("user_id", userId),
+      supabase.from("activities").select("*").eq("user_id", userId),
       supabase.from("user_settings").select("*").eq("user_id", userId).maybeSingle(),
     ]);
 
