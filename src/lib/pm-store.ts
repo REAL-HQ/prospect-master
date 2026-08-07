@@ -85,6 +85,8 @@ export type OutreachStep = {
   sent: boolean;
   sentAt?: number;
   openedAt?: number;
+  scheduledFor?: number;
+  autoSent?: boolean;
 };
 
 export type Outreach = {
