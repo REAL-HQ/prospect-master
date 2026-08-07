@@ -12,11 +12,12 @@ type Snapshot = {
   savedSearches: any[];
   notifications: any[];
   filings: any[];
-  ghl: {
-    enabled: boolean;
-    pit?: string;
-    locationId?: string;
+  activities: any[];
+  automation: {
+    autoFollowUp: boolean;
     defaultTags: string[];
+    sitePrice: number;
+    hostingFee: number;
   };
   firecrawlConfigured: boolean;
 };
