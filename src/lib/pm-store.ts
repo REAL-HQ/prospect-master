@@ -118,11 +118,28 @@ export type FreshFiling = {
   createdAt: number;
 };
 
-export type GhlSettings = {
-  enabled: boolean;
-  pit?: string;
-  locationId?: string;
+export type ActivityType = "note" | "tag" | "outreach" | "status" | "payment" | "system";
+
+export type Activity = {
+  id: string;
+  prospectId?: string;
+  type: ActivityType;
+  text: string;
+  at: number;
+};
+
+export type AutomationSettings = {
+  autoFollowUp: boolean;
   defaultTags: string[];
+  sitePrice: number;
+  hostingFee: number;
+};
+
+export const DEFAULT_AUTOMATION: AutomationSettings = {
+  autoFollowUp: true,
+  defaultTags: ["no-website", "prospectmaster"],
+  sitePrice: 1000,
+  hostingFee: 99,
 };
 
 type State = {
@@ -134,7 +151,8 @@ type State = {
   savedSearches: { id: string; query: string; category: string; location: string; createdAt: number }[];
   notifications: { id: string; text: string; at: number; read: boolean }[];
   filings: FreshFiling[];
-  ghl: GhlSettings;
+  activities: Activity[];
+  automation: AutomationSettings;
   firecrawlConfigured: boolean;
 };
 
@@ -160,10 +178,15 @@ type Actions = {
   checkFilingNext: (limit?: number) => Promise<{ no_website: number; social_only: number; has_website: number }>;
   convertFilingsToLeads: (ids: string[]) => number;
   deleteFilings: (ids: string[]) => void;
-  setGhl: (patch: Partial<GhlSettings>) => void;
-  pushToGhl: (ids: string[]) => Promise<{ pushed: number; skipped: number; failed: number }>;
+  // Native CRM (replaces GoHighLevel)
+  setAutomation: (patch: Partial<AutomationSettings>) => void;
+  logActivity: (prospectId: string | undefined, text: string, type?: ActivityType) => void;
+  addTags: (ids: string[], tags: string[]) => number;
+  removeTag: (id: string, tag: string) => void;
+  runDueSteps: () => number;
   setFirecrawlConfigured: (v: boolean) => void;
 };
+
 
 const uid = () =>
   typeof crypto !== "undefined" && "randomUUID" in crypto
