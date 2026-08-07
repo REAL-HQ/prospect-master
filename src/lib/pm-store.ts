@@ -601,6 +601,7 @@ export const usePmStore = create<State & Actions & {
             notes: `Imported from Fresh Filing · Agent: ${f.registeredAgent || "—"} · Filed ${f.filingDate}`,
             createdAt: now,
             lastActivityAt: now,
+            tags: ["fresh-filing", ...(f.webPresence === "no_website" ? ["no-website"] : [])],
             verificationStatus: f.webPresence === "no_website" ? "verified_no_site" : f.webPresence === "has_website" ? "unlinked_site" : "unverified",
           };
           newProspects.push(p);
