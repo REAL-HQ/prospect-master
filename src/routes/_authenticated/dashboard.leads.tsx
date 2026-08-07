@@ -11,8 +11,8 @@ function LeadsPage() {
   const prospects = usePmStore((s) => s.prospects);
   const verifyLeads = usePmStore((s) => s.verifyLeads);
   const verifyNext = usePmStore((s) => s.verifyNext);
-  const ghlEnabled = usePmStore((s) => s.ghl.enabled);
-  const pushToGhl = usePmStore((s) => s.pushToGhl);
+  const addTags = usePmStore((s) => s.addTags);
+  const defaultTags = usePmStore((s) => s.automation.defaultTags);
 
   const [tier, setTier] = React.useState<"ALL" | LeadTier>("ALL");
   const [vfilter, setVfilter] = React.useState<"ALL" | VerificationStatus>("ALL");
