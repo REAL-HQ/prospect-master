@@ -53,14 +53,14 @@ function LeadsPage() {
     setVerifying(false);
   };
 
-  const handlePushGhl = async () => {
+  const handleTagSelected = async () => {
     if (selected.size === 0) return;
-    const sel = Array.from(selected);
-    const noPhone = sel.filter((id) => !prospects.find((p) => p.id === id)?.phone).length;
-    const ok = confirm(`Push ${sel.length} leads to GoHighLevel?\nTags: prospectmaster, no-website\n${noPhone > 0 ? `Note: ${noPhone} will be skipped (no phone).` : ""}`);
-    if (!ok) return;
+    const input = prompt("Tags to add (comma separated)", defaultTags.join(", "));
+    if (input === null) return;
+    const tags = input.split(",").map((t) => t.trim()).filter(Boolean);
+    if (!tags.length) return;
     setPushing(true);
-    await pushToGhl(sel);
+    addTags(Array.from(selected), tags);
     setPushing(false);
     clearSel();
   };
