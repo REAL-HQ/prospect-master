@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { usePmStore, type DealStatus } from "@/lib/pm-store";
 import * as React from "react";
-import { X, Star } from "lucide-react";
+import { X, Star, Clock } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/dashboard/crm")({
   component: CrmPage,
