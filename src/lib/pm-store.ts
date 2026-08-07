@@ -341,7 +341,8 @@ export const usePmStore = create<State & Actions & {
       savedSearches: [],
       notifications: [],
       filings: [],
-      ghl: { enabled: false, defaultTags: ["prospectmaster", "no-website"] },
+      activities: [],
+      automation: DEFAULT_AUTOMATION,
       firecrawlConfigured: false,
 
       runSearch: ({ category, location, count = 8 }) => {
