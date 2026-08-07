@@ -422,19 +422,24 @@ export const usePmStore = create<State & Actions & {
         const prospect = get().prospects.find((p) => p.id === prospectId);
         if (!prospect) throw new Error("Prospect not found");
         const cat = prospect.category.toLowerCase();
+        const now = Date.now();
+        const at = (day: number) => now + (day - 1) * 86400000;
         const steps: OutreachStep[] = [
           {
             channel: "email", day: 1,
             subject: `Quick site I built for ${prospect.name}`,
             body: `Hi ${prospect.name} team,\n\nI noticed ${prospect.name} doesn't have a website yet — so I built you a free preview. Most ${cat} miss 60–80% of online leads without one.\n\nTake a look (30 seconds): preview.prospectmaster.com/${prospect.name.toLowerCase().replace(/\s+/g, "-")}\n\nIf you like it, I can deploy it to your domain today. No design fees.\n\n— Sent via ProspectMaster`,
             sent: false,
+            scheduledFor: at(1),
           },
-          { channel: "email", day: 3, subject: `Re: site for ${prospect.name}`, body: `Just checking in — did you get a chance to look at the preview? Happy to tweak anything. Most of my ${cat} clients see new bookings within 2 weeks of going live.`, sent: false },
-          { channel: "sms", day: 7, body: `Hi — sent over a free website preview for ${prospect.name} last week. Want me to take it down or push it live? Reply STOP to opt out.`, sent: false },
+          { channel: "email", day: 3, subject: `Re: site for ${prospect.name}`, body: `Just checking in — did you get a chance to look at the preview? Happy to tweak anything. Most of my ${cat} clients see new bookings within 2 weeks of going live.`, sent: false, scheduledFor: at(3) },
+          { channel: "sms", day: 7, body: `Hi — sent over a free website preview for ${prospect.name} last week. Want me to take it down or push it live? Reply STOP to opt out.`, sent: false, scheduledFor: at(7) },
         ];
-        const o: Outreach = { id: uid(), prospectId, siteId, steps, createdAt: Date.now() };
+        const o: Outreach = { id: uid(), prospectId, siteId, steps, createdAt: now };
         set((s) => ({ outreach: [o, ...s.outreach] }));
         get().updateProspect(prospectId, { outreachId: o.id, status: "Contacted" });
+        get().addTags([prospectId], get().automation.defaultTags);
+        get().logActivity(prospectId, `Sequence launched — 3 steps scheduled (day 1, 3, 7)`, "outreach");
         return o;
       },
 
@@ -450,8 +455,12 @@ export const usePmStore = create<State & Actions & {
         }));
         const o = get().outreach.find((x) => x.id === outreachId);
         const p = o && get().prospects.find((pr) => pr.id === o.prospectId);
-        if (p) get().pushNotification(`Sent outreach step to ${p.name}`);
+        if (p) {
+          get().pushNotification(`Sent outreach step to ${p.name}`);
+          get().logActivity(p.id, `Manual send to ${p.name}`, "outreach");
+        }
       },
+
 
       recordPayment: (prospectId, amount, type = "upfront") => {
         const payment: Payment = { id: uid(), prospectId, amount, type, paidAt: Date.now() };
