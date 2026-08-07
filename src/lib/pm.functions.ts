@@ -165,14 +165,18 @@ export const pmLoadState = createServerFn({ method: "GET" })
         raw: (f.raw as any) ?? undefined,
         createdAt: new Date(f.created_at).getTime(),
       })),
-      ghl: {
-        enabled: settingsRes.data?.ghl_enabled ?? false,
-        pit: settingsRes.data?.ghl_pit ?? undefined,
-        locationId: settingsRes.data?.ghl_location_id ?? undefined,
-        defaultTags: (settingsRes.data?.ghl_default_tags as any) ?? [
-          "prospectmaster",
-          "no-website",
-        ],
+      activities: (activitiesRes.data ?? []).map((a: any) => ({
+        id: a.id,
+        prospectId: a.prospect_id ?? undefined,
+        type: a.type,
+        text: a.text,
+        at: new Date(a.at).getTime(),
+      })),
+      automation: {
+        autoFollowUp: settingsRes.data?.auto_follow_up ?? true,
+        defaultTags: (settingsRes.data?.default_tags as any) ?? ["no-website", "prospectmaster"],
+        sitePrice: Number(settingsRes.data?.default_site_price ?? 1000),
+        hostingFee: Number(settingsRes.data?.default_hosting_fee ?? 99),
       },
       firecrawlConfigured: settingsRes.data?.firecrawl_configured ?? false,
     };
