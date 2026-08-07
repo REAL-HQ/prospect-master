@@ -33,9 +33,8 @@ export type Prospect = {
   verificationStatus: VerificationStatus;
   foundUrl?: string;
   verifiedAt?: number;
-  // Phase 2: GHL push
-  ghlContactId?: string;
-  ghlPushedAt?: number;
+  // Native CRM
+  tags: string[];
 };
 
 export type SiteBusinessInfo = {
