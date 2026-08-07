@@ -297,7 +297,8 @@ function scheduleSync(getState: () => State & Actions) {
       savedSearches: s.savedSearches,
       notifications: s.notifications,
       filings: s.filings,
-      ghl: s.ghl,
+      activities: s.activities,
+      automation: s.automation,
       firecrawlConfigured: s.firecrawlConfigured,
     };
     pmSaveState({ data: snap as never }).catch((err) => console.error("[pm sync]", err));
