@@ -391,47 +391,59 @@ export type Database = {
       sites: {
         Row: {
           about: string | null
+          business: Json
           created_at: string
           cta: string | null
           deployed_domain: string | null
           headline: string | null
+          hero_url: string | null
           id: string
           palette: Json
           preview_path: string | null
           prospect_id: string | null
+          published: boolean
           services: Json
           slug: string
           tagline: string | null
+          template: string
           user_id: string
         }
         Insert: {
           about?: string | null
+          business?: Json
           created_at?: string
           cta?: string | null
           deployed_domain?: string | null
           headline?: string | null
+          hero_url?: string | null
           id?: string
           palette?: Json
           preview_path?: string | null
           prospect_id?: string | null
+          published?: boolean
           services?: Json
           slug: string
           tagline?: string | null
+          template?: string
           user_id: string
         }
         Update: {
           about?: string | null
+          business?: Json
           created_at?: string
           cta?: string | null
           deployed_domain?: string | null
           headline?: string | null
+          hero_url?: string | null
           id?: string
           palette?: Json
           preview_path?: string | null
           prospect_id?: string | null
+          published?: boolean
           services?: Json
           slug?: string
           tagline?: string | null
+          template?: string
           user_id?: string
         }
         Relationships: [

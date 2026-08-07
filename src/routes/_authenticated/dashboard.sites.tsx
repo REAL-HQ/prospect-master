@@ -1,6 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { usePmStore } from "@/lib/pm-store";
 import { generateSiteCopy } from "@/lib/ai.functions";
+import { heroImage, TEMPLATE_LABELS, type TemplateId } from "@/lib/site-templates";
+
 import * as React from "react";
 import { Sparkles, Loader2, Globe, ExternalLink } from "lucide-react";
 
@@ -69,8 +71,20 @@ function SitesPage() {
                 <span style={{ width: 8, height: 8, borderRadius: 4, background: "#FF5F57" }} />
                 <span style={{ width: 8, height: 8, borderRadius: 4, background: "#FEBC2E" }} />
                 <span style={{ width: 8, height: 8, borderRadius: 4, background: "#28C840" }} />
-                <span className="text-[11px] text-muted-foreground ml-1 truncate">preview.prospectmaster.com/{site.slug}</span>
+                <span className="text-[11px] text-muted-foreground ml-1 truncate">/s/{site.slug}</span>
+                <span className="ml-auto text-[10px] px-2 py-0.5" style={{ background: "#F0F0F0", borderRadius: 10, color: "#666" }}>
+                  {TEMPLATE_LABELS[(site.template as TemplateId) ?? "modern"] ?? "Modern"}
+                </span>
               </div>
+              <img
+                src={heroImage(site.business?.heroKey)}
+                alt={`${site.business?.name ?? p?.name ?? "Business"} website hero`}
+                loading="lazy"
+                width={1280}
+                height={800}
+                className="w-full"
+                style={{ height: 130, objectFit: "cover" }}
+              />
               <div style={{ background: site.palette.bg, padding: 20 }}>
                 <div className="text-[11px] uppercase tracking-wider" style={{ color: site.palette.primary, fontWeight: 600 }}>{p?.category}</div>
                 <div style={{ fontSize: 20, fontWeight: 600, marginTop: 6, color: "#0E1116" }}>{site.headline}</div>
@@ -85,13 +99,16 @@ function SitesPage() {
               </div>
               <div className="flex items-center justify-between px-3 py-2 text-xs" style={{ borderTop: "0.5px solid #F0F0F0" }}>
                 <span className="text-muted-foreground flex items-center gap-1"><Globe size={11} /> Free hosting + SSL</span>
-                <span className="flex items-center gap-1" style={{ color: "#CC0000" }}>Preview <ExternalLink size={10} /></span>
+                <a href={`/s/${site.slug}`} target="_blank" rel="noreferrer" className="flex items-center gap-1" style={{ color: "#CC0000" }}>
+                  Open live site <ExternalLink size={10} />
+                </a>
               </div>
             </div>
           );
         })}
         {sites.length === 0 && <div className="text-sm text-muted-foreground p-8 text-center pm-card md:col-span-2">No sites generated yet.</div>}
       </div>
+
     </div>
   );
 }

@@ -1,5 +1,7 @@
 import { create } from "zustand";
 import { pmLoadState, pmSaveState } from "./pm.functions";
+import { themeFor } from "./site-templates";
+
 
 export type LeadTier = "HOT" | "WARM" | "COLD";
 export type DealStatus = "New" | "Contacted" | "Interested" | "Closed" | "Lost";
@@ -36,6 +38,20 @@ export type Prospect = {
   ghlPushedAt?: number;
 };
 
+export type SiteBusinessInfo = {
+  name?: string;
+  category?: string;
+  city?: string;
+  state?: string;
+  phone?: string;
+  address?: string;
+  heroKey?: string;
+  testimonial?: { quote: string; author: string };
+  faqs?: { q: string; a: string }[];
+  hours?: string[];
+  highlights?: string[];
+};
+
 export type Site = {
   id: string;
   prospectId: string;
@@ -46,9 +62,13 @@ export type Site = {
   services: string[];
   cta: string;
   palette: { primary: string; bg: string };
+  template: string;
+  business: SiteBusinessInfo;
+  published: boolean;
   deployedDomain?: string;
   createdAt: number;
 };
+
 
 export type PreviewEvent = {
   id: string;
@@ -349,7 +369,11 @@ export const usePmStore = create<State & Actions & {
       generateSite: (prospectId, copy) => {
         const prospect = get().prospects.find((p) => p.id === prospectId);
         if (!prospect) throw new Error("Prospect not found");
-        const slug = prospect.name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+        const base = prospect.name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+        const taken = new Set(get().sites.map((s) => s.slug));
+        let slug = `${base}-${prospect.city.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`;
+        if (taken.has(slug)) slug = `${slug}-${Math.random().toString(36).slice(2, 6)}`;
+        const theme = themeFor(prospect.category);
         const site: Site = {
           id: uid(),
           prospectId,
@@ -358,14 +382,27 @@ export const usePmStore = create<State & Actions & {
           tagline: copy.tagline || `${prospect.category} in ${prospect.city}, ${prospect.state}`,
           about: copy.about || `${prospect.name} serves the ${prospect.city} community with trusted ${prospect.category.toLowerCase()} services.`,
           services: copy.services || ["Quality service", "Trusted professionals", "Local expertise"],
-          cta: copy.cta || "Get in touch",
-          palette: copy.palette || { primary: "#CC0000", bg: "#FFF8F8" },
+          cta: copy.cta || "Get In Touch",
+          palette: copy.palette || theme.palette,
+          template: copy.template || theme.template,
+          published: true,
+          business: {
+            name: prospect.name,
+            category: prospect.category,
+            city: prospect.city,
+            state: prospect.state,
+            phone: prospect.phone,
+            address: prospect.address,
+            heroKey: theme.heroKey,
+            ...(copy.business ?? {}),
+          },
           createdAt: Date.now(),
         };
         set((s) => ({ sites: [site, ...s.sites] }));
         get().updateProspect(prospectId, { siteId: site.id });
-        get().pushNotification(`Built demo site for ${prospect.name}`);
+        get().pushNotification(`Built live site for ${prospect.name}`);
         return site;
+
       },
 
       simulatePreviewActivity: (siteId, n = 1) => {
