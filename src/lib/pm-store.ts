@@ -33,9 +33,8 @@ export type Prospect = {
   verificationStatus: VerificationStatus;
   foundUrl?: string;
   verifiedAt?: number;
-  // Phase 2: GHL push
-  ghlContactId?: string;
-  ghlPushedAt?: number;
+  // Native CRM
+  tags: string[];
 };
 
 export type SiteBusinessInfo = {
@@ -86,6 +85,8 @@ export type OutreachStep = {
   sent: boolean;
   sentAt?: number;
   openedAt?: number;
+  scheduledFor?: number;
+  autoSent?: boolean;
 };
 
 export type Outreach = {
@@ -119,11 +120,28 @@ export type FreshFiling = {
   createdAt: number;
 };
 
-export type GhlSettings = {
-  enabled: boolean;
-  pit?: string;
-  locationId?: string;
+export type ActivityType = "note" | "tag" | "outreach" | "status" | "payment" | "system";
+
+export type Activity = {
+  id: string;
+  prospectId?: string;
+  type: ActivityType;
+  text: string;
+  at: number;
+};
+
+export type AutomationSettings = {
+  autoFollowUp: boolean;
   defaultTags: string[];
+  sitePrice: number;
+  hostingFee: number;
+};
+
+export const DEFAULT_AUTOMATION: AutomationSettings = {
+  autoFollowUp: true,
+  defaultTags: ["no-website", "prospectmaster"],
+  sitePrice: 1000,
+  hostingFee: 99,
 };
 
 type State = {
@@ -135,7 +153,8 @@ type State = {
   savedSearches: { id: string; query: string; category: string; location: string; createdAt: number }[];
   notifications: { id: string; text: string; at: number; read: boolean }[];
   filings: FreshFiling[];
-  ghl: GhlSettings;
+  activities: Activity[];
+  automation: AutomationSettings;
   firecrawlConfigured: boolean;
 };
 
@@ -161,10 +180,15 @@ type Actions = {
   checkFilingNext: (limit?: number) => Promise<{ no_website: number; social_only: number; has_website: number }>;
   convertFilingsToLeads: (ids: string[]) => number;
   deleteFilings: (ids: string[]) => void;
-  setGhl: (patch: Partial<GhlSettings>) => void;
-  pushToGhl: (ids: string[]) => Promise<{ pushed: number; skipped: number; failed: number }>;
+  // Native CRM (replaces GoHighLevel)
+  setAutomation: (patch: Partial<AutomationSettings>) => void;
+  logActivity: (prospectId: string | undefined, text: string, type?: ActivityType) => void;
+  addTags: (ids: string[], tags: string[]) => number;
+  removeTag: (id: string, tag: string) => void;
+  runDueSteps: () => number;
   setFirecrawlConfigured: (v: boolean) => void;
 };
+
 
 const uid = () =>
   typeof crypto !== "undefined" && "randomUUID" in crypto
@@ -226,6 +250,7 @@ function generateProspect(category: string, location: string): Prospect {
     createdAt: now,
     lastActivityAt: now,
     verificationStatus: "unverified",
+    tags: hasWebsite ? [] : ["no-website"],
   };
 }
 
@@ -277,7 +302,8 @@ type Snapshot = Pick<
   | "savedSearches"
   | "notifications"
   | "filings"
-  | "ghl"
+  | "activities"
+  | "automation"
   | "firecrawlConfigured"
 >;
 
@@ -298,7 +324,8 @@ function scheduleSync(getState: () => State & Actions) {
       savedSearches: s.savedSearches,
       notifications: s.notifications,
       filings: s.filings,
-      ghl: s.ghl,
+      activities: s.activities,
+      automation: s.automation,
       firecrawlConfigured: s.firecrawlConfigured,
     };
     pmSaveState({ data: snap as never }).catch((err) => console.error("[pm sync]", err));
@@ -324,7 +351,8 @@ export const usePmStore = create<State & Actions & {
             savedSearches: (snap as any).savedSearches ?? [],
             notifications: (snap as any).notifications ?? [],
             filings: (snap as any).filings ?? [],
-            ghl: (snap as any).ghl ?? { enabled: false, defaultTags: ["prospectmaster", "no-website"] },
+            activities: (snap as any).activities ?? [],
+            automation: { ...DEFAULT_AUTOMATION, ...((snap as any).automation ?? {}) },
             firecrawlConfigured: !!(snap as any).firecrawlConfigured,
             hydrated: true,
           });
@@ -342,7 +370,8 @@ export const usePmStore = create<State & Actions & {
       savedSearches: [],
       notifications: [],
       filings: [],
-      ghl: { enabled: false, defaultTags: ["prospectmaster", "no-website"] },
+      activities: [],
+      automation: DEFAULT_AUTOMATION,
       firecrawlConfigured: false,
 
       runSearch: ({ category, location, count = 8 }) => {
@@ -423,19 +452,24 @@ export const usePmStore = create<State & Actions & {
         const prospect = get().prospects.find((p) => p.id === prospectId);
         if (!prospect) throw new Error("Prospect not found");
         const cat = prospect.category.toLowerCase();
+        const now = Date.now();
+        const at = (day: number) => now + (day - 1) * 86400000;
         const steps: OutreachStep[] = [
           {
             channel: "email", day: 1,
             subject: `Quick site I built for ${prospect.name}`,
             body: `Hi ${prospect.name} team,\n\nI noticed ${prospect.name} doesn't have a website yet — so I built you a free preview. Most ${cat} miss 60–80% of online leads without one.\n\nTake a look (30 seconds): preview.prospectmaster.com/${prospect.name.toLowerCase().replace(/\s+/g, "-")}\n\nIf you like it, I can deploy it to your domain today. No design fees.\n\n— Sent via ProspectMaster`,
             sent: false,
+            scheduledFor: at(1),
           },
-          { channel: "email", day: 3, subject: `Re: site for ${prospect.name}`, body: `Just checking in — did you get a chance to look at the preview? Happy to tweak anything. Most of my ${cat} clients see new bookings within 2 weeks of going live.`, sent: false },
-          { channel: "sms", day: 7, body: `Hi — sent over a free website preview for ${prospect.name} last week. Want me to take it down or push it live? Reply STOP to opt out.`, sent: false },
+          { channel: "email", day: 3, subject: `Re: site for ${prospect.name}`, body: `Just checking in — did you get a chance to look at the preview? Happy to tweak anything. Most of my ${cat} clients see new bookings within 2 weeks of going live.`, sent: false, scheduledFor: at(3) },
+          { channel: "sms", day: 7, body: `Hi — sent over a free website preview for ${prospect.name} last week. Want me to take it down or push it live? Reply STOP to opt out.`, sent: false, scheduledFor: at(7) },
         ];
-        const o: Outreach = { id: uid(), prospectId, siteId, steps, createdAt: Date.now() };
+        const o: Outreach = { id: uid(), prospectId, siteId, steps, createdAt: now };
         set((s) => ({ outreach: [o, ...s.outreach] }));
         get().updateProspect(prospectId, { outreachId: o.id, status: "Contacted" });
+        get().addTags([prospectId], get().automation.defaultTags);
+        get().logActivity(prospectId, `Sequence launched — 3 steps scheduled (day 1, 3, 7)`, "outreach");
         return o;
       },
 
@@ -451,8 +485,12 @@ export const usePmStore = create<State & Actions & {
         }));
         const o = get().outreach.find((x) => x.id === outreachId);
         const p = o && get().prospects.find((pr) => pr.id === o.prospectId);
-        if (p) get().pushNotification(`Sent outreach step to ${p.name}`);
+        if (p) {
+          get().pushNotification(`Sent outreach step to ${p.name}`);
+          get().logActivity(p.id, `Manual send to ${p.name}`, "outreach");
+        }
       },
+
 
       recordPayment: (prospectId, amount, type = "upfront") => {
         const payment: Payment = { id: uid(), prospectId, amount, type, paidAt: Date.now() };
@@ -473,7 +511,7 @@ export const usePmStore = create<State & Actions & {
 
       markAllRead: () => set((s) => ({ notifications: s.notifications.map((n) => ({ ...n, read: true })) })),
 
-      resetAll: () => set({ prospects: [], sites: [], previewEvents: [], outreach: [], payments: [], savedSearches: [], notifications: [], filings: [], ghl: { enabled: false, defaultTags: ["prospectmaster", "no-website"] } }),
+      resetAll: () => set({ prospects: [], sites: [], previewEvents: [], outreach: [], payments: [], savedSearches: [], notifications: [], filings: [], activities: [], automation: DEFAULT_AUTOMATION }),
 
       seedDemo: () => {
         const prospects = seedProspects();
@@ -485,7 +523,8 @@ export const usePmStore = create<State & Actions & {
           ],
           notifications: [{ id: uid(), text: "Welcome! Demo data loaded. Try a search.", at: Date.now(), read: false }],
           filings: seedFilings(),
-          ghl: { enabled: false, defaultTags: ["prospectmaster", "no-website"] },
+          activities: [],
+          automation: DEFAULT_AUTOMATION,
         });
       },
 
@@ -602,6 +641,7 @@ export const usePmStore = create<State & Actions & {
             notes: `Imported from Fresh Filing · Agent: ${f.registeredAgent || "—"} · Filed ${f.filingDate}`,
             createdAt: now,
             lastActivityAt: now,
+            tags: ["fresh-filing", ...(f.webPresence === "no_website" ? ["no-website"] : [])],
             verificationStatus: f.webPresence === "no_website" ? "verified_no_site" : f.webPresence === "has_website" ? "unlinked_site" : "unverified",
           };
           newProspects.push(p);
@@ -617,28 +657,70 @@ export const usePmStore = create<State & Actions & {
 
       deleteFilings: (ids) => set((s) => ({ filings: s.filings.filter((f) => !ids.includes(f.id)) })),
 
-      // ============ Phase 2: GHL ============
+      // ============ Native CRM (replaces GHL) ============
 
-      setGhl: (patch) => set((s) => ({ ghl: { ...s.ghl, ...patch } })),
+      setAutomation: (patch) => set((s) => ({ automation: { ...s.automation, ...patch } })),
 
-      pushToGhl: async (ids) => {
-        const { ghl } = get();
-        if (!ghl.enabled) return { pushed: 0, skipped: 0, failed: 0 };
-        let pushed = 0, skipped = 0, failed = 0;
-        for (const id of ids) {
-          await sleep(80);
-          const p = get().prospects.find((x) => x.id === id);
-          if (!p) { failed++; continue; }
-          if (!p.phone) { skipped++; continue; }
-          const contactId = `ghl_${uid()}`;
+      logActivity: (prospectId, text, type = "note") => {
+        const a: Activity = { id: uid(), prospectId, type, text, at: Date.now() };
+        set((s) => ({ activities: [a, ...s.activities].slice(0, 500) }));
+        if (prospectId) {
           set((s) => ({
-            prospects: s.prospects.map((x) => x.id === id ? { ...x, ghlContactId: contactId, ghlPushedAt: Date.now() } : x),
+            prospects: s.prospects.map((p) => p.id === prospectId ? { ...p, lastActivityAt: Date.now() } : p),
           }));
-          pushed++;
         }
-        get().pushNotification(`GHL: ${pushed} pushed · ${skipped} skipped (no phone) · ${failed} failed`);
-        return { pushed, skipped, failed };
       },
+
+      addTags: (ids, tags) => {
+        const clean = tags.map((t) => t.trim().toLowerCase()).filter(Boolean);
+        if (!clean.length) return 0;
+        let n = 0;
+        set((s) => ({
+          prospects: s.prospects.map((p) => {
+            if (!ids.includes(p.id)) return p;
+            n++;
+            const merged = Array.from(new Set([...(p.tags ?? []), ...clean]));
+            return { ...p, tags: merged, lastActivityAt: Date.now() };
+          }),
+        }));
+        ids.forEach((id) => get().logActivity(id, `Tagged: ${clean.join(", ")}`, "tag"));
+        get().pushNotification(`Tagged ${n} lead${n === 1 ? "" : "s"} with ${clean.join(", ")}`);
+        return n;
+      },
+
+      removeTag: (id, tag) => set((s) => ({
+        prospects: s.prospects.map((p) => p.id === id ? { ...p, tags: (p.tags ?? []).filter((t) => t !== tag) } : p),
+      })),
+
+      runDueSteps: () => {
+        const { automation, outreach } = get();
+        if (!automation.autoFollowUp) return 0;
+        const now = Date.now();
+        let sent = 0;
+        const touched: { prospectId: string; day: number; channel: string }[] = [];
+        const next = outreach.map((o) => {
+          const idx = o.steps.findIndex((st) => !st.sent);
+          if (idx < 0) return o;
+          const step = o.steps[idx];
+          const due = step.scheduledFor ?? o.createdAt + step.day * 86400000;
+          if (due > now) return o;
+          sent++;
+          touched.push({ prospectId: o.prospectId, day: step.day, channel: step.channel });
+          const steps = o.steps.map((st, i) => i === idx
+            ? { ...st, sent: true, autoSent: true, sentAt: now, openedAt: Math.random() > 0.5 ? now + 60000 : undefined }
+            : st);
+          return { ...o, steps };
+        });
+        if (!sent) return 0;
+        set({ outreach: next });
+        touched.forEach((t) => {
+          const p = get().prospects.find((x) => x.id === t.prospectId);
+          get().logActivity(t.prospectId, `Auto-sent day ${t.day} ${t.channel}${p ? ` to ${p.name}` : ""}`, "outreach");
+        });
+        get().pushNotification(`Automation sent ${sent} scheduled message${sent === 1 ? "" : "s"}`);
+        return sent;
+      },
+
 
       setFirecrawlConfigured: (v) => set({ firecrawlConfigured: v }),
     }),
@@ -651,7 +733,7 @@ if (typeof window !== "undefined") {
     // Only sync when data fields change (ignore transient hydration flag).
     const keys: (keyof Snapshot)[] = [
       "prospects","sites","previewEvents","outreach","payments",
-      "savedSearches","notifications","filings","ghl","firecrawlConfigured",
+      "savedSearches","notifications","filings","activities","automation","firecrawlConfigured",
     ];
     for (const k of keys) {
       if ((state as any)[k] !== (prev as any)[k]) {

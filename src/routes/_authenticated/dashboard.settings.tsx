@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { usePmStore } from "@/lib/pm-store";
 import * as React from "react";
-import { Key, Check, ExternalLink, User as UserIcon, Lock } from "lucide-react";
+import { Key, Check, ExternalLink, User as UserIcon, Lock, Zap } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
@@ -11,15 +11,15 @@ export const Route = createFileRoute("/_authenticated/dashboard/settings")({
 });
 
 function SettingsPage() {
-  const ghl = usePmStore((s) => s.ghl);
-  const setGhl = usePmStore((s) => s.setGhl);
+  const automation = usePmStore((s) => s.automation);
+  const setAutomation = usePmStore((s) => s.setAutomation);
   const firecrawlConfigured = usePmStore((s) => s.firecrawlConfigured);
   const setFirecrawlConfigured = usePmStore((s) => s.setFirecrawlConfigured);
 
   return (
     <div>
       <h1 style={{ fontSize: 28, fontWeight: 500 }}>Account</h1>
-      <p className="text-sm text-muted-foreground mt-1">Profile, security, connectors, and integrations.</p>
+      <p className="text-sm text-muted-foreground mt-1">Profile, security, automation, and connectors.</p>
 
       <ProfileSection />
       <SecuritySection />
@@ -38,73 +38,63 @@ function SettingsPage() {
             onToggle={setFirecrawlConfigured}
             href="https://firecrawl.dev/app/api-keys"
           />
-          <SecretRow
-            label="GHL_PIT"
-            description="Optional. Private Integration Token for GoHighLevel."
-            configured={Boolean(ghl.pit)}
-            disabled
-          />
-          <SecretRow
-            label="GHL_LOCATION_ID"
-            description="Optional. GHL sub-account location ID."
-            configured={Boolean(ghl.locationId)}
-            disabled
-          />
         </div>
       </div>
 
-      {/* GHL toggle */}
+      {/* Automation */}
       <div className="pm-card p-5 mt-4">
+        <div className="flex items-center gap-2 mb-3">
+          <Zap size={14} />
+          <div className="text-sm font-medium">Automation</div>
+        </div>
+
         <div className="flex items-start justify-between gap-4">
           <div>
-            <div className="text-sm font-medium">GoHighLevel <span className="text-xs text-muted-foreground font-normal">(Optional)</span></div>
+            <div className="text-sm font-medium">Auto follow-up</div>
             <div className="text-xs text-muted-foreground mt-1 max-w-md">
-              Off by default. When enabled, a "Push to GHL" action appears on the Leads page alongside the built-in CRM. Your built-in CRM remains the primary experience either way.
+              When on, scheduled outreach steps send themselves as soon as they come due — no manual sending required.
             </div>
           </div>
           <button
-            onClick={() => setGhl({ enabled: !ghl.enabled })}
+            onClick={() => setAutomation({ autoFollowUp: !automation.autoFollowUp })}
             style={{
               position: "relative",
               width: 42, height: 24, borderRadius: 12,
-              background: ghl.enabled ? "#CC0000" : "#D0D0D0",
+              background: automation.autoFollowUp ? "#CC0000" : "#D0D0D0",
               transition: "background 0.15s",
+              flexShrink: 0,
             }}
-            aria-label="Toggle GHL"
+            aria-label="Toggle auto follow-up"
           >
-            <span style={{ position: "absolute", top: 2, left: ghl.enabled ? 20 : 2, width: 20, height: 20, borderRadius: 10, background: "#fff", transition: "left 0.15s" }} />
+            <span style={{ position: "absolute", top: 2, left: automation.autoFollowUp ? 20 : 2, width: 20, height: 20, borderRadius: 10, background: "#fff", transition: "left 0.15s" }} />
           </button>
         </div>
 
-        {ghl.enabled && (
-          <div className="mt-4 grid gap-3" style={{ borderTop: "0.5px solid #F0F0F0", paddingTop: 16 }}>
-            <Field
-              label="Private Integration Token (PIT)"
-              value={ghl.pit || ""}
-              onChange={(v) => setGhl({ pit: v })}
-              placeholder="pit-xxxxxxxxxxxxxxxxxxxx"
-              type="password"
+        <div className="mt-4 grid gap-3" style={{ borderTop: "0.5px solid #F0F0F0", paddingTop: 16 }}>
+          <div>
+            <label className="text-xs text-muted-foreground">Default tags applied to new leads (comma-separated)</label>
+            <input
+              value={automation.defaultTags.join(", ")}
+              onChange={(e) => setAutomation({ defaultTags: e.target.value.split(",").map((s) => s.trim()).filter(Boolean) })}
+              className="w-full mt-1"
+              style={{ padding: "9px 10px", border: "0.5px solid #E0E0E0", borderRadius: 6, fontSize: 13 }}
             />
-            <Field
-              label="Location ID"
-              value={ghl.locationId || ""}
-              onChange={(v) => setGhl({ locationId: v })}
-              placeholder="abcDEF123XYZ"
-            />
-            <div>
-              <label className="text-xs text-muted-foreground">Default tags (comma-separated)</label>
-              <input
-                value={ghl.defaultTags.join(", ")}
-                onChange={(e) => setGhl({ defaultTags: e.target.value.split(",").map((s) => s.trim()).filter(Boolean) })}
-                className="w-full mt-1"
-                style={{ padding: "9px 10px", border: "0.5px solid #E0E0E0", borderRadius: 6, fontSize: 13 }}
-              />
-            </div>
-            <div className="text-xs text-muted-foreground">
-              Saved locally. Push uses the GHL Contacts API: upserts contacts, applies tags, and posts a note with the lead's category, rating, and site status.
-            </div>
           </div>
-        )}
+          <div className="grid sm:grid-cols-2 gap-3">
+            <Field
+              label="Default site price ($)"
+              value={String(automation.sitePrice)}
+              onChange={(v) => setAutomation({ sitePrice: Number(v) || 0 })}
+              type="number"
+            />
+            <Field
+              label="Default monthly hosting fee ($)"
+              value={String(automation.hostingFee)}
+              onChange={(v) => setAutomation({ hostingFee: Number(v) || 0 })}
+              type="number"
+            />
+          </div>
+        </div>
       </div>
     </div>
   );

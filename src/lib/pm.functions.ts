@@ -12,11 +12,12 @@ type Snapshot = {
   savedSearches: any[];
   notifications: any[];
   filings: any[];
-  ghl: {
-    enabled: boolean;
-    pit?: string;
-    locationId?: string;
+  activities: any[];
+  automation: {
+    autoFollowUp: boolean;
     defaultTags: string[];
+    sitePrice: number;
+    hostingFee: number;
   };
   firecrawlConfigured: boolean;
 };
@@ -38,6 +39,7 @@ export const pmLoadState = createServerFn({ method: "GET" })
       searchesRes,
       notificationsRes,
       filingsRes,
+      activitiesRes,
       settingsRes,
     ] = await Promise.all([
       supabase.from("prospects").select("*").eq("user_id", userId),
@@ -48,6 +50,7 @@ export const pmLoadState = createServerFn({ method: "GET" })
       supabase.from("saved_searches").select("*").eq("user_id", userId),
       supabase.from("notifications").select("*").eq("user_id", userId),
       supabase.from("fresh_filings").select("*").eq("user_id", userId),
+      supabase.from("activities").select("*").eq("user_id", userId),
       supabase.from("user_settings").select("*").eq("user_id", userId).maybeSingle(),
     ]);
 
@@ -86,8 +89,7 @@ export const pmLoadState = createServerFn({ method: "GET" })
         verificationStatus: p.verification_status,
         foundUrl: p.found_url ?? undefined,
         verifiedAt: fromIso(p.verified_at),
-        ghlContactId: p.ghl_contact_id ?? undefined,
-        ghlPushedAt: fromIso(p.ghl_pushed_at),
+        tags: Array.isArray(p.tags) ? (p.tags as any) : [],
       })),
       sites: sites.map((s: any) => ({
         id: s.id,
@@ -128,6 +130,8 @@ export const pmLoadState = createServerFn({ method: "GET" })
             sent: st.sent,
             sentAt: fromIso(st.sent_at),
             openedAt: fromIso(st.opened_at),
+            scheduledFor: fromIso(st.scheduled_for),
+            autoSent: st.auto_sent ?? false,
           })),
       })),
       payments: (paymentsRes.data ?? []).map((p) => ({
@@ -164,14 +168,18 @@ export const pmLoadState = createServerFn({ method: "GET" })
         raw: (f.raw as any) ?? undefined,
         createdAt: new Date(f.created_at).getTime(),
       })),
-      ghl: {
-        enabled: settingsRes.data?.ghl_enabled ?? false,
-        pit: settingsRes.data?.ghl_pit ?? undefined,
-        locationId: settingsRes.data?.ghl_location_id ?? undefined,
-        defaultTags: (settingsRes.data?.ghl_default_tags as any) ?? [
-          "prospectmaster",
-          "no-website",
-        ],
+      activities: (activitiesRes.data ?? []).map((a: any) => ({
+        id: a.id,
+        prospectId: a.prospect_id ?? undefined,
+        type: a.type,
+        text: a.text,
+        at: new Date(a.at).getTime(),
+      })),
+      automation: {
+        autoFollowUp: settingsRes.data?.auto_follow_up ?? true,
+        defaultTags: (settingsRes.data?.default_tags as any) ?? ["no-website", "prospectmaster"],
+        sitePrice: Number(settingsRes.data?.default_site_price ?? 1000),
+        hostingFee: Number(settingsRes.data?.default_hosting_fee ?? 99),
       },
       firecrawlConfigured: settingsRes.data?.firecrawl_configured ?? false,
     };
@@ -193,6 +201,7 @@ export const pmSaveState = createServerFn({ method: "POST" })
     const staleSiteIds = (existingSites.data ?? []).map((s) => s.id).filter((id) => !keepSiteIds.has(id));
     await Promise.all([
       supabase.from("outreach_steps").delete().eq("user_id", userId),
+      supabase.from("activities").delete().eq("user_id", userId),
       supabase.from("payments").delete().eq("user_id", userId),
       supabase.from("notifications").delete().eq("user_id", userId),
       supabase.from("saved_searches").delete().eq("user_id", userId),
@@ -233,8 +242,7 @@ export const pmSaveState = createServerFn({ method: "POST" })
           verification_status: p.verificationStatus ?? "unverified",
           found_url: p.foundUrl ?? null,
           verified_at: toIso(p.verifiedAt),
-          ghl_contact_id: p.ghlContactId ?? null,
-          ghl_pushed_at: toIso(p.ghlPushedAt),
+          tags: p.tags ?? [],
           created_at: toIso(p.createdAt) ?? new Date().toISOString(),
           last_activity_at: toIso(p.lastActivityAt) ?? new Date().toISOString(),
         })),
@@ -296,6 +304,8 @@ export const pmSaveState = createServerFn({ method: "POST" })
           sent: !!st.sent,
           sent_at: toIso(st.sentAt),
           opened_at: toIso(st.openedAt),
+          scheduled_for: toIso(st.scheduledFor),
+          auto_sent: !!st.autoSent,
         })),
       );
       if (steps.length) await supabase.from("outreach_steps").insert(steps);
@@ -366,13 +376,26 @@ export const pmSaveState = createServerFn({ method: "POST" })
       );
     }
 
+    if (data.activities?.length) {
+      await supabase.from("activities").insert(
+        data.activities.map((a: any) => ({
+          id: a.id,
+          user_id: userId,
+          prospect_id: a.prospectId ?? null,
+          type: a.type ?? "note",
+          text: a.text,
+          at: toIso(a.at) ?? new Date().toISOString(),
+        })),
+      );
+    }
+
     await supabase.from("user_settings").upsert(
       {
         user_id: userId,
-        ghl_enabled: data.ghl.enabled,
-        ghl_pit: data.ghl.pit ?? null,
-        ghl_location_id: data.ghl.locationId ?? null,
-        ghl_default_tags: data.ghl.defaultTags ?? [],
+        auto_follow_up: data.automation?.autoFollowUp ?? true,
+        default_tags: data.automation?.defaultTags ?? [],
+        default_site_price: data.automation?.sitePrice ?? 1000,
+        default_hosting_fee: data.automation?.hostingFee ?? 99,
         firecrawl_configured: data.firecrawlConfigured,
         updated_at: new Date().toISOString(),
       },

@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { usePmStore, type LeadTier, type VerificationStatus } from "@/lib/pm-store";
 import * as React from "react";
-import { Star, Info, ShieldCheck, ShieldAlert, ShieldQuestion, ExternalLink, Loader2, Send } from "lucide-react";
+import { Star, Info, ShieldCheck, ShieldAlert, ShieldQuestion, ExternalLink, Loader2, Tag } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/dashboard/leads")({
   component: LeadsPage,
@@ -11,8 +11,8 @@ function LeadsPage() {
   const prospects = usePmStore((s) => s.prospects);
   const verifyLeads = usePmStore((s) => s.verifyLeads);
   const verifyNext = usePmStore((s) => s.verifyNext);
-  const ghlEnabled = usePmStore((s) => s.ghl.enabled);
-  const pushToGhl = usePmStore((s) => s.pushToGhl);
+  const addTags = usePmStore((s) => s.addTags);
+  const defaultTags = usePmStore((s) => s.automation.defaultTags);
 
   const [tier, setTier] = React.useState<"ALL" | LeadTier>("ALL");
   const [vfilter, setVfilter] = React.useState<"ALL" | VerificationStatus>("ALL");
@@ -53,14 +53,14 @@ function LeadsPage() {
     setVerifying(false);
   };
 
-  const handlePushGhl = async () => {
+  const handleTagSelected = async () => {
     if (selected.size === 0) return;
-    const sel = Array.from(selected);
-    const noPhone = sel.filter((id) => !prospects.find((p) => p.id === id)?.phone).length;
-    const ok = confirm(`Push ${sel.length} leads to GoHighLevel?\nTags: prospectmaster, no-website\n${noPhone > 0 ? `Note: ${noPhone} will be skipped (no phone).` : ""}`);
-    if (!ok) return;
+    const input = prompt("Tags to add (comma separated)", defaultTags.join(", "));
+    if (input === null) return;
+    const tags = input.split(",").map((t) => t.trim()).filter(Boolean);
+    if (!tags.length) return;
     setPushing(true);
-    await pushToGhl(sel);
+    addTags(Array.from(selected), tags);
     setPushing(false);
     clearSel();
   };
@@ -112,11 +112,9 @@ function LeadsPage() {
         <button onClick={handleVerifyNext} disabled={verifying || unverifiedCount === 0} className="text-xs flex items-center gap-1.5 px-3 py-1.5" style={{ border: "0.5px solid #E0E0E0", borderRadius: 6, background: "#fff", opacity: unverifiedCount === 0 ? 0.5 : 1 }}>
           {verifying ? <Loader2 size={12} className="animate-spin" /> : <ShieldCheck size={12} />} Verify next 25
         </button>
-        {ghlEnabled && (
-          <button onClick={handlePushGhl} disabled={selected.size === 0 || pushing} className="text-xs flex items-center gap-1.5 px-3 py-1.5" style={{ border: "0.5px solid #CC0000", color: "#CC0000", borderRadius: 6, background: "#fff", opacity: selected.size === 0 ? 0.5 : 1 }}>
-            {pushing ? <Loader2 size={12} className="animate-spin" /> : <Send size={12} />} Push to GHL
-          </button>
-        )}
+        <button onClick={handleTagSelected} disabled={selected.size === 0 || pushing} className="text-xs flex items-center gap-1.5 px-3 py-1.5" style={{ border: "0.5px solid #CC0000", color: "#CC0000", borderRadius: 6, background: "#fff", opacity: selected.size === 0 ? 0.5 : 1 }}>
+          {pushing ? <Loader2 size={12} className="animate-spin" /> : <Tag size={12} />} Add tags
+        </button>
       </div>
 
       <div className="mt-3 grid gap-2">
@@ -128,9 +126,9 @@ function LeadsPage() {
               <div className="font-medium text-sm flex items-center gap-2">
                 {p.name}
                 <VerifiedBadge status={p.verificationStatus} foundUrl={p.foundUrl} />
-                {p.ghlContactId && (
-                  <span style={{ fontSize: 9, fontWeight: 600, padding: "2px 6px", borderRadius: 3, background: "#E8F0FE", color: "#1A56DB", letterSpacing: 0.5 }}>GHL</span>
-                )}
+                {(p.tags ?? []).map((t) => (
+                  <span key={t} style={{ fontSize: 9, fontWeight: 600, padding: "2px 6px", borderRadius: 3, background: "#F0F0F0", color: "#666" }}>{t}</span>
+                ))}
               </div>
               <div className="text-xs text-muted-foreground flex items-center gap-2 mt-0.5 flex-wrap">
                 <span>{p.category}</span>·
