@@ -484,7 +484,8 @@ export const usePmStore = create<State & Actions & {
           ],
           notifications: [{ id: uid(), text: "Welcome! Demo data loaded. Try a search.", at: Date.now(), read: false }],
           filings: seedFilings(),
-          ghl: { enabled: false, defaultTags: ["prospectmaster", "no-website"] },
+          activities: [],
+          automation: DEFAULT_AUTOMATION,
         });
       },
 
