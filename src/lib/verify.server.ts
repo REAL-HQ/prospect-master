@@ -134,11 +134,19 @@ async function checkSocial(input: VerifyInput): Promise<VerifySignal | null> {
   const slug = slugify(input.name);
   if (slug.length < 4) return null;
   const res = await fetchText(`https://www.facebook.com/${slug}`, 5000);
-  if (res?.ok && res.body.toLowerCase().includes(slug.slice(0, 6))) {
-    return { label: "Facebook page found", detail: `facebook.com/${slug}`, weight: 20 };
-  }
-  return null;
+  if (!res?.ok || !res.body) return null;
+  const lower = res.body.toLowerCase();
+  const notFound = ["content isn't available", "page isn't available", "content not found", "log in or sign up"].some((m) =>
+    lower.includes(m),
+  );
+  if (notFound) return null;
+  const title = /<title[^>]*>([^<]*)<\/title>/i.exec(res.body)?.[1]?.toLowerCase() ?? "";
+  const words = input.name.toLowerCase().replace(/[^a-z0-9\s]/g, " ").split(/\s+/).filter((w) => w.length > 2);
+  const titleMatch = words.length > 0 && words.every((w) => title.includes(w));
+  if (!titleMatch) return null;
+  return { label: "Facebook page found", detail: `facebook.com/${slug}`, weight: 20 };
 }
+
 
 export async function verifyBusiness(input: VerifyInput): Promise<VerifyResult> {
   const domains = candidateDomains(input);
