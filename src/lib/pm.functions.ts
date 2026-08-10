@@ -317,7 +317,10 @@ export const pmSaveState = createServerFn({ method: "POST" })
       if (steps.length) await supabase.from("outreach_steps").insert(steps);
     }
     if (data.previewEvents.length) {
-      await supabase.from("preview_events").insert(
+      // Upsert (not insert): analytics rows already in the DB are re-sent on
+      // every sync, and a plain insert would fail on duplicate ids and abort
+      // the whole save.
+      const { error: eventsError } = await supabase.from("preview_events").upsert(
         data.previewEvents.map((e: any) => ({
           id: e.id,
           site_id: e.siteId,
@@ -325,8 +328,11 @@ export const pmSaveState = createServerFn({ method: "POST" })
           device: e.device,
           at: toIso(e.at) ?? new Date().toISOString(),
         })),
+        { onConflict: "id", ignoreDuplicates: true },
       );
+      if (eventsError) throw new Error(`Failed to save analytics: ${eventsError.message}`);
     }
+
     if (data.payments.length) {
       await supabase.from("payments").insert(
         data.payments.map((p: any) => ({
