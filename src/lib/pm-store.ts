@@ -33,6 +33,9 @@ export type Prospect = {
   verificationStatus: VerificationStatus;
   foundUrl?: string;
   verifiedAt?: number;
+  verificationConfidence?: number;
+  verificationSignals?: { label: string; detail?: string; weight: number }[];
+
   // Native CRM
   tags: string[];
 };
