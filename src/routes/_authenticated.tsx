@@ -39,6 +39,8 @@ function AuthenticatedLayout() {
   const markAllRead = usePmStore((s) => s.markAllRead);
   const hydrate = usePmStore((s) => s.hydrate);
   const hydrated = usePmStore((s) => s.hydrated);
+  const hydrateFailed = usePmStore((s) => s.hydrateFailed);
+
   const [bellOpen, setBellOpen] = React.useState(false);
   const [profileOpen, setProfileOpen] = React.useState(false);
   const unread = notifications.filter((n) => !n.read).length;
