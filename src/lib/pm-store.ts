@@ -619,20 +619,32 @@ export const usePmStore = create<State & Actions & {
       },
 
       checkFilingPresence: async (ids) => {
-        const capped = ids.slice(0, 50);
+        const capped = ids.slice(0, 25);
+        const items = get()
+          .filings.filter((f) => capped.includes(f.id))
+          .map((f) => ({ id: f.id, name: f.businessName, city: f.city }));
+        if (!items.length) return { no_website: 0, social_only: 0, has_website: 0 };
+
         let no_website = 0, social_only = 0, has_website = 0;
-        for (const id of capped) {
-          await sleep(100);
-          const r = Math.random();
-          const wp: WebPresence = r < 0.55 ? "no_website" : r < 0.8 ? "social_only" : "has_website";
+        let results: Awaited<ReturnType<typeof verifyBusinesses>>["results"] = [];
+        try {
+          results = (await verifyBusinesses({ data: { items } })).results;
+        } catch {
+          get().pushNotification("Web presence check failed — could not reach the checker");
+          return { no_website: 0, social_only: 0, has_website: 0 };
+        }
+
+        for (const r of results) {
+          const wp = r.verdict as WebPresence;
           set((s) => ({
-            filings: s.filings.map((f) => f.id === id ? { ...f, webPresence: wp, status: "checked" } : f),
+            filings: s.filings.map((f) => (f.id === r.id ? { ...f, webPresence: wp, status: "checked" } : f)),
           }));
           if (wp === "no_website") no_website++; else if (wp === "social_only") social_only++; else has_website++;
         }
-        get().pushNotification(`Checked ${capped.length} filings: ${no_website} no-site · ${social_only} social-only · ${has_website} has site`);
+        get().pushNotification(`Checked ${results.length} filings: ${no_website} no-site · ${social_only} social-only · ${has_website} has site`);
         return { no_website, social_only, has_website };
       },
+
 
       checkFilingNext: async (limit = 25) => {
         const ids = get().filings
