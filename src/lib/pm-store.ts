@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { pmLoadState, pmSaveState } from "./pm.functions";
+import { verifyBusinesses } from "./verify.functions";
 import { themeFor } from "./site-templates";
 
 
