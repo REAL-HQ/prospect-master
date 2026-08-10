@@ -224,7 +224,7 @@ export const pmSaveState = createServerFn({ method: "POST" })
 
     // Insert fresh
     if (data.prospects.length) {
-      await supabase.from("prospects").insert(
+      const { error: prospectsError } = await supabase.from("prospects").insert(
         data.prospects.map((p: any) => ({
           id: p.id,
           user_id: userId,
@@ -253,7 +253,9 @@ export const pmSaveState = createServerFn({ method: "POST" })
           last_activity_at: toIso(p.lastActivityAt) ?? new Date().toISOString(),
         })),
       );
+      if (prospectsError) throw new Error(`Failed to save leads: ${prospectsError.message}`);
     }
+
     if (data.sites.length) {
       const { error: sitesError } = await supabase.from("sites").upsert(
         data.sites.map((s: any) => ({
