@@ -312,7 +312,10 @@ type Snapshot = Pick<
 >;
 
 let syncTimer: ReturnType<typeof setTimeout> | null = null;
-let syncPaused = false;
+// Starts paused: nothing may be pushed to the cloud until a successful
+// hydrate, otherwise an empty local state would wipe the user's saved data.
+let syncPaused = true;
+let syncInFlight: Promise<unknown> = Promise.resolve();
 function scheduleSync(getState: () => State & Actions) {
   if (syncPaused) return;
   if (typeof window === "undefined") return;
@@ -332,9 +335,15 @@ function scheduleSync(getState: () => State & Actions) {
       automation: s.automation,
       firecrawlConfigured: s.firecrawlConfigured,
     };
-    pmSaveState({ data: snap as never }).catch((err) => console.error("[pm sync]", err));
+    // Serialize saves — each save wipes then re-inserts rows, so overlapping
+    // requests can race and lose data.
+    syncInFlight = syncInFlight
+      .catch(() => {})
+      .then(() => pmSaveState({ data: snap as never }))
+      .catch((err) => console.error("[pm sync]", err));
   }, 800);
 }
+
 
 export const usePmStore = create<State & Actions & {
   hydrate: () => Promise<void>;
