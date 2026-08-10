@@ -89,7 +89,10 @@ export const pmLoadState = createServerFn({ method: "GET" })
         verificationStatus: p.verification_status,
         foundUrl: p.found_url ?? undefined,
         verifiedAt: fromIso(p.verified_at),
+        verificationConfidence: Number((p as any).verification_confidence ?? 0),
+        verificationSignals: Array.isArray((p as any).verification_signals) ? ((p as any).verification_signals as any) : [],
         tags: Array.isArray(p.tags) ? (p.tags as any) : [],
+
       })),
       sites: sites.map((s: any) => ({
         id: s.id,
