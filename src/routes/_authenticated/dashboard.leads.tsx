@@ -125,7 +125,7 @@ function LeadsPage() {
             <div className="flex-1 min-w-0">
               <div className="font-medium text-sm flex items-center gap-2">
                 {p.name}
-                <VerifiedBadge status={p.verificationStatus} foundUrl={p.foundUrl} />
+                <VerifiedBadge status={p.verificationStatus} foundUrl={p.foundUrl} confidence={p.verificationConfidence} signals={p.verificationSignals} />
                 {(p.tags ?? []).map((t) => (
                   <span key={t} style={{ fontSize: 9, fontWeight: 600, padding: "2px 6px", borderRadius: 3, background: "#F0F0F0", color: "#666" }}>{t}</span>
                 ))}
