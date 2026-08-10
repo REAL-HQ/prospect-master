@@ -39,6 +39,8 @@ function AuthenticatedLayout() {
   const markAllRead = usePmStore((s) => s.markAllRead);
   const hydrate = usePmStore((s) => s.hydrate);
   const hydrated = usePmStore((s) => s.hydrated);
+  const hydrateFailed = usePmStore((s) => s.hydrateFailed);
+
   const [bellOpen, setBellOpen] = React.useState(false);
   const [profileOpen, setProfileOpen] = React.useState(false);
   const unread = notifications.filter((n) => !n.read).length;
@@ -142,7 +144,21 @@ function AuthenticatedLayout() {
           </div>
         </nav>
       </div>
+      {hydrateFailed && (
+        <div className="px-6 md:px-10 pt-4">
+          <div className="flex items-center justify-between gap-3 rounded-lg border border-destructive/30 bg-destructive/5 px-4 py-3 text-sm text-destructive">
+            <span>Couldn't load your data — changes won't be saved until this reconnects.</span>
+            <button
+              onClick={() => void hydrate()}
+              className="rounded-md border border-destructive/40 px-3 py-1 text-xs font-medium"
+            >
+              Retry
+            </button>
+          </div>
+        </div>
+      )}
       <Outlet />
+
     </div>
   );
 }

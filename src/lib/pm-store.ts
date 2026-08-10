@@ -312,7 +312,10 @@ type Snapshot = Pick<
 >;
 
 let syncTimer: ReturnType<typeof setTimeout> | null = null;
-let syncPaused = false;
+// Starts paused: nothing may be pushed to the cloud until a successful
+// hydrate, otherwise an empty local state would wipe the user's saved data.
+let syncPaused = true;
+let syncInFlight: Promise<unknown> = Promise.resolve();
 function scheduleSync(getState: () => State & Actions) {
   if (syncPaused) return;
   if (typeof window === "undefined") return;
@@ -332,39 +335,60 @@ function scheduleSync(getState: () => State & Actions) {
       automation: s.automation,
       firecrawlConfigured: s.firecrawlConfigured,
     };
-    pmSaveState({ data: snap as never }).catch((err) => console.error("[pm sync]", err));
+    // Serialize saves — each save wipes then re-inserts rows, so overlapping
+    // requests can race and lose data.
+    syncInFlight = syncInFlight
+      .catch(() => {})
+      .then(() => pmSaveState({ data: snap as never }))
+      .catch((err) => console.error("[pm sync]", err));
   }, 800);
 }
+
+
+let hydratePromise: Promise<void> | null = null;
 
 export const usePmStore = create<State & Actions & {
   hydrate: () => Promise<void>;
   hydrated: boolean;
+  hydrateFailed: boolean;
 }>()(
     (set, get) => ({
       hydrated: false,
+      hydrateFailed: false,
       hydrate: async () => {
-        try {
-          const snap = await pmLoadState();
-          syncPaused = true;
-          set({
-            prospects: (snap as any).prospects ?? [],
-            sites: (snap as any).sites ?? [],
-            previewEvents: (snap as any).previewEvents ?? [],
-            outreach: (snap as any).outreach ?? [],
-            payments: (snap as any).payments ?? [],
-            savedSearches: (snap as any).savedSearches ?? [],
-            notifications: (snap as any).notifications ?? [],
-            filings: (snap as any).filings ?? [],
-            activities: (snap as any).activities ?? [],
-            automation: { ...DEFAULT_AUTOMATION, ...((snap as any).automation ?? {}) },
-            firecrawlConfigured: !!(snap as any).firecrawlConfigured,
-            hydrated: true,
-          });
-          syncPaused = false;
-        } catch (err) {
-          console.error("[pm hydrate]", err);
-          set({ hydrated: true });
-        }
+        // Guard against concurrent hydrates (double effect / remount).
+        if (hydratePromise) return hydratePromise;
+        hydratePromise = (async () => {
+          try {
+            const snap = await pmLoadState();
+            syncPaused = true;
+            set({
+              prospects: (snap as any).prospects ?? [],
+              sites: (snap as any).sites ?? [],
+              previewEvents: (snap as any).previewEvents ?? [],
+              outreach: (snap as any).outreach ?? [],
+              payments: (snap as any).payments ?? [],
+              savedSearches: (snap as any).savedSearches ?? [],
+              notifications: (snap as any).notifications ?? [],
+              filings: (snap as any).filings ?? [],
+              activities: (snap as any).activities ?? [],
+              automation: { ...DEFAULT_AUTOMATION, ...((snap as any).automation ?? {}) },
+              firecrawlConfigured: !!(snap as any).firecrawlConfigured,
+              hydrated: true,
+              hydrateFailed: false,
+            });
+            syncPaused = false;
+          } catch (err) {
+            console.error("[pm hydrate]", err);
+            // Keep sync paused: pushing an empty local state would delete
+            // everything stored in the cloud.
+            syncPaused = true;
+            set({ hydrated: true, hydrateFailed: true });
+          } finally {
+            hydratePromise = null;
+          }
+        })();
+        return hydratePromise;
       },
       prospects: [],
       sites: [],
@@ -380,11 +404,19 @@ export const usePmStore = create<State & Actions & {
 
       runSearch: ({ category, location, count = 8 }) => {
         const created: Prospect[] = [];
-        for (let i = 0; i < count; i++) {
+        // Always return `count` no-website leads instead of silently dropping
+        // generated prospects that happened to have a site.
+        let guard = 0;
+        while (created.length < count && guard++ < count * 20) {
           const p = generateProspect(category, location);
-          if (p.hasWebsite) continue;
+          if (p.hasWebsite) {
+            p.hasWebsite = false;
+            p.score = score(p.rating, p.reviews, false);
+            p.tier = tierOf(p.score);
+          }
           created.push(p);
         }
+
         set((s) => ({ prospects: [...created, ...s.prospects] }));
         get().pushNotification(`Found ${created.length} no-website leads in ${location}`);
         created.filter((p) => p.tier === "HOT").forEach((p) => get().pushNotification(`🔥 HOT lead: ${p.name} · score ${p.score}`));
