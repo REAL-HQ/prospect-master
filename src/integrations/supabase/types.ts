@@ -327,6 +327,8 @@ export type Database = {
           tier: string
           updated_at: string
           user_id: string
+          verification_confidence: number
+          verification_signals: Json
           verification_status: string
           verified_at: string | null
         }
@@ -356,6 +358,8 @@ export type Database = {
           tier?: string
           updated_at?: string
           user_id: string
+          verification_confidence?: number
+          verification_signals?: Json
           verification_status?: string
           verified_at?: string | null
         }
@@ -385,6 +389,8 @@ export type Database = {
           tier?: string
           updated_at?: string
           user_id?: string
+          verification_confidence?: number
+          verification_signals?: Json
           verification_status?: string
           verified_at?: string | null
         }
