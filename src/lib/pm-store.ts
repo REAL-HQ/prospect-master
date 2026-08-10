@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { pmLoadState, pmSaveState } from "./pm.functions";
+import { verifyBusinesses } from "./verify.functions";
 import { themeFor } from "./site-templates";
 
 
@@ -33,6 +34,9 @@ export type Prospect = {
   verificationStatus: VerificationStatus;
   foundUrl?: string;
   verifiedAt?: number;
+  verificationConfidence?: number;
+  verificationSignals?: { label: string; detail?: string; weight: number }[];
+
   // Native CRM
   tags: string[];
 };
@@ -531,28 +535,55 @@ export const usePmStore = create<State & Actions & {
       // ============ Phase 2: Verification ============
 
       verifyLeads: async (ids) => {
-        const capped = ids.slice(0, 50);
+        const capped = ids.slice(0, 25);
+        const items = get()
+          .prospects.filter((p) => capped.includes(p.id))
+          .map((p) => ({ id: p.id, name: p.name, city: p.city, state: p.state, phone: p.phone }));
+        if (!items.length) return { verified_no_site: 0, unlinked_site: 0, errors: 0 };
+
         let verified_no_site = 0, unlinked_site = 0, errors = 0;
-        for (const id of capped) {
-          await sleep(120);
-          // Mock Firecrawl Search: 70% verified_no_site, 25% unlinked_site, 5% error
-          const r = Math.random();
-          if (r < 0.05) { errors++; continue; }
-          const found = r >= 0.75;
+        let results: Awaited<ReturnType<typeof verifyBusinesses>>["results"] = [];
+        try {
+          results = (await verifyBusinesses({ data: { items } })).results;
+        } catch {
+          get().pushNotification("Verification failed — could not reach the checker");
+          return { verified_no_site: 0, unlinked_site: 0, errors: items.length };
+        }
+
+        for (const r of results) {
+          if (r.error) { errors++; continue; }
+          const hasSite = r.verdict === "has_website";
+          if (hasSite) unlinked_site++; else verified_no_site++;
           set((s) => ({
             prospects: s.prospects.map((p) => {
-              if (p.id !== id) return p;
-              if (found) {
-                const newScore = Math.max(p.score - 2, 1);
-                return { ...p, verificationStatus: "unlinked_site", foundUrl: `https://${p.name.toLowerCase().replace(/[^a-z0-9]+/g, "")}.com`, verifiedAt: Date.now(), score: +newScore.toFixed(1), tier: tierOf(newScore) };
-              }
-              const newScore = Math.min(p.score + 1, 10);
-              return { ...p, verificationStatus: "verified_no_site", foundUrl: undefined, verifiedAt: Date.now(), score: +newScore.toFixed(1), tier: tierOf(newScore) };
+              if (p.id !== r.id) return p;
+              const newScore = hasSite ? Math.max(p.score - 2, 1) : Math.min(p.score + 1, 10);
+              const tags = hasSite
+                ? p.tags.filter((t) => t !== "no-website")
+                : p.tags.includes("no-website") ? p.tags : [...p.tags, "no-website"];
+              return {
+                ...p,
+                verificationStatus: hasSite ? "unlinked_site" : "verified_no_site",
+                hasWebsite: hasSite,
+                foundUrl: r.foundUrl,
+                verifiedAt: Date.now(),
+                verificationConfidence: r.confidence,
+                verificationSignals: r.signals,
+                score: +newScore.toFixed(1),
+                tier: tierOf(newScore),
+                tags,
+              };
             }),
           }));
-          if (found) unlinked_site++; else verified_no_site++;
+          get().logActivity(
+            r.id,
+            hasSite
+              ? `Verification: existing site found at ${r.foundUrl} (${r.confidence}% confidence)`
+              : `Verification: no website found (${r.confidence}% confidence)${r.verdict === "social_only" ? " · social profile only" : ""}`,
+            "note",
+          );
         }
-        get().pushNotification(`Verification: ${verified_no_site} confirmed no-site · ${unlinked_site} unlinked site · ${errors} errors`);
+        get().pushNotification(`Verification: ${verified_no_site} confirmed no-site · ${unlinked_site} with a site · ${errors} errors`);
         return { verified_no_site, unlinked_site, errors };
       },
 
@@ -560,10 +591,11 @@ export const usePmStore = create<State & Actions & {
         const ids = get().prospects
           .filter((p) => p.verificationStatus === "unverified")
           .sort((a, b) => b.score - a.score)
-          .slice(0, Math.min(limit, 50))
+          .slice(0, Math.min(limit, 25))
           .map((p) => p.id);
         return get().verifyLeads(ids);
       },
+
 
       // ============ Phase 2: Fresh Filings ============
 
@@ -587,20 +619,32 @@ export const usePmStore = create<State & Actions & {
       },
 
       checkFilingPresence: async (ids) => {
-        const capped = ids.slice(0, 50);
+        const capped = ids.slice(0, 25);
+        const items = get()
+          .filings.filter((f) => capped.includes(f.id))
+          .map((f) => ({ id: f.id, name: f.businessName, city: f.city }));
+        if (!items.length) return { no_website: 0, social_only: 0, has_website: 0 };
+
         let no_website = 0, social_only = 0, has_website = 0;
-        for (const id of capped) {
-          await sleep(100);
-          const r = Math.random();
-          const wp: WebPresence = r < 0.55 ? "no_website" : r < 0.8 ? "social_only" : "has_website";
+        let results: Awaited<ReturnType<typeof verifyBusinesses>>["results"] = [];
+        try {
+          results = (await verifyBusinesses({ data: { items } })).results;
+        } catch {
+          get().pushNotification("Web presence check failed — could not reach the checker");
+          return { no_website: 0, social_only: 0, has_website: 0 };
+        }
+
+        for (const r of results) {
+          const wp = r.verdict as WebPresence;
           set((s) => ({
-            filings: s.filings.map((f) => f.id === id ? { ...f, webPresence: wp, status: "checked" } : f),
+            filings: s.filings.map((f) => (f.id === r.id ? { ...f, webPresence: wp, status: "checked" } : f)),
           }));
           if (wp === "no_website") no_website++; else if (wp === "social_only") social_only++; else has_website++;
         }
-        get().pushNotification(`Checked ${capped.length} filings: ${no_website} no-site · ${social_only} social-only · ${has_website} has site`);
+        get().pushNotification(`Checked ${results.length} filings: ${no_website} no-site · ${social_only} social-only · ${has_website} has site`);
         return { no_website, social_only, has_website };
       },
+
 
       checkFilingNext: async (limit = 25) => {
         const ids = get().filings

@@ -89,7 +89,10 @@ export const pmLoadState = createServerFn({ method: "GET" })
         verificationStatus: p.verification_status,
         foundUrl: p.found_url ?? undefined,
         verifiedAt: fromIso(p.verified_at),
+        verificationConfidence: Number((p as any).verification_confidence ?? 0),
+        verificationSignals: Array.isArray((p as any).verification_signals) ? ((p as any).verification_signals as any) : [],
         tags: Array.isArray(p.tags) ? (p.tags as any) : [],
+
       })),
       sites: sites.map((s: any) => ({
         id: s.id,
@@ -242,7 +245,10 @@ export const pmSaveState = createServerFn({ method: "POST" })
           verification_status: p.verificationStatus ?? "unverified",
           found_url: p.foundUrl ?? null,
           verified_at: toIso(p.verifiedAt),
+          verification_confidence: p.verificationConfidence ?? 0,
+          verification_signals: p.verificationSignals ?? [],
           tags: p.tags ?? [],
+
           created_at: toIso(p.createdAt) ?? new Date().toISOString(),
           last_activity_at: toIso(p.lastActivityAt) ?? new Date().toISOString(),
         })),

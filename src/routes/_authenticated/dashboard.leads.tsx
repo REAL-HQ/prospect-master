@@ -125,7 +125,7 @@ function LeadsPage() {
             <div className="flex-1 min-w-0">
               <div className="font-medium text-sm flex items-center gap-2">
                 {p.name}
-                <VerifiedBadge status={p.verificationStatus} foundUrl={p.foundUrl} />
+                <VerifiedBadge status={p.verificationStatus} foundUrl={p.foundUrl} confidence={p.verificationConfidence} signals={p.verificationSignals} />
                 {(p.tags ?? []).map((t) => (
                   <span key={t} style={{ fontSize: 9, fontWeight: 600, padding: "2px 6px", borderRadius: 3, background: "#F0F0F0", color: "#666" }}>{t}</span>
                 ))}
@@ -146,7 +146,20 @@ function LeadsPage() {
   );
 }
 
-function VerifiedBadge({ status, foundUrl }: { status: VerificationStatus; foundUrl?: string }) {
+type Signal = { label: string; detail?: string; weight: number };
+
+function VerifiedBadge({
+  status,
+  foundUrl,
+  confidence,
+  signals,
+}: {
+  status: VerificationStatus;
+  foundUrl?: string;
+  confidence?: number;
+  signals?: Signal[];
+}) {
+  const evidence = (signals ?? []).map((s) => `• ${s.label}${s.detail ? `: ${s.detail}` : ""}`).join("\n");
   if (status === "unverified") {
     return (
       <span title="Not yet verified" style={{ display: "inline-flex", alignItems: "center", gap: 4, fontSize: 10, fontWeight: 500, padding: "2px 7px", borderRadius: 10, background: "#F0F0F0", color: "#888" }}>
@@ -156,17 +169,18 @@ function VerifiedBadge({ status, foundUrl }: { status: VerificationStatus; found
   }
   if (status === "verified_no_site") {
     return (
-      <span title="Confirmed no website" style={{ display: "inline-flex", alignItems: "center", gap: 4, fontSize: 10, fontWeight: 600, padding: "2px 7px", borderRadius: 10, background: "#CC0000", color: "#fff" }}>
-        <ShieldCheck size={10} /> verified
+      <span title={`Confirmed no website${confidence ? ` · ${Math.round(confidence)}% confidence` : ""}${evidence ? `\n${evidence}` : ""}`} style={{ display: "inline-flex", alignItems: "center", gap: 4, fontSize: 10, fontWeight: 600, padding: "2px 7px", borderRadius: 10, background: "#CC0000", color: "#fff" }}>
+        <ShieldCheck size={10} /> verified{confidence ? ` ${Math.round(confidence)}%` : ""}
       </span>
     );
   }
   return (
-    <a href={foundUrl} target="_blank" rel="noreferrer" title={`Site found: ${foundUrl}`} style={{ display: "inline-flex", alignItems: "center", gap: 4, fontSize: 10, fontWeight: 500, padding: "2px 7px", borderRadius: 10, background: "#FFF4D6", color: "#B36B00" }}>
+    <a href={foundUrl} target="_blank" rel="noreferrer" title={`Site found: ${foundUrl}${confidence ? ` · ${Math.round(confidence)}% confidence` : ""}${evidence ? `\n${evidence}` : ""}`} style={{ display: "inline-flex", alignItems: "center", gap: 4, fontSize: 10, fontWeight: 500, padding: "2px 7px", borderRadius: 10, background: "#FFF4D6", color: "#B36B00" }}>
       <ShieldAlert size={10} /> Unlinked site <ExternalLink size={9} />
     </a>
   );
 }
+
 
 function ScoreDial({ score }: { score: number }) {
   const pct = (score / 10) * 100;
