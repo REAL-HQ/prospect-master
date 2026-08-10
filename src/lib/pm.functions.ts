@@ -245,7 +245,10 @@ export const pmSaveState = createServerFn({ method: "POST" })
           verification_status: p.verificationStatus ?? "unverified",
           found_url: p.foundUrl ?? null,
           verified_at: toIso(p.verifiedAt),
+          verification_confidence: p.verificationConfidence ?? 0,
+          verification_signals: p.verificationSignals ?? [],
           tags: p.tags ?? [],
+
           created_at: toIso(p.createdAt) ?? new Date().toISOString(),
           last_activity_at: toIso(p.lastActivityAt) ?? new Date().toISOString(),
         })),
